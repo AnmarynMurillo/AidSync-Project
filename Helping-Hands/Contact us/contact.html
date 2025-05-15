@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helping Hands</title>
+    <link rel="stylesheet" href="contact.css">
+    <!-- esto es para añadir fuentes a css -->
+           <link href="https://fonts.cdnfonts.com/css/adlam-display" rel="stylesheet">
+           <link href="https://fonts.cdnfonts.com/css/br-shape" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+       <!-- esto es para añadir fuentes a css -->
+    <!-- Importando los estilos para la página del mapa -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- ¡Usando Leaflet para los mapas! -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Este script es necesario para hacer que Leaflet funcione -->
+      <link rel="shortcut icon" href="/Imagenes/Index/Logo.png"> 
+</head>
+<body>
+    <header>
+        <div class="color-bar"></div>
+         <div class="header-content">
+             <div id="userIcon" class="user-icon">
+                  <a href="../Profile/profile.html"></a>
+             </div>
+        <section class="Logo">
+            <div id="LogoAndName">
+            <div id="Logo">
+                <img src="../Imagenes/Index/Logo.png" alt="Logo of Helping Hands" width="150" height="150">
+                <!-- Aquí se añade el logo de Helping Hands -->
+            </div>
+        <section class="Name">
+            <div id="title">
+                <h1>Helping Hands</h1>
+                <p>"We can't help everyone, but everyone can help someone"</p>
+                <!-- Un lema muy bonito -->
+        </section>
+            </div>
+         </section>
+             <nav>
+                  <ul>
+                      <li><a href="/index.html">Home</a></li>
+                      <li><a href="../Blog/blog.html">Blog</a></li>
+                      <li><a href="../Map/map.html" >Map</a></li>
+                      <li><a href="../Donation/Donate.html">Donation</a></li>
+                      <li><a href="../Contact us/contact.html" class="active">Contact</a></li>
+                      <li><a href="../About_us/About:us.html">About Us</a></li>
+                  </ul>
+              </nav>
+    </header>
+    <div class="color-bar"></div>
+    <main>
+        <section class="contact-form">
+            <h2>Contact Us</h2>
+            <form id="contactForm">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">Your Message:</label>
+                <textarea id="message" name="message" required></textarea>
+
+                <button type="submit">Send Message</button>
+            </form>
+        </section>
+    </main>
+    <div class="color-bar"></div>
+    <footer class="footer">
+        <div class="footer-section websites">
+            <h3>Websites</h3>
+            <p>"We can't help everyone, but everyone can help someone"</p>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/helping.hands.off"> <img src="/Imagenes/Index/instagram-icon.png" alt="Instagram"></a>
+                <a href="mailto:helpinghhands.sa@gmail.com"><img src="/Imagenes/Index/gmail-icon.png" alt="Gmail"></a>
+                <a href="Calendar/calendar.html"><img src="/Imagenes/Index/calendar.png" alt="Calendar"></a>
+            </div>
+        </div>
+        <div class="footer-section forum">
+            <h3>Forum</h3>
+            <p>555-123-4567</p>
+        </div>
+        <div class="footer-section contact">
+            <h3>Contact</h3>
+            <p>E-mail for personalised notifications</p>
+            <input type="email" placeholder="Enter your email address here">
+            <button>Send contact form</button>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024. All rights reserved, Helping Hands</p>
+        </div>
+    </footer>
+    <script src= "/Contact us/contact.js"></script>
+</body>
+</html>

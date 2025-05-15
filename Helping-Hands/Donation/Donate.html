@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helping Hands</title>
+    <link rel="stylesheet" href="Donate.css">
+    <!-- esto es para añadir fuentes a css -->
+           <link href="https://fonts.cdnfonts.com/css/adlam-display" rel="stylesheet">
+           <link href="https://fonts.cdnfonts.com/css/br-shape" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+       <!-- esto es para añadir fuentes a css -->
+    <!-- Importando los estilos para la página del mapa -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- ¡Usando Leaflet para los mapas! -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Este script es necesario para hacer que Leaflet funcione -->
+      <link rel="shortcut icon" href="/Imagenes/Index/Logo.png"> 
+</head>
+<body>
+    <header>
+        <div class="color-bar"></div>
+         <div class="header-content">
+             <div id="userIcon" class="user-icon"></div>
+        <section class="Logo">
+            <div id="LogoAndName">
+            <div id="Logo">
+                <img src="../Imagenes/Index/Logo.png" alt="Logo of Helping Hands" width="150" height="150">
+                <!-- Aquí se añade el logo de Helping Hands -->
+            </div>
+        <section class="Name">
+            <div id="title">
+                <h1>Helping Hands</h1>
+                <p>"We can't help everyone, but everyone can help someone"</p>
+                <!-- Un lema muy bonito -->
+        </section>
+            </div>
+         </section>
+             <nav>
+                 <ul>
+                     <li><a href="/index.html">Home</a></li>
+                     <li><a href="../Blog/blog.html">Blog</a></li>
+                     <li><a href="../Map/map.html" >Map</a></li>
+                     <li><a href="../Donation/Donate.html"class="active">Donation</a></li>
+                     <li><a href="../Contact us/contact.html">Contact</a></li>
+                     <li><a href="../About_us/About:us.html">About Us</a></li>
+                 </ul>
+             </nav>
+    </header>
+    <div class="color-bar"></div>
+    <div class="card-container">
+        <div class="card">
+            <img src="/Imagenes/Donation/Medica.avif" alt="Dona artículos">
+            <h3>Donate items for patients</h3>
+            <p class="card-description">Our Patient Treatment program needs your support to continue providing @ioncologico patients with the attention and care they deserve.</p>
+            <button class="donate-button">I want to donate</button>
+        </div>
+        <div class="card">
+            <img src="/Imagenes/Donation/img1.jpg" alt="Fundación Mai Panamá">
+            <h3>Mai Panama Foundation needs you</h3>
+            <p class="card-description">Support us by donating materials and refreshments for our workshops. Here are some ideas: Colored pencils, crayons pastels, markers Canvas, various sizes Paint...</p>
+            <button class="donate-button">I want to donate</button>
+        </div>
+        <div class="card">
+            <img src="/Imagenes/Donation/imag4.png" alt="Colecta de alimentos">
+            <h3>Food Drive</h3>
+            <p class="card-description">Join in doing good and donate food</p>
+            <button class="donate-button">I want to donate</button>
+        </div>
+        <div class="card">
+            <img src="/Imagenes/Donation/imga3.webp" alt="Do your Good Deed">
+            <h3>Do your Good Deed and donate school supplies</h3>
+            <p class="card-description">On the Day of Good Deeds, Panama supports the Caravana del Niño Jesús Foundation and donates school supplies for the children of Quebrada Cogollo in the Ngäbe Buglé Region.</p>
+            <button class="donate-button">I want to donate</button>
+        </div>
+        <div class="card">
+            <img src="/Imagenes/Donation/ROPITA.png" alt="Donate Clothes">
+            <h3>Give your donated clothes a new start.</h3>
+            <p class="card-description">Donate clothes that you don't need or don't fit, let's recycle your clothes to people who need it most.It can be pants, shoes sweaters or any type of clothing. Remember: They must be in good condition.</p>
+            <button class="donate-button">I want to donate</button>
+        </div>
+    </div>
+
+    <!-- Modal for donation registration -->
+    <!-- Modal for donation form -->
+    <div id="donateModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Donation Form</h2>
+            <form id="donationForm">
+                <label for="item">Item to Donate:</label>
+                <input type="text" id="item" name="item" required>
+                <label for="deliveryTime">When will you deliver it?</label>
+                <input type="text" id="deliveryTime" name="deliveryTime" required>
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" name="email" required>
+                <button type="submit">Submit</button>
+            </form>
+            <p>We can’t help everyone, but everyone can help someone.</p>
+        </div>
+    </div>
+
+
+    <footer class="footer">
+        <div class="footer-section websites">
+            <h3>Websites</h3>
+            <p>"We can't help everyone, but everyone can help someone"</p>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/helping.hands.off"> <img src="/Imagenes/Index/instagram-icon.png" alt="Instagram"></a>
+                <a href="mailto:helpinghhands.sa@gmail.com"><img src="/Imagenes/Index/gmail-icon.png" alt="Gmail"></a>
+                <a href="../Calendar/calendar.html"><img src="/Imagenes/Index/calendar.png" alt="Calendar"></a>
+            </div>
+        </div>
+        <div class="footer-section forum">
+            <h3>Forum</h3>
+            <p>555-123-4567</p>
+        </div>
+        <div class="footer-section contact">
+            <h3>Contact</h3>
+            <p>E-mail for personalised notifications</p>
+            <input type="email" placeholder="Enter your email address here">
+            <button>Send contact form</button>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024. All rights reserved, Helping Hands</p>
+        </div>
+    </footer>
+    <script src="Donate.js"></script>
+</body>
+</html>
