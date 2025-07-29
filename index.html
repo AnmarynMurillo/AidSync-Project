@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AidSync | Home</title>
+    <link rel="stylesheet" href="public/css/styles.css">
+    <script defer src="public/js/main.js"></script>
+</head>
+<body>
+    <!-- Hero Section: Carrusel Principal -->
+    <section class="hero-carousel">
+        <div class="carousel-container">
+            <div class="carousel-slide">
+                <!-- Slides will be injected by JS -->
+            </div>
+            <div class="carousel-overlay-content">
+                <div class="carousel-label">AIDSYNC</div>
+                <h1 class="carousel-title">HELP THAT<br><span class="carousel-title-accent">SYNCHRONIZES</span></h1>
+                <div class="carousel-desc">We connect people, organizations, and causes for real impact in Education, Health, Environment, and Social Welfare.</div>
+                <div class="carousel-btns">
+                    <a href="#" class="carousel-btn accent">Get Started</a>
+                    <a href="#what-we-do" class="carousel-btn outline">synchronized</a>
+                </div>
+            </div>
+            <button class="carousel-arrow left">&#8592;</button>
+            <button class="carousel-arrow right">&#8594;</button>
+        </div>
+    </section>
+
+    <!-- What We Do Section -->
+    <section class="what-we-do">
+        <div class="what-we-do-flex">
+            <div class="what-we-do-left">
+                <div class="what-we-do-label">WELCOME</div>
+                <h2 class="what-we-do-title">Smart help for the future<br>and real impact now</h2>
+                <div class="what-we-do-underline"></div>
+            </div>
+            <div class="what-we-do-right">
+                <p>AIDSYNC is a digital platform that centralizes volunteering and donation opportunities in a smart and organized way. Our system connects people, organizations, and causes through a clear, fast, and synchronized interface.<br><br>We make helping as easy as clicking. Our engine runs on synchronization logic: when you decide to act, AIDSYNC aligns that action with the real needs of foundations and communities.<br><br><b>The goal is not just to help, but to do it with efficiency, impact, and technology.</b></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Areas We Support Section -->
+    <section class="areas-support">
+        <h2>Areas We Support</h2>
+        <div class="areas-cards">
+            <div class="area-card education" data-area="education">
+                <img src="public/assets/img/Carrusel_1/Educacion.jpg" alt="Education">
+                <div class="area-card-content">
+                    <h3>Education</h3>
+                    <button class="join-btn">Join</button>
+                    <div class="area-card-description">We support access to quality education for all, empowering communities through knowledge.</div>
+                </div>
+            </div>
+            <div class="area-card health" data-area="health">
+                <img src="public/assets/img/Carrusel_1/health.png" alt="Health">
+                <div class="area-card-content">
+                    <h3>Health</h3>
+                    <button class="join-btn">Join</button>
+                    <div class="area-card-description">We promote health initiatives and access to medical care for vulnerable populations.</div>
+                </div>
+            </div>
+            <div class="area-card environment" data-area="environment">
+                <img src="public/assets/img/Carrusel_1/environment.jpg" alt="Environment">
+                <div class="area-card-content">
+                    <h3>Environment</h3>
+                    <button class="join-btn">Join</button>
+                    <div class="area-card-description">We drive smart environmental actions for a sustainable future.</div>
+                </div>
+            </div>
+            <div class="area-card social-welfare" data-area="social-welfare">
+                <img src="public/assets/img/Carrusel_1/Social_welfare.png" alt="Social Welfare">
+                <div class="area-card-content">
+                    <h3>Social Welfare</h3>
+                    <button class="join-btn">Join</button>
+                    <div class="area-card-description">We foster social inclusion and well-being for all.</div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal for area descriptions -->
+        <!-- <div class="area-modal" id="areaModal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h3 id="modalTitle"></h3>
+                <p id="modalDesc"></p>
+            </div>
+        </div> -->
+    </section>
+
+    <!-- Foundations We Support Section -->
+    <section class="foundations-support">
+        <h2>Foundations We Support</h2>
+        <div class="foundations-carousel">
+            <button class="foundation-arrow left">&#8592;</button>
+            <div class="foundation-cards">
+                <!-- Foundation cards will be injected by JS -->
+            </div>
+            <button class="foundation-arrow right">&#8594;</button>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="contact-info">
+            <div class="contact-label">GET IN TOUCH</div>
+            <h2 class="contact-title">Have a question or feedback?</h2>
+            <p class="contact-desc">Let us know your doubts, comments or suggestions. We are here to help you synchronize your support with real causes.</p>
+        </div>
+        <form class="contact-form">
+            <div class="form-row">
+                <input type="text" name="name" placeholder="Name*" required>
+                <input type="text" name="company" placeholder="Company">
+            </div>
+            <div class="form-row">
+                <input type="email" name="email" placeholder="Email*" required>
+                <input type="text" name="phone" placeholder="Phone">
+            </div>
+            <input type="text" name="subject" placeholder="Subject*" required>
+            <textarea name="message" placeholder="Message" required></textarea>
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-accordion">
+            <div class="faq-item">
+                <button class="faq-question">What is AIDSYNC and what does it do?<span class="faq-icon">&#9660;</span></button>
+                <div class="faq-answer">AIDSYNC is a digital platform that centralizes volunteering and donation opportunities across four impact areas: health, education, environment, and social welfare. It connects users to causes and organizations through a fast and synchronized system.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">How can I become a volunteer through the platform?<span class="faq-icon">&#9660;</span></button>
+                <div class="faq-answer">Go to the Volunteering section, explore available opportunities, and apply. You’ll be connected to causes based on your interests and availability.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">What types of donations does AIDSYNC accept?<span class="faq-icon">&#9660;</span></button>
+                <div class="faq-answer">AIDSYNC facilitates connections to verified organizations that accept monetary and in-kind donations.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Is AIDSYNC available internationally?<span class="faq-icon">&#9660;</span></button>
+                <div class="faq-answer">Currently, the platform focuses on local and regional efforts, with plans to expand to international support.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Is AIDSYNC a real organization?<span class="faq-icon">&#9660;</span></button>
+                <div class="faq-answer">AIDSYNC is a working prototype that demonstrates a functional model for centralized, synchronized aid. While still in development, it reflects real logic and real impact goals.</div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
