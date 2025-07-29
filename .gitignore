@@ -1,0 +1,8 @@
+# secretos
+secretos/
+# Claves privadas
+backend/credentials.json
+backend/firebase_config.json
+
+# Archivos de variables de entorno
+.env
