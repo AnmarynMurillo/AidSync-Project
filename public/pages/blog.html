@@ -1,0 +1,44 @@
+<!-- Blog AidSync -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog | AidSync</title>
+  <link rel="stylesheet" href="/public/assets/css/global.css">
+  <link rel="stylesheet" href="/public/assets/css/blog.css">
+  <link rel="icon" href="/public/assets/images/logos/logito.ico" type="image/x-icon">
+</head>
+<body>
+  <!-- Global Header -->
+  <div id="header-include"></div>
+  <main class="blog-main">
+    <section class="featured-section">
+      <h1>Featured Posts</h1>
+      <div id="featured-posts" class="featured-posts"></div>
+    </section>
+    <section class="blog-controls">
+      <input id="blog-search" type="search" placeholder="Search the blog..." aria-label="Search the blog">
+    </section>
+    <section class="blog-list-section">
+      <div id="blog-list" class="blog-list"></div>
+      <div id="blog-pagination" class="blog-pagination"></div>
+    </section>
+  </main>
+  <!-- Modal for full post -->
+  <div id="blog-modal" class="blog-modal" aria-hidden="true" tabindex="-1">
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Close">&times;</button>
+      <div class="modal-body"></div>
+    </div>
+  </div>
+  <!-- Global Footer -->
+  <div id="footer-include"></div>
+  <script src="/public/assets/js/blog.js"></script>
+  <script>
+    // Load global header and footer
+    fetch('/public/assets/components/header.html').then(r=>r.text()).then(t=>document.getElementById('header-include').innerHTML=t);
+    fetch('/public/assets/components/footer.html').then(r=>r.text()).then(t=>document.getElementById('footer-include').innerHTML=t);
+  </script>
+</body>
+</html>
