@@ -149,5 +149,11 @@
             </div>
         </div>
     </section>
+    <!--footer-->
+    <div id="footer-container"></div>
+  <script>
+    fetch('/src/components/html/header.html').then(r=>r.text()).then(h=>document.getElementById('header-container').innerHTML=h);
+    fetch('/src/components/html/footer.html').then(r=>r.text()).then(f=>document.getElementById('footer-container').innerHTML=f);
+  </script>
 </body>
 </html>
