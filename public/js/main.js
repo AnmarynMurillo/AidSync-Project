@@ -148,3 +148,74 @@ document.addEventListener('DOMContentLoaded', () => {
     alert('Thank you for contacting AidSync!');
   };
 });
+
+// FAQ Modern Accordion (impact)
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.faq-accordion.impact .faq-question').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const item = this.closest('.faq-item');
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-accordion.impact .faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) item.classList.add('active');
+    });
+  });
+});
+
+// Loader universal para el header
+function loadHeader() {
+  const container = document.getElementById('header-container');
+  if (!container) return;
+  fetch('/src/components/html/header.html')
+    .then(res => res.text())
+    .then(html => {
+      container.innerHTML = html;
+      // Carga el JS del header después de insertar el HTML
+      const script = document.createElement('script');
+      script.src = '/src/components/js/header.js';
+      script.defer = true;
+      document.body.appendChild(script);
+      // Carga el CSS del header si no está ya cargado
+      if (!document.querySelector('link[href*="header.css"]')) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/src/components/css/header.css';
+        document.head.appendChild(link);
+      }
+    });
+}
+document.addEventListener('DOMContentLoaded', loadHeader);
+// For dynamic header: re-inicializa modo oscuro tras cargar el header
+function initDarkModeHeader() {
+  const html = document.documentElement;
+  function setDarkMode(on) {
+    if (on) {
+      html.setAttribute('data-theme', 'dark');
+      localStorage.setItem('as_darkmode', '1');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('as_darkmode', '0');
+    }
+  }
+  if (localStorage.getItem('as_darkmode') === '1') {
+    setDarkMode(true);
+  } else {
+    setDarkMode(false);
+  }
+  document.querySelectorAll('.as-header__darkmode-btn').forEach(btn => {
+    btn.onclick = function () {
+      setDarkMode(html.getAttribute('data-theme') !== 'dark');
+    };
+  });
+}
+// Si el header se carga dinámicamente, espera a que esté en el DOM
+if (document.getElementById('header-container')) {
+  const observer = new MutationObserver(() => {
+    if (document.querySelector('.as-header__darkmode-btn')) {
+      initDarkModeHeader();
+      observer.disconnect();
+    }
+  });
+  observer.observe(document.getElementById('header-container'), { childList: true, subtree: true });
+} else {
+  document.addEventListener('DOMContentLoaded', initDarkModeHeader);
+}
