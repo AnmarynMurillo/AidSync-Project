@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AidSync | Home</title>
     <link rel="stylesheet" href="public/css/styles.css">
+    <link rel="stylesheet" href="src/components/css/header.css">
     <script defer src="public/js/main.js"></script>
 </head>
 <body>
+<div id="header-container"></div>
     <!-- Hero Section: Carrusel Principal -->
     <section class="hero-carousel">
         <div class="carousel-container">
@@ -124,30 +126,55 @@
     </section>
 
     <!-- FAQ Section -->
-    <section class="faq-section">
-        <h2>Frequently Asked Questions</h2>
-        <div class="faq-accordion">
-            <div class="faq-item">
-                <button class="faq-question">What is AIDSYNC and what does it do?<span class="faq-icon">&#9660;</span></button>
-                <div class="faq-answer">AIDSYNC is a digital platform that centralizes volunteering and donation opportunities across four impact areas: health, education, environment, and social welfare. It connects users to causes and organizations through a fast and synchronized system.</div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">How can I become a volunteer through the platform?<span class="faq-icon">&#9660;</span></button>
-                <div class="faq-answer">Go to the Volunteering section, explore available opportunities, and apply. You’ll be connected to causes based on your interests and availability.</div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">What types of donations does AIDSYNC accept?<span class="faq-icon">&#9660;</span></button>
-                <div class="faq-answer">AIDSYNC facilitates connections to verified organizations that accept monetary and in-kind donations.</div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">Is AIDSYNC available internationally?<span class="faq-icon">&#9660;</span></button>
-                <div class="faq-answer">Currently, the platform focuses on local and regional efforts, with plans to expand to international support.</div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">Is AIDSYNC a real organization?<span class="faq-icon">&#9660;</span></button>
-                <div class="faq-answer">AIDSYNC is a working prototype that demonstrates a functional model for centralized, synchronized aid. While still in development, it reflects real logic and real impact goals.</div>
-            </div>
+    <section class="faq-section impact-faq">
+      <div class="faq-visual">
+        <div class="faq-illustration">
+          <span class="faq-big">FAQ</span>
+          
         </div>
+      </div>
+      <div class="faq-content">
+        <h2 class="faq-title">Frequently Asked Questions</h2>
+        <div class="faq-accordion impact">
+          <div class="faq-item">
+            <button class="faq-question">
+              <span class="faq-q">What is AIDSYNC and what does it do?</span>
+              <span class="faq-icon"><svg width="24" height="24" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+            <div class="faq-answer">AIDSYNC is a digital platform that centralizes volunteering and donation opportunities across four impact areas: health, education, environment, and social welfare. It connects users to causes and organizations through a fast and synchronized system.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span class="faq-q">How can I become a volunteer through the platform?</span>
+              <span class="faq-icon"><svg width="24" height="24" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+            <div class="faq-answer">Go to the Volunteering section, explore available opportunities, and apply. You’ll be connected to causes based on your interests and availability.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span class="faq-q">What types of donations does AIDSYNC accept?</span>
+              <span class="faq-icon"><svg width="24" height="24" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+            <div class="faq-answer">AIDSYNC facilitates connections to verified organizations that accept monetary and in-kind donations.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span class="faq-q">Is AIDSYNC available internationally?</span>
+              <span class="faq-icon"><svg width="24" height="24" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+            <div class="faq-answer">Currently, the platform focuses on local and regional efforts, with plans to expand to international support.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span class="faq-q">Is AIDSYNC a real organization?</span>
+              <span class="faq-icon"><svg width="24" height="24" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+            <div class="faq-answer">AIDSYNC is a working prototype that demonstrates a functional model for centralized, synchronized aid. While still in development, it reflects real logic and real impact goals.</div>
+          </div>
+        </div>
+      </div>
     </section>
+    <!-- Scripts globales header -->
+    <script src="src/components/js/header.js"></script>
 </body>
 </html>
