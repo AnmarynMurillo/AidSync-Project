@@ -1,0 +1,58 @@
+<!--este archivo es login.html y es el archivo de la pagina de login-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión | AidSync</title>
+  <link rel="icon" href="/public/assets/images/logos/logito.ico" type="imagen/x-icon">
+  <link rel="stylesheet" href="/public/css/login.css">
+  <link rel="stylesheet" href="/public/css/global.css">
+  <link rel="stylesheet" href="/public/css/register.css">
+</head>
+<body>
+  <!-- Header oculto -->
+  <div id="header-container"></div>
+  <main class="register-main">
+    <section class="register-section">
+      <a href="/" class="register-logo-link" style="position: absolute; top: 24px; left: 24px; z-index: 10;">
+        <img src="/public/assets/images/logos/Black_name.png" alt="AidSync logo" style="max-width: 150px; height: auto;">
+      </a>
+      <h1>Login</h1>
+      <form id="login-form" class="register-form" autocomplete="off">
+        <div class="register-row">
+          <input type="text" id="login-email" name="Email" placeholder="Email" required maxlength="60">
+        </div>
+        <div class="register-row">
+          <input type="password" id="login-pass" name="password" placeholder="Password" required minlength="6">
+        </div>
+        <div class="register-row login-remember-row">
+          <label><input type="checkbox" id="login-remember"> Remember me</label>
+        </div>
+        <div class="register-row no-account-row">
+          <span>Don't have an account? <a href="register.html" class="login-register-link">Register</a></span>
+        </div>
+        <div class="register-row login-location-msg">
+          <span class="login-location-info">🔒 We use your location only to show you nearby opportunities on the map. We never share your data.</span>
+        </div>
+        <button type="submit" class="register-btn">Login</button>
+        <button type="button" class="register-btn" style="background:#aaa; margin-top:0.5rem;" onclick="window.location.href='/'">Back</button>
+        <div id="login-status" class="register-status"></div>
+      </form>
+      <div class="login-links" style="text-align:center; margin-top:1rem;">
+        <a href="#" class="login-forgot">Forgot your password?</a>
+      </div>
+    </section>
+  </main>
+  <div id="footer-container"></div>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="../js/login.js"></script>
+<script>
+  // Carga header y footer externos
+  fetch('/public/assets/components/header.html').then(r=>r.text()).then(html=>document.getElementById('header-container').innerHTML=html);
+  fetch('/public/assets/components/footer.html').then(r=>r.text()).then(html=>document.getElementById('footer-container').innerHTML=html);
+</script>
+</body>
+</html>
