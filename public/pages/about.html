@@ -1,15 +1,15 @@
 <!-- Sobre Nosotros - AidSync -->
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sobre Nosotros | AidSync</title>
-  <link rel="icon" href="/public/assets/logos/logito.ico" type="imagen/x-icon">
-  <link rel="stylesheet" href="/src/components/css/header.css">
-  <link rel="stylesheet" href="/public/css/about.css">
-  <script defer src="../js/about.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voluntariado | AidSync</title>
+    <link rel="icon" href="/public/assets/logos/logito.ico" type="imagen/x-icon">
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="/src/components/css/header.css">
+    <link rel="stylesheet" href="/public/css/about.css">
+    <script defer src="/public/js/about.js"></script>
 </head>
 <body>
   <div id="header-container"></div>
@@ -66,7 +66,7 @@
     </section>
      <section class="logo-explanation">
         <h1>Our Logo Explained</h1>
-      <img src="/public/assets/images/logos/Logo_logo.png" alt="AidSync Logo" class="logo-explain-img">
+      <img src="/public/assets/logos/Logo_logo.png" alt="AidSync Logo" class="logo-explain-img">
       <p class="logo-explain-text">Our logo represents three figures: the volunteer, the person in need, and AidSync, the connector that unites them.</p>
     </section>
     <section class="mantras-section">
@@ -80,8 +80,8 @@
   </main>
   <div id="footer-container"></div>
   <script>
-    fetch('/public/src/components/html/header.html').then(r=>r.text()).then(h=>document.getElementById('header-container').innerHTML=h);
-    fetch('/public/src/components/html/footer.html').then(r=>r.text()).then(f=>document.getElementById('footer-container').innerHTML=f);
+    fetch('/src/components/html/header.html').then(r=>r.text()).then(h=>document.getElementById('header-container').innerHTML=h);
+    fetch('/src/components/html/footer.html').then(r=>r.text()).then(f=>document.getElementById('footer-container').innerHTML=f);
   </script>
 </body>
 </html>

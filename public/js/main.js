@@ -86,49 +86,52 @@ document.addEventListener('DOMContentLoaded', () => {
   closeModal.onclick = () => modal.classList.remove('active');
   modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
 
-  // Foundations Carousel
-  const foundations = [
-    { img: 'public/assets/img/Carrusel_1/Educacion.jpg', name: 'Educa Foundation' },
-    { img: 'public/assets/img/Carrusel_1/health.png', name: 'Health4All' },
-    { img: 'public/assets/img/Carrusel_1/environment.jpg', name: 'GreenFuture' },
-    { img: 'public/assets/img/Carrusel_1/Social_welfare.png', name: 'SocialCare' },
-    { img: 'public/assets/img/Carrusel_1/Educacion.jpg', name: 'Learn&Grow' }
-  ];
-  let foundationIdx = 0;
-  const cardsToShow = 3;
+  // Foundations Carousel funcionalidad solo JS
+  let currentFoundation = 0;
   const foundationCardsDiv = document.querySelector('.foundation-cards');
-  function renderFoundationCards() {
-    foundationCardsDiv.innerHTML = '';
-    for (let i = 0; i < cardsToShow; i++) {
-      const idx = (foundationIdx + i) % foundations.length;
-      const f = foundations[idx];
-      const card = document.createElement('div');
-      card.className = 'foundation-card';
-      card.innerHTML = `<img src="${f.img}" alt="${f.name}"><div class="foundation-name">${f.name}</div>`;
-      foundationCardsDiv.appendChild(card);
-    }
+  function getFoundationCards() {
+    return Array.from(document.querySelectorAll('.foundation-card'));
   }
-  function nextFoundation() {
-    foundationIdx = (foundationIdx + 1) % foundations.length;
-    renderFoundationCards();
+  function showOnlyFoundation(idx) {
+    const foundationCards = getFoundationCards();
+    foundationCards.forEach((card, i) => {
+      card.style.display = (i === idx) ? 'flex' : 'none';
+    });
   }
-  function prevFoundation() {
-    foundationIdx = (foundationIdx - 1 + foundations.length) % foundations.length;
-    renderFoundationCards();
+  function nextFoundationSlide() {
+    const foundationCards = getFoundationCards();
+    currentFoundation = (currentFoundation + 1) % foundationCards.length;
+    showOnlyFoundation(currentFoundation);
   }
-  document.querySelector('.foundation-arrow.left').onclick = () => { prevFoundation(); startFoundationAuto(); };
-  document.querySelector('.foundation-arrow.right').onclick = () => { nextFoundation(); startFoundationAuto(); };
+  function prevFoundationSlide() {
+    const foundationCards = getFoundationCards();
+    currentFoundation = (currentFoundation - 1 + foundationCards.length) % foundationCards.length;
+    showOnlyFoundation(currentFoundation);
+  }
   let foundationTimer;
   function startFoundationAuto() {
     clearInterval(foundationTimer);
-    foundationTimer = setInterval(nextFoundation, 4000);
+    foundationTimer = setInterval(() => {
+      nextFoundationSlide();
+    }, 3000);
   }
   function stopFoundationAuto() {
     clearInterval(foundationTimer);
   }
-  foundationCardsDiv.onmouseenter = stopFoundationAuto;
-  foundationCardsDiv.onmouseleave = startFoundationAuto;
-  renderFoundationCards();
+  // Interacción usuario: pausa/reanuda
+  foundationCardsDiv.addEventListener('mouseenter', stopFoundationAuto);
+  foundationCardsDiv.addEventListener('mouseleave', startFoundationAuto);
+  foundationCardsDiv.addEventListener('focusin', stopFoundationAuto);
+  foundationCardsDiv.addEventListener('focusout', startFoundationAuto);
+  document.querySelector('.foundation-arrow.left').onclick = () => {
+    prevFoundationSlide();
+    startFoundationAuto();
+  };
+  document.querySelector('.foundation-arrow.right').onclick = () => {
+    nextFoundationSlide();
+    startFoundationAuto();
+  };
+  showOnlyFoundation(currentFoundation);
   startFoundationAuto();
 
   // FAQ Accordion

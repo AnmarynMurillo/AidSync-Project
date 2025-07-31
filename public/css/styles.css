@@ -1,3 +1,23 @@
+/* Foundation Button Style */
+.foundation-btn {
+  display: inline-block;
+  margin: 1rem auto 1.2rem auto;
+  padding: 0.6rem 1.5rem;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  box-shadow: 0 2px 10px rgba(0,61,102,0.10);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.foundation-btn:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
 :root {
   --color-primary: #003d66;
   --color-accent: #16a085;
@@ -441,7 +461,7 @@ h2, h3 {
   display: flex;
   gap: 1.7rem;
   overflow: hidden;
-  width: 900px;
+  width: 1200px;
   min-height: 260px;
   transition: width 0.2s;
 }
@@ -449,8 +469,8 @@ h2, h3 {
   background: var(--color-support2);
   border-radius: 22px;
   box-shadow: 0 4px 18px rgba(0,0,0,0.10);
-  width: 260px;
-  min-width: 260px;
+  width: 270px;
+  min-width: 270px;
   height: 260px;
   display: flex;
   flex-direction: column;
@@ -814,9 +834,10 @@ h2, h3 {
 [data-theme="dark"] .area-card-description,
 [data-theme="dark"] .foundation-name,
 [data-theme="dark"] .submit-btn,
-[data-theme="dark"] .join-btn {
-  color: #fff !important;
-}
+[data-theme="dark"] .area-card.education .join-btn { color: var(--color-primary) !important; }
+[data-theme="dark"] .area-card.health .join-btn { color: var(--color-health) !important; }
+[data-theme="dark"] .area-card.environment .join-btn { color: var(--color-accent) !important; }
+[data-theme="dark"] .area-card.social-welfare .join-btn { color: var(--color-social) !important; }
 [data-theme="dark"] input,
 [data-theme="dark"] textarea {
   background: #232a3a;
