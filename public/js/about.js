@@ -1,97 +1,97 @@
-// about.js - Funcionalidad para la página Sobre Nosotros
+// about.js - Functionality for the About Us page
 
-// Datos del equipo con rutas corregidas y validación
+// Team data with corrected paths and validation
 const TEAM = [
     {
       nombre: 'Juan Morales',
-      foto: '../images/integrantes/Juan.Morales.png',
-      rol: 'Desarrollo',
-      desc: 'Apasionado por la tecnología y el impacto social. Encargado del backend y la integración con Firebase.'
+      foto: '/public/assets/members/Juan.png',
+      rol: 'Development',
+      desc: 'Passionate about technology and social impact. In charge of backend and Firebase integration.'
     },
     {
       nombre: 'Isaura Ríos',
-      foto: '../images/integrantes/Isaura.Rios.png',
-      rol: 'Diseño UX/UI',
-      desc: 'Diseñadora creativa, responsable de la experiencia visual y la identidad de AidSync.'
+      foto: '/public/assets/members/Isaura.png',
+      rol: 'UX/UI Design',
+      desc: 'Creative designer, responsible for the visual experience and AidSync identity.'
     },
     {
       nombre: 'Patricia Fernández',
-      foto: '../images/integrantes/Patricia.Fernandez.png',
-      rol: 'Contenido',
-      desc: 'Redactor y comunicador. Se encarga de los textos y la estrategia de comunicación.'
+      foto: '/public/assets/members/Patricia.png',
+      rol: 'Content',
+      desc: 'Writer and communicator. Handles texts and communication strategy.'
     },
     {
       nombre: 'Anmaryn Murrillo',
-      foto: '../images/integrantes/Anmaryn.Murrillo.png',
-      rol: 'Gestión de Proyectos',
-      desc: 'Organiza y coordina al equipo para que todo funcione en tiempo y forma.'
+      foto: '/public/assets/members/Anmaryn.png',
+      rol: 'Project Management',
+      desc: 'Organizes and coordinates the team to ensure everything works on time and properly.'
     },
     {
       nombre: 'Dushka Jimenez',
-      foto: '../images/integrantes/Dushka.Jimenez.png',
+      foto: '/public/assets/members/Dushka.png',
       rol: 'Marketing',
-      desc: 'Estratega digital, encargada de la difusión y redes sociales de AidSync.'
+      desc: 'Digital strategist, in charge of AidSync outreach and social media.'
     },
     {
       nombre: 'Emily Bulgin',
-      foto: '../images/integrantes/Emily.Bulgin.png',
+      foto: '/public/assets/members/Emily.png',
       rol: 'QA & Testing',
-      desc: 'Responsable de la calidad y pruebas de la plataforma.'
+      desc: 'Responsible for platform quality and testing.'
     },
     {
       nombre: 'Luis Camargo',
-      foto: '../images/integrantes/Luis.Camargo.png',
-      rol: 'Soporte Técnico',
-      desc: 'Brinda soporte y ayuda a los usuarios y fundaciones.'
+      foto: '/public/assets/members/Luis.png',
+      rol: 'Technical Support',
+      desc: 'Provides support and assistance to users and foundations.'
     },
     {
       nombre: 'Gilberto Rodriguez',
-      foto: '../images/integrantes/Gilberto.Rodriguez.png',
+      foto: '/public/assets/members/Gilberto.png',
       rol: 'DevOps',
-      desc: 'Gestiona la infraestructura y el despliegue seguro de la plataforma.'
+      desc: 'Manages infrastructure and secure platform deployment.'
     },
     {
       nombre: 'Stephany Dominguez',
-      foto: '../images/integrantes/Stephany.Dominguez.png',
+      foto: '/public/assets/members/Stephany.png',
       rol: 'Legal',
-      desc: 'Asegura el cumplimiento legal y la protección de datos en AidSync.'
+      desc: 'Ensures legal compliance and data protection in AidSync.'
     },
     {
       nombre: 'Elina Pérez',
-      foto: '../images/integrantes/Elina.Perez.png',
+      foto: '/public/assets/members/Elina.png',
       rol: 'JS Developer',
-      desc: 'Encargada de la funcionalidad JavaScript y interacciones dinámicas.'
+      desc: 'In charge of JavaScript functionality and dynamic interactions.'
     }
   ];
   
-  // Carrusel con rutas corregidas
+  // Carousel with corrected paths
   const CAROUSEL_IMAGES = [
-    '../images/team/momento1.jpg',
-    '../images/team/momento2.jpg',
-    '../images/team/momento3.jpg',
-    '../images/team/momento4.jpg'
+    '/public/assets/aidsync_moments/momento 1.jpeg',
+    '/public/assets/aidsync_moments/momento 2.jpeg',
+    '/public/assets/aidsync_moments/momento 3.jpeg',
+    '/public/assets/aidsync_moments/momento 4.jpg',
   ];
   
-  // Función para renderizar el equipo con manejo de errores
+  // Function to render team with error handling  
   function renderTeam() {
     const gallery = document.getElementById('team-gallery');
     
     if (!gallery) {
-      console.error('Error: No se encontró el elemento con ID "team-gallery"');
+      console.error('Error: Element with ID "team-gallery" not found');
       return;
     }
   
     gallery.innerHTML = TEAM.map(member => {
-      // Validación de datos del miembro
+      // Member data validation
       if (!member.foto || !member.rol) {
-        console.warn(`Datos incompletos para: ${member.nombre}`);
+        console.warn(`Incomplete data for: ${member.nombre}`);
         return '';
       }
       
       return `
         <div class="team-card">
           <img src="${member.foto}" 
-               alt="Foto de ${member.nombre}" 
+               alt="Photo of ${member.nombre}" 
                class="team-photo"
                loading="lazy"
                onerror="this.onerror=null;this.src='../images/default-avatar.png'">
@@ -103,7 +103,7 @@ const TEAM = [
     }).join('');
   }
   
-  // Carrusel mejorado con autoplay y controles
+  // Enhanced carousel with autoplay and controls
   let carouselIndex = 0;
   let carouselInterval = null;
   
@@ -114,7 +114,7 @@ const TEAM = [
     track.innerHTML = CAROUSEL_IMAGES.map((src, index) => 
       `<img src="${src}" 
             class="carousel-img" 
-            alt="Momento del equipo ${index + 1}"
+            alt="Team moment ${index + 1}"
             draggable="false"
             loading="lazy">`
     ).join('');
@@ -122,11 +122,11 @@ const TEAM = [
     updateCarousel();
     startCarouselAuto();
     
-    // Agregar event listeners
+    // Add event listeners
     document.getElementById('carousel-prev')?.addEventListener('click', prevCarousel);
     document.getElementById('carousel-next')?.addEventListener('click', nextCarousel);
     
-    // Pausar al hacer hover
+    // Pause on hover
     track.addEventListener('mouseenter', pauseCarousel);
     track.addEventListener('mouseleave', startCarouselAuto);
   }
@@ -164,7 +164,7 @@ const TEAM = [
     startCarouselAuto();
   }
   
-  // Observador de intersección para animaciones
+  // Intersection observer for animations
   function setupIntersectionObserver() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -179,12 +179,12 @@ const TEAM = [
     });
   }
   
-  // Inicialización cuando el DOM esté listo
+  // Initialization when DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
     renderTeam();
     renderCarousel();
     setupIntersectionObserver();
     
-    // Verificación en consola
-    console.log('Página "Sobre Nosotros" cargada correctamente');
+    // Console verification
+    console.log('About Us page loaded successfully');
   });

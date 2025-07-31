@@ -23,6 +23,9 @@
     font-size: 1.3rem;
     margin-bottom: 1.2rem;
   }
+  .donate-main {
+    padding: 1.5rem 0.5rem 1rem 0.5rem;
+  }
 }
 .donate-filters {
   display: flex;
@@ -217,8 +220,28 @@
 @media (max-width: 600px) {
   .donate-gallery { grid-template-columns: 1fr; }
   .modal-content { padding: 1rem; }
+  .donate-filters {
+    gap: 0.5rem;
+  }
+  .filter-btn {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.95rem;
+  }
 }
-
+@media (max-width: 600px) {
+  .modal-details { padding: 0.7rem 0.5rem; font-size: 0.95rem; }
+  .modal-payment-methods { flex-direction: column; gap: 0.5rem; }
+  .field-group { flex-direction: column; gap: 0.3rem; }
+  .donate-banner {
+    padding: 1rem 0.5rem;
+  }
+  .donate-banner-title {
+    font-size: 1.2rem;
+  }
+  .donate-banner-desc {
+    font-size: 0.9rem;
+  }
+}
 /* Detalles adicionales en el modal */
 .modal-details {
   margin: 1.2rem 0 1.5rem 0;
@@ -282,8 +305,27 @@
 .input-card-number { flex: 1; min-width: 160px; }
 .input-card-expiry { width: 80px; }
 .input-card-cvv { width: 60px; }
-@media (max-width: 600px) {
-  .modal-details { padding: 0.7rem 0.5rem; font-size: 0.95rem; }
-  .modal-payment-methods { flex-direction: column; gap: 0.5rem; }
-  .field-group { flex-direction: column; gap: 0.3rem; }
+ /* Center the modal */
+ #difference-modal.donate-modal[aria-hidden="false"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+#difference-modal .modal-content {
+  margin: 0;
+  top: auto;
+  left: auto;
+  transform: none;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.15);
+  border-radius: 20px;
+  min-width: 400px;
+  max-width: 90vw;
+  text-align: center;
+}
+@media (max-width: 500px) {
+  #difference-modal .modal-content { min-width: 0; width: 95vw; }
 }
