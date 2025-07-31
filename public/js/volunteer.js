@@ -8,7 +8,7 @@ const VOLUNTEERS = [
       categoria: 'educacion',
       color: '#2563eb',
       colorHover: '#1d4ed8',
-      img: '../img/volunter/casaEsperanza.jpg',
+      img: '../assets/img/volunter/casaEsperanza.jpg',
       desc: 'Help children and young people improve their academic performance.',
       descLarga: 'Be part of our team of volunteers for the Casa Esperanza Summer School and together we help strengthen the learning of the children and adolescents in our programs.',
       ubicacion: 'C. la Esperanza 70, Aguadulce, Provincia de Coclé',
@@ -25,7 +25,7 @@ const VOLUNTEERS = [
       categoria: 'salud',
       color: '#dc2626',
       colorHover: '#b91c1c',
-      img: '../img/volunter/Brigadas.jpg',
+      img: '../assets/img/volunter/Brigadas.jpg',
       desc: 'Global Brigades Panama is an international organization that connects volunteers with vulnerable communities to provide medical, dental, and health education services through short-term brigades.',
       descLarga: 'Become a volunteer and help bring vital healthcare and education to communities in need.',
       ubicacion: '1003 Calle 60 Oeste, Panamá, Provincia de Panamá, PA',
@@ -54,7 +54,7 @@ const VOLUNTEERS = [
       mapa:'<iframe width="100%" height="180" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=-79.5513%2C8.9785%2C-79.5473%2C8.9815&amp;layer=mapnik&amp;marker=8.980028423107049%2C-79.54932847557309" style="border:1px solid black"></iframe>',
       requisitos: ['Commitment to the environmental cause','Availability of time',
       'Physical ability','Minimum age (18 years or younger with authorization)','Teamwork and positive attitude', 'Participation in informational or orientation sessions', 'Compliance with safety protocols'],
-      img:'../img/volunter/Reforestacion.jpeg',
+      img:'../assets/img/volunter/Reforestacion.jpeg',
     },
     {
       id: 4,
@@ -67,7 +67,7 @@ const VOLUNTEERS = [
       ubicacion: 'Vía Circunvalación, Las Mañanitas, Tocumen, Panamá',
       mapa: '<iframe width="100%" height="180" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"  src="https://www.openstreetmap.org/export/embed.html?bbox=-79.3999%2C9.0873%2C-79.3959%2C9.0903&layer=mapnik&marker=9.088846170013202%2C-79.3978560319548"  style="border:1px solid black"></iframe>',
       requisitos: ['Strong social commitment and willingness to help', 'Be at least 16 years old (or younger with permission)','Availability (weekdays or weekends)','Teamwork and collaborative attitude','Follow hygiene and safety rules','Attend an orientation or information session', 'Be punctual and comply with assigned schedules','Wear appropriate clothing (closed shoes, no loose accessories)'],
-      img:  '../img/Bnaco - Copy.webp',
+      img:  '../assets/img/volunter/banco.jpg',
     }
   ];
   
