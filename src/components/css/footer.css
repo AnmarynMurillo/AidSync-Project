@@ -1,5 +1,5 @@
 footer {
-    background:  linear-gradient(90deg, var(--color-bg) 0%, var(--color-accent) 100%);;
+    background:  linear-gradient(90deg, var(--color-bg) 0%, var(--color-accent) 100%);
     color: var(--color-text, #222);
     padding: 2rem;
     display: flex;
@@ -7,7 +7,8 @@ footer {
     gap: 1.5rem;
     box-shadow: 0 -2px 12px #0001;
     border-top: 2px solid var(--color-border);
-  }
+    font-family: var(--font-family, 'Poppins', 'Nunito', Arial, sans-serif);
+}
   
   .footer-row {
     display: flex;
@@ -49,9 +50,10 @@ footer {
     margin-top: 0.5rem;
   }
   
-  .social-icons i {
-    background: #FF6A00;
+.social-icons i {
+    background: linear-gradient(135deg, var(--color-primary, #003d66) 0%, var(--color-accent, #16a085) 100%);
     padding: 0.5rem;
     border-radius: 50%;
     color: white;
-  }
+    transition: background 0.3s;
+}
