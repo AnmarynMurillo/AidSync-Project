@@ -1,237 +1,263 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contacto | AidSync</title>
-  <link rel="icon" href="/public/assets/logos/logito.ico" type="imagen/x-icon">
-  <link rel="stylesheet" href="/public/css/styles.css">
-  <link rel="stylesheet" href="/src/components/css/header.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us - Conztru</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="script.js"></script>
   <style>
-    .contact-main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2.5rem 1rem 2rem 1rem;
-      font-family: 'Poppins', 'Nunito', Arial, sans-serif;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    
-    .contact-main h1 {
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #fff;
+      color: #00113B;
+    }
+
+    header,
+    footer,
+    nav,
+    section,
+    main {
       width: 100%;
-      text-align: center;
-      margin-bottom: 2rem;
-      font-size: 2rem;
-      color: var(--color-primary);
-      font-weight: 700;
-      display: block;
-      letter-spacing: 0.5px;
     }
-    
+
+    .topbar {
+      background: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .topbar .left,
+    .topbar .right {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      padding: 1rem 2rem;
+    }
+
+    nav ul a {
+      text-decoration: none;
+      color: #00113B;
+      font-weight: 500;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+    }
+
+    .breadcrumb {
+      color: #FF6A00;
+      margin-bottom: 1rem;
+    }
+
     .contact-section {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 2rem;
       padding: 2rem;
-      max-width: 1000px;
-      margin: 0 auto;
     }
-    
-    .contact-form {
+
+    form {
       flex: 1;
       min-width: 300px;
       max-width: 600px;
-      background: var(--color-card);
-      border-radius: 1.2rem;
-      box-shadow: 0 2px 12px #0002;
-      padding: 2rem;
-    }
-    
-    .contact-form h2 {
-      color: var(--color-primary);
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-      text-align: center;
-    }
-    
-    .form-row {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
+      gap: 1rem;
     }
-    
-    .contact-form input,
-    .contact-form textarea {
-      border: 1.5px solid #eaf4f5;
-      background: #eaf4f5;
-      font-size: 1rem;
-      color: var(--color-text);
-      border-radius: 0.7rem;
-      padding: 0.8rem 1rem;
-      outline: none;
-      transition: border 0.2s, background 0.2s;
-      font-family: inherit;
+
+    input,
+    textarea {
+      padding: 0.8rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 100%;
+      font-family: 'Poppins';
     }
-    
-    .contact-form input:focus,
-    .contact-form textarea:focus {
-      border: 2px solid var(--color-primary);
-      background: #d6f5f0;
-    }
-    
-    .contact-form textarea {
-      resize: vertical;
-      min-height: 120px;
-    }
-    
-    .submit-btn {
-      background: var(--color-primary);
-      color: #fff;
+
+    .send-btn {
+      background: #FF6A00;
+      color: white;
       border: none;
-      border-radius: 0.7rem;
       padding: 0.8rem 2rem;
-      font-size: 1.1rem;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
-      transition: background 0.2s, transform 0.2s;
-      width: 100%;
-      margin-top: 1rem;
+      max-width: 150px;
     }
-    
-    .submit-btn:hover {
-      background: var(--color-accent);
-      transform: translateY(-2px) scale(1.02);
-    }
-    
+
     .contact-info {
-      background: var(--color-primary);
+      background: #00113B;
       color: white;
-      border-radius: 1.2rem;
+      border-radius: 16px;
       padding: 2rem;
       max-width: 400px;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1rem;
     }
-    
-    .contact-info h3 {
-      color: var(--color-accent);
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    .contact-info p {
-      font-size: 1rem;
-      line-height: 1.6;
-    }
-    
+
     .social-icons {
       display: flex;
       gap: 1rem;
-      margin-top: 1rem;
     }
-    
+
     .social-icons i {
-      background: var(--color-accent);
-      padding: 0.8rem;
+      background: #FF6A00;
+      padding: 0.5rem;
       border-radius: 50%;
       color: white;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.2s;
     }
-    
-    .social-icons i:hover {
-      background: var(--color-support1);
-      transform: scale(1.1);
+
+    .map {
+      width: 100%;
+      height: 300px;
+      background: #eee;
+      margin: 2rem 0;
     }
-    
-    @media (max-width: 900px) {
-      .contact-section {
-        flex-direction: column;
-        align-items: center;
-      }
-      
-      .contact-form,
-      .contact-info {
-        max-width: 100%;
-        width: 100%;
-      }
+
+    footer {
+      background: #00113B;
+      color: white;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
     }
-    
-    @media (max-width: 600px) {
-      .contact-main h1 {
-        font-size: 1.5rem;
-      }
-      
-      .contact-form,
-      .contact-info {
-        padding: 1.5rem;
-      }
+
+    .footer-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      background: #FF6A00;
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .email-subscribe {
+      display: flex;
+      max-width: 300px;
+    }
+
+    .email-subscribe input {
+      flex: 1;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 4px 0 0 4px;
+    }
+
+    .email-subscribe button {
+      background: #FF6A00;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0 4px 4px 0;
     }
   </style>
 </head>
+
 <body>
-  <!-- Header -->
-  <div id="header-container"></div>
-  
-  <main class="contact-main">
-    <h1>Contacto</h1>
-    
+  <header>
+    <div class="topbar">
+      <div class="left">
+        <img src="logo.png" alt="Logo" />
+        <span>Conztru.</span>
+      </div>
+      <div class="right">
+        <span><i class="fa fa-phone"></i> (406) 555-0120</span>
+        <span><i class="fa fa-envelope"></i> example@gmail.com</span>
+        <div class="social-icons">
+          <i class="fab fa-facebook-f"></i>
+          <i class="fab fa-twitter"></i>
+          <i class="fab fa-linkedin"></i>
+        </div>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Projects</a></li>
+        <li><a href="#">Blogs</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#" style="color: #FF6A00;">Contact Us</a></li>
+        <li><a href="#" style="background: #FF6A00; color: white; padding: 0.5rem 1rem; border-radius: 8px;">Get a Quote</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <p class="breadcrumb">Home / Contact Us</p>
+      <h1>Contact Us</h1>
+    </div>
+
     <section class="contact-section">
-      <form class="contact-form">
-        <h2>Envíanos un mensaje</h2>
-        <div class="form-row">
-          <input type="text" placeholder="Nombre completo *" required />
-        </div>
-        <div class="form-row">
-          <input type="email" placeholder="Email *" required />
-        </div>
-        <div class="form-row">
-          <input type="tel" placeholder="Teléfono" />
-        </div>
-        <div class="form-row">
-          <input type="text" placeholder="Asunto *" required />
-        </div>
-        <div class="form-row">
-          <textarea placeholder="Tu mensaje *" rows="5" required></textarea>
-        </div>
-        <button type="submit" class="submit-btn">Enviar mensaje</button>
+      <form>
+        <input type="text" placeholder="First Name *" required />
+        <input type="text" placeholder="Last Name *" required />
+        <input type="email" placeholder="Email *" required />
+        <input type="text" placeholder="Phone Number *" required />
+        <input type="text" placeholder="Subject *" required />
+        <textarea placeholder="Your Message *" rows="5" required></textarea>
+        <button type="submit" class="send-btn">Send Message</button>
       </form>
 
       <div class="contact-info">
-        <div>
-          <h3>Dirección</h3>
-          <p>Ciudad de Panamá, Panamá</p>
-        </div>
-        <div>
-          <h3>Contacto</h3>
-          <p>Teléfono: +(507) 000-0000<br>Email: info@aidsync.org</p>
-        </div>
-        <div>
-          <h3>Horario de atención</h3>
-          <p>Lun - Vie: 9:00 - 18:00<br>Sáb - Dom: 10:00 - 16:00</p>
-        </div>
-        <div>
-          <h3>Síguenos</h3>
-          <div class="social-icons">
-            <i class="fab fa-facebook-f"></i>
-            <i class="fab fa-twitter"></i>
-            <i class="fab fa-instagram"></i>
-            <i class="fab fa-linkedin"></i>
-          </div>
+        <h3>Address</h3>
+        <p>2464 Royal Ln. Mesa, New Jersey 45463</p>
+        <h3>Contact</h3>
+        <p>Phone: +(000) 000-0000<br>Email: example@gmail.com</p>
+        <h3>Open Time</h3>
+        <p>Mon - Fri: 10:00 - 20:00<br>Sat - Sun: 11:00 - 18:00</p>
+        <h3>Stay Connected</h3>
+        <div class="social-icons">
+          <i class="fab fa-facebook-f"></i>
+          <i class="fab fa-xing"></i>
+          <i class="fab fa-pinterest"></i>
+          <i class="fab fa-instagram"></i>
+          <i class="fab fa-dribbble"></i>
         </div>
       </div>
     </section>
+
   </main>
 
   <!-- Footer -->
   <div id="footer-container"></div>
-  
-  <script src="/src/components/js/header.js"></script>
   <script>
     // Carga header/footer
-    fetch('/src/components/html/header.html').then(r=>r.text()).then(h=>document.getElementById('header-container').innerHTML=h);
-    fetch('/src/components/html/footer.html').then(r=>r.text()).then(f=>document.getElementById('footer-container').innerHTML=f);
-  </script>
+    fetch('/public/assets/components/header.html').then(r=>r.text()).then(h=>document.getElementById('header-container').innerHTML=h);
+    fetch('/public/assets/components/footer.html').then(r=>r.text()).then(f=>document.getElementById('footer-container').innerHTML=f);
+</script>
 </body>
+
 </html>

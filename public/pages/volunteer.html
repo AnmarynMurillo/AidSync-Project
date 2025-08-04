@@ -6,15 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voluntariado | AidSync</title>
     <link rel="icon" href="/public/assets/logos/logito.ico" type="imagen/x-icon">
-<<<<<<< HEAD
-      <link rel="stylesheet" href="/public/css/styles.css">
-  <link rel="stylesheet" href="/src/components/css/header.css">
-  <link rel="stylesheet" href="/public/css/volunteer.css">
-=======
     <link rel="stylesheet" href="/public/css/styles.css">
     <link rel="stylesheet" href="/src/components/css/header.css">
     <link rel="stylesheet" href="/public/css/volunteer.css">
->>>>>>> 1fa6f7cc469857319ecb6d4e4aefa5b32bb8a8df
     <script defer src="/public/js/volunteer.js"></script>
 </head>
 <body>
@@ -49,12 +43,10 @@
     </div>
     <!-- Footer -->
     <div id="footer-container"></div>
-    <script src="/src/components/js/header.js"></script>
     <script>
       // Carga header/footer
-     fetch('/src/components/html/header.html').then(r=>r.text()).then(html=>document.getElementById('header-container').innerHTML=html);
-fetch('/src/components/html/footer.html').then(r=>r.text()).then(html=>document.getElementById('footer-container').innerHTML=html);
-
+      fetch('/src/components/html/header.html').then(r=>r.text()).then(html=>document.getElementById('header-container').innerHTML=html);
+      fetch('/src/components/html/footer.html').then(r=>r.text()).then(html=>document.getElementById('footer-container').innerHTML=html);
     </script>
 </body>
 </html>
