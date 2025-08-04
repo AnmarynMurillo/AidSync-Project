@@ -1,15 +1,16 @@
 <!-- Sobre Nosotros - AidSync -->
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voluntariado | AidSync</title>
-    <link rel="icon" href="/public/assets/logos/logito.ico" type="imagen/x-icon">
-    <link rel="stylesheet" href="/public/css/styles.css">
-    <link rel="stylesheet" href="/src/components/css/header.css">
-    <link rel="stylesheet" href="/public/css/about.css">
-    <script defer src="/public/js/about.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sobre Nosotros | AidSync</title>
+  <link rel="icon" href="/public/assets/logos/logito.ico" type="imagen/x-icon">
+  <link rel="stylesheet" href="/public/css/styles.css">
+  <link rel="stylesheet" href="/src/components/css/header.css">
+  <link rel="stylesheet" href="/public/css/about.css">
+  <script defer src="../js/about.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div id="header-container"></div>
@@ -43,23 +44,23 @@
       <h2>Our Values</h2>
       <div class="values-grid">
         <div class="value-card">
-          <img src="/public/assets/images/hero/connection.png" alt="Connection">
+          <img src="/public/assets/img/Carrusel_1/health.png" alt="Connection">
           <span>Connection</span>
         </div>
         <div class="value-card">
-          <img src="/public/assets/images/hero/innovations.png" alt="Innovation">
+          <img src="/public/assets/img/Carrusel_1/health.png" alt="Innovation">
           <span>Innovation</span>
         </div>
         <div class="value-card">
-          <img src="/public/assets/images/hero/commitment.png" alt="Commitment">
+          <img src="/public/assets/img/Carrusel_1/health.png" alt="Commitment">
           <span>Commitment</span>
         </div>
         <div class="value-card">
-          <img src="/public/assets/images/hero/inclusion.png" alt="Inclusion">
+          <img src="/public/assets/img/Carrusel_1/health.png" alt="Inclusion">
           <span>Inclusion</span>
         </div>
         <div class="value-card">
-          <img src="/public/assets/images/hero/emphaty.png" alt="Empathy">
+          <img src="/public/assets/img/Carrusel_1/health.png" alt="Empathy">
           <span>Empathy</span>
         </div>
       </div>
@@ -79,6 +80,7 @@
     </section>
   </main>
   <div id="footer-container"></div>
+  <script src="/src/components/js/header.js"></script>
   <script>
     fetch('/src/components/html/header.html').then(r=>r.text()).then(h=>document.getElementById('header-container').innerHTML=h);
     fetch('/src/components/html/footer.html').then(r=>r.text()).then(f=>document.getElementById('footer-container').innerHTML=f);
