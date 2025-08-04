@@ -7,7 +7,7 @@ const CAUSES = [
       categoria: 'wellbeing',
       color: '#eab308',
       colorHover: '#ca8a04',
-      img: '../img/donation/socialwelfare.png',
+      img: '../assets/img/donation/socialwelfare.png',
       desc: 'Improving the quality of life for vulnerable children and families in Panama.',
       descLarga: 'A non-profit organization established as an NGO since 1992, aiming to provide development opportunities to children and adolescents living in poverty, especially those who generate income and their families.',
       ubicacion: 'Panama',
@@ -20,7 +20,7 @@ const CAUSES = [
       categoria: 'health',
       color: '#dc2626',
       colorHover: '#b91c1c',
-      img: '../img/donation/BRIGADA-MEDICA.jpg',
+      img: '../assets/img/donation/BRIGADA-MEDICA.jpg',
       desc: 'Health campaigns and prevention in rural communities.',
       descLarga: 'Health for All brings medical brigades, prevention workshops, and basic care to remote rural communities.',
       ubicacion: 'Chiriquí',
@@ -33,7 +33,7 @@ const CAUSES = [
       categoria: 'education',
       color: '#2563eb',
       colorHover: '#1d4ed8',
-      img: '../img/donation/education.webp',
+      img: '../assets/img/donation/education.webp',
       desc: 'Scholarships and tutoring for underprivileged youth.',
       descLarga: 'Educating Futures provides scholarships, mentoring, and academic support to talented low-income youth so they can continue their studies.',
       ubicacion: 'West Panama',
@@ -46,7 +46,7 @@ const CAUSES = [
       categoria: 'environment',
       color: '#16a34a',
       colorHover: '#15803d',
-      img: '../img/donation/environment.png',
+      img: '../assets/img/donation/environment.png',
       desc: 'Reforestation and environmental education in cities.',
       descLarga: 'Urban Green promotes tree planting, workshops, and environmental awareness campaigns in urban areas.',
       ubicacion: 'Panama City',
@@ -71,9 +71,11 @@ const CAUSES = [
         card.style.setProperty('--cat-color-hover', c.colorHover);
         card.innerHTML = `
           <img src="${c.img}" alt="${c.nombre}">
-          <div class="card-title">${c.nombre}</div>
-          <div class="card-desc">${c.desc}</div>
-          <button class="donate-btn">Donate now</button>
+          <div class="card-content">
+            <div class="card-title">${c.nombre}</div>
+            <div class="card-desc">${c.desc}</div>
+            <button class="donate-btn">Donate now</button>
+          </div>
         `;
         card.querySelector('.donate-btn').addEventListener('click', e => {
           e.stopPropagation();
@@ -171,7 +173,8 @@ const CAUSES = [
     const confirmBtn = modalBody.querySelector('.donate-confirm');
     const successMsg = modalBody.querySelector('.donate-success');
     confirmBtn.addEventListener('click', () => {
-      const method = modalBody.querySelector('input[name="method"]:checked').value;
+      const selectedMethodBtn = modalBody.querySelector('.payment-method-btn.selected');
+      const method = selectedMethodBtn ? selectedMethodBtn.dataset.method : 'tarjeta';
       const amount = selectedAmount || customInput.value;
       if (!amount || isNaN(amount) || Number(amount) <= 0) {
         successMsg.style.display = 'block';
