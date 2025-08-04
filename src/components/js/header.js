@@ -1,5 +1,6 @@
 // Funcionalidad Header AidSync
 // Menú móvil y modo oscuro global
+//AidSync-Project\src\components\js\header.js
 
 document.addEventListener('DOMContentLoaded', function () {
   // --- Modo oscuro global en <html> ---
