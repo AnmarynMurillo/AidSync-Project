@@ -1,171 +1,42 @@
 /*
-Estilos para el formulario de registro - Compatible con AidSync
+Estilos básicos para el formulario de registro.
+Puedes personalizar colores y fuentes según tu diseño.
 */
-.register-main {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2.5rem 1rem 3rem 1rem;
-  font-family: 'Poppins', 'Nunito', Arial, sans-serif;
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
 }
-
-.register-section {
-  background: var(--color-card);
-  border-radius: 1.2rem;
-  box-shadow: 0 2px 12px #0002;
-  padding: 2.5rem 2.5rem 2rem 2.5rem;
-  min-width: 320px;
-  max-width: 400px;
-  width: 100%;
-  margin: 0 auto;
-  animation: modalIn 0.4s cubic-bezier(.4,2,.6,1) both;
+form {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
-
-.register-section h1 {
-  color: var(--color-primary);
-  font-size: 1.5rem;
-  margin-bottom: 1.2rem;
-  text-align: center;
+input, button {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
 }
-
-.register-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-  width: 100%;
+button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
 }
-
-.register-row {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
+button:hover {
+    background: #0056b3;
 }
-
-.register-form input[type="text"],
-.register-form input[type="password"],
-.register-form input[type="email"] {
-  border: 1.5px solid #eaf4f5;
-  background: #eaf4f5;
-  font-size: 1rem;
-  color: var(--color-text);
-  border-radius: 0.7rem;
-  padding: 0.8rem 1rem;
-  outline: none;
-  transition: border 0.2s, background 0.2s;
-}
-
-.register-form input:focus {
-  border: 2px solid var(--color-primary);
-  background: #d6f5f0;
-}
-
-.register-btn {
-  background: var(--color-primary);
-  color: #fff;
-  border: none;
-  border-radius: 0.7rem;
-  padding: 0.7rem 1.7rem;
-  font-size: 1.1rem;
-  cursor: pointer;
-  margin-top: 0.5rem;
-  align-self: flex-end;
-  box-shadow: 0 2px 8px #003d6610;
-  transition: background 0.2s, transform 0.2s;
-}
-
-.register-btn:hover {
-  background: var(--color-accent);
-  transform: translateY(-2px) scale(1.04);
-}
-
-.register-status {
-  margin-top: 0.7rem;
-  font-size: 1rem;
-  min-height: 1.2em;
-  color: var(--color-accent);
-  text-align: center;
-}
-
-.register-status.error {
-  color: #dc3545;
-}
-
-.register-status.success {
-  color: var(--color-accent);
-}
-
-.login-remember-row {
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.login-remember-row label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--color-text-secondary);
-}
-
-.no-account-row {
-  text-align: center;
-  font-size: 0.9rem;
-  color: var(--color-text-secondary);
-}
-
-.login-register-link {
-  color: var(--color-primary);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.login-register-link:hover {
-  color: var(--color-accent);
-}
-
-.login-location-msg {
-  text-align: center;
-  font-size: 0.8rem;
-  color: var(--color-text-secondary);
-  background: var(--color-support2);
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-}
-
-.login-links {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-.login-forgot {
-  color: var(--color-primary);
-  text-decoration: none;
-  font-size: 0.9rem;
-}
-
-.login-forgot:hover {
-  color: var(--color-accent);
-}
-
-@keyframes modalIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-@media (max-width: 600px) {
-  .register-section {
-    padding: 1.2rem 0.7rem;
-  }
-  .register-main h1, .register-main h2 {
-    font-size: 1.3rem;
-    margin-bottom: 1.2rem;
-  }
+#registerMessage {
+    margin-top: 1rem;
+    color: #d9534f;
+    font-weight: bold;
 }
