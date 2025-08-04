@@ -412,6 +412,7 @@ h2, h3 {
   box-shadow: 0 2px 10px rgba(0,0,0,0.10);
   outline: none;
   display: inline-block;
+  text-decoration: none;
 }
 .area-card .join-btn:hover {
   background: #f7f7f7;
