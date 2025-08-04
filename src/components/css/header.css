@@ -47,7 +47,7 @@
   outline-offset: 2px;
 }
 .as-header__slogan {
-  color: var(#fff, var(--color-text));
+  color: #fff;
   font-size: 1.1rem;
   font-weight: 500;
   letter-spacing: 0.08em;
