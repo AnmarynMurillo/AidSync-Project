@@ -80,24 +80,49 @@ const TEAM = [
       console.error('Error: Element with ID "team-gallery" not found');
       return;
     }
-  
-    gallery.innerHTML = TEAM.map(member => {
+
+    // Define color variations using AidSync colors
+    const colorVariations = [
+      { bg: '#82dfcd', accent: '#16a085' }, // Support1 + Accent
+      { bg: '#003d66', accent: '#82dfcd' }, // Primary + Support1
+      { bg: '#16a085', accent: '#eaf4f5' }, // Accent + Support2
+      { bg: '#eaf4f5', accent: '#003d66' }, // Support2 + Primary
+      { bg: '#4a9b8e', accent: '#fff' },    // Blend + White
+    ];
+
+    gallery.innerHTML = TEAM.map((member, index) => {
       // Member data validation
       if (!member.foto || !member.rol) {
         console.warn(`Incomplete data for: ${member.nombre}`);
         return '';
       }
       
+      const colorScheme = colorVariations[index % colorVariations.length];
+      const isLightBg = ['#82dfcd', '#eaf4f5'].includes(colorScheme.bg);
+      const textColor = isLightBg ? '#003d66' : '#fff';
+      
       return `
-        <div class="team-card">
-          <img src="${member.foto}" 
-               alt="Photo of ${member.nombre}" 
-               class="team-photo"
-               loading="lazy"
-               onerror="this.onerror=null;this.src='../images/default-avatar.png'">
-          <div class="team-name">${member.nombre}</div>
-          <div class="team-role">${member.rol}</div>
-          <div class="team-desc">${member.desc}</div>
+        <div class="team-member" style="--member-bg: ${colorScheme.bg}; --member-accent: ${colorScheme.accent}; --member-text: ${textColor}">
+          <div class="member-circle">
+            <img src="${member.foto}" 
+                 alt="Photo of ${member.nombre}" 
+                 class="member-photo"
+                 loading="lazy"
+                 onerror="this.onerror=null;this.src='../images/default-avatar.png'">
+            <div class="member-info">
+              <h3 class="member-name">${member.nombre.toUpperCase()}</h3>
+              <p class="member-role">${member.rol}</p>
+            </div>
+            <div class="member-decorative-elements">
+              <div class="deco-circle deco-1"></div>
+              <div class="deco-circle deco-2"></div>
+              <div class="deco-pill deco-3"></div>
+              <div class="deco-pill deco-4"></div>
+            </div>
+          </div>
+          <div class="member-description">
+            <p>${member.desc}</p>
+          </div>
         </div>
       `;
     }).join('');
