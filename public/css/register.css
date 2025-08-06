@@ -3,40 +3,163 @@ Estilos básicos para el formulario de registro.
 Puedes personalizar colores y fuentes según tu diseño.
 */
 body {
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
+    font-family: 'Poppins', 'Nunito', Arial, sans-serif;
+    background: linear-gradient(120deg, #eaf4f5 60%, #82dfcd 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
+}
+.logo-top-left {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+}
+.logo-top-left img {
+  width: 56px;
+  height: 56px;
+  cursor: pointer;
+  filter: drop-shadow(0 2px 8px var(--login-primary));
+  transition: transform 0.15s, box-shadow 0.2s;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 8px var(--login-primary);
+}
+.logo-top-left img:hover {
+  transform: scale(1.09) rotate(-8deg);
+  box-shadow: 0 4px 16px var(--login-accent);
 }
 form {
     background: #fff;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 2.5rem 2.2rem 2.2rem 2.2rem;
+    border-radius: 1.2rem;
+    box-shadow: 0 8px 32px #003d6615;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 1.1rem;
+    min-width: 320px;
+    max-width: 410px;
+    width: 100%;
+    margin: 0 auto;
+    border: 2px solid #eaf4f5;
+    backdrop-filter: blur(2px);
 }
 input, button {
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+    padding: 1.1rem 1.2rem;
+    border-radius: 0.7rem;
+    border: 2px solid #eaf4f5;
+    font-size: 1.13rem;
+    font-family: inherit;
+    box-shadow: 0 1px 4px #003d6608;
+    outline: none;
+    transition: border 0.2s, background 0.2s, box-shadow 0.2s;
+}
+input:focus {
+    border: 2.5px solid #16a085;
+    background: #eaf4f5;
+    box-shadow: 0 2px 12px #16a08522;
 }
 button {
-    background: #007bff;
+    background: linear-gradient(90deg, #16a085 0%, #003d66 100%);
     color: #fff;
     border: none;
+    border-radius: 0.7rem;
+    padding: 1.2rem 2rem;
+    font-size: 1.18rem;
     cursor: pointer;
-    transition: background 0.2s;
+    margin-top: 0.5rem;
+    align-self: flex-end;
+    box-shadow: 0 2px 8px #003d6610;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    font-weight: 800;
+    letter-spacing: 0.5px;
 }
 button:hover {
-    background: #0056b3;
+    background: linear-gradient(90deg, #003d66 0%, #16a085 100%);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 16px #003d6620;
 }
 #registerMessage {
     margin-top: 1rem;
     color: #d9534f;
     font-weight: bold;
+    font-size: 1.13rem;
+    text-align: center;
+}
+h2 {
+    color: #003d66;
+    font-size: 2.1rem;
+    font-weight: 900;
+    margin-bottom: 2rem;
+    text-align: center;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px #16a08522;
+    font-family: 'Poppins', 'Nunito', Arial, sans-serif;
+}
+@media (max-width: 600px) {
+    form { padding: 1.2rem 0.7rem; min-width: 0; }
+    h2 { font-size: 1.3rem; margin-bottom: 1.2rem; }
+}
+footer {
+    background:  linear-gradient(90deg, var(--color-bg) 0%, var(--color-accent) 100%);
+    color: var(--color-text, #222);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    box-shadow: 0 -2px 12px #0001;
+    border-top: 2px solid var(--color-border);
+    font-family: var(--font-family, 'Poppins', 'Nunito', Arial, sans-serif);
+}
+  
+  .footer-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-between;
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    background:#16a08533;
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .email-subscribe {
+    display: flex;
+    max-width: 300px;
+  }
+  
+  .email-subscribe input {
+    flex: 1;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 4px 0 0 4px;
+  }
+  
+  .email-subscribe button {
+    background:#001f33;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0 4px 4px 0;
+  }
+  
+  .social-icons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  
+.social-icons i {
+    background: linear-gradient(135deg, var(--color-primary, #003d66) 0%, var(--color-accent, #16a085) 100%);
+    padding: 0.5rem;
+    border-radius: 50%;
+    color: white;
+    transition: background 0.3s;
 }

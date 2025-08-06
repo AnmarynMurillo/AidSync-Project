@@ -8,24 +8,28 @@ Al enviar, los datos se envían al backend por JS. Si falla, intenta con Firebas
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro</title>
+    <title>Register | AidSync</title>
     <link rel="stylesheet" href="../css/register.css">
 </head>
 <body>
-    <h2>Registro de Usuario</h2>
+    <a href="/index.html" id="logo-link" style="display:block;width:fit-content;margin:2rem auto 0 auto;">
+    <img src="/public/assets/logos/logito.ico" alt="AidSync Logo" style="width:60px;height:60px;display:block;margin:0 auto;cursor:pointer;filter:drop-shadow(0 2px 8px #003d6610);">
+  </a>
+    <h2>Register</h2>
     <form id="registerForm">
-        <input type="text" id="nombre" name="nombre" placeholder="Nombre completo" required><br>
-        <input type="number" id="edad" name="edad" placeholder="Edad" required><br>
-        <input type="text" id="area" name="area" placeholder="Área de voluntariado" required><br>
-        <input type="email" id="email" name="email" placeholder="Correo electrónico" required><br>
-        <input type="password" id="password" name="password" placeholder="Contraseña" required><br>
-        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirmar contraseña" required><br>
-        <button type="submit">Registrarse</button>
+        <input type="text" id="name" name="name" placeholder="Name" required><br>
+        <input type="number" id="age" name="age" placeholder="Age" required><br>
+        <input type="text" id="area" name="area" placeholder="Volunteering Area" required><br>
+        <input type="email" id="email" name="email" placeholder="Email" required><br>
+        <input type="password" id="password" name="password" placeholder="Password" required><br>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required><br>
+        <button type="submit">Register</button>
     </form>
     <div id="registerMessage"></div>
+    <div id="footer-container"></div>
     <script>
-        // Detecta si la página se está sirviendo desde 127.0.0.1 o localhost y ajusta la URL del backend
-        window.BACKEND_URL = window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:5000' : 'http://localhost:5000';
+      // Detecta si la página se está sirviendo desde 127.0.0.1 o localhost y ajusta la URL del backend
+      window.BACKEND_URL = window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:5000' : 'http://localhost:5000';
     </script>
    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
