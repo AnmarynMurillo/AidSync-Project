@@ -1,0 +1,6 @@
+# data_validation.py
+# Funciones de validación de datos para Firestore y otros servicios
+
+# Aquí puedes agregar funciones como:
+# def is_valid_email(email): ...
+# def is_strong_password(password): ...
