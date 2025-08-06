@@ -1,6 +1,6 @@
 /* AidSync Header Styles - adaptado a la paleta institucional */
-/* AidSync Header Styles - adaptado a la paleta institucional */
-.as-header {
+
+.as-header__container {
   width: 100%;
   min-height: 72px;
   background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
