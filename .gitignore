@@ -1,8 +1,97 @@
-# secretos
-secretos/
-# Claves privadas
-backend/credentials.json
-backend/firebase_config.json
+# ========================================
+# ARCHIVOS CONFIDENCIALES Y SEGURIDAD
+# ========================================
 
-# Archivos de variables de entorno
+# Firebase y configuraciones
+backend/firebase_config.json
+backend/credentials.json
+public/js/firebase-config.js
 .env
+.env.local
+.env.production
+
+# Claves privadas y certificados
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Base de datos
+*.db
+*.sqlite
+*.sqlite3
+
+# ========================================
+# DEPENDENCIAS Y ARCHIVOS DEL SISTEMA
+# ========================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ========================================
+# LOGS Y ARCHIVOS TEMPORALES
+# ========================================
+
+# Logs
+*.log
+logs/
+log/
+
+# Archivos temporales
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# ========================================
+# IDE Y EDITORES
+# ========================================
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# IntelliJ
+.idea/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ========================================
+# BUILD Y DISTRIBUCION
+# ========================================
+
+# Build outputs
+dist/
+build/
+*.tgz
+*.tar.gz
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# ========================================
+# SECRETOS ESPECÍFICOS DEL PROYECTO
+# ========================================
+
+# Secretos
+secretos/
+secrets/
