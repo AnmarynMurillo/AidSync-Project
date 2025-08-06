@@ -1,4 +1,10 @@
 /* Login AidSync - Estilo moderno, claro/oscuro, responsivo y embellecido */
+/* 
+   Estilos para la página de inicio de sesión de AidSync.
+   Incluye un diseño moderno, soporte para temas claro/oscuro,
+   y un enfoque en la usabilidad y estética.
+   Puedes personalizar colores y fuentes según tu diseño.
+*/
 :root {
   --login-primary: var(--color-primary, #003d66);
   --login-accent: var(--color-accent, #16a085);

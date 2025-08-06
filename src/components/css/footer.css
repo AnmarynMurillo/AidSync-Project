@@ -1,3 +1,5 @@
+
+/* Footer AidSync - Estilo moderno, claro/oscuro, responsivo y embellecido */
 footer {
     background:  linear-gradient(90deg, var(--color-bg) 0%, var(--color-accent) 100%);
     color: var(--color-text, #222);

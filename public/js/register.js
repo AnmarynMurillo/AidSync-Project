@@ -15,6 +15,7 @@ async function loadConfig() {
     } catch (error) {
         console.warn('⚠️ No se pudo cargar configuraciones del backend, usando valores por defecto');
         // Configuración por defecto (fallback)
+        // Firebase v8
         firebaseConfig = {
             apiKey: "AIzaSyAJ395j9EL5Nv81Q70Csc4zRKNp5e1Xrjo",
             authDomain: "expo-project-1040e.firebaseapp.com",
