@@ -1,20 +1,32 @@
 
 /* Estilos del footer */
-.footer {
+.main-footer {
   background: linear-gradient(90deg, var(--color-bg) 0%, var(--color-accent) 100%);
   color: var(--color-text, #222);
-  padding: 40px 0 0;
-  margin-top: auto;
-  width: 100%;
+  padding: 2.5rem 1rem 1rem 1rem;
+  box-shadow: 0 -2px 12px #0001;
+  border-top: 2px solid var(--color-border);
+  transition: background var(--transition), color var(--transition);
+  border-color: #003d66;
+}
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* Estilos del newsletter en la sección del footer */
 .footer-section.newsletter {
   background: rgba(255, 255, 255, 0.05);
   padding: 25px;
-  border-radius: 8px;
   max-width: 100%;
   grid-column: span 1;
+  border: 2px solid #004080; /* Color y grosor del borde */
+  border-radius: 15px;       /* Bordes redondeados */
 }
 
 /* Estilos de la sección de logos */
@@ -52,7 +64,7 @@
 
 .logo-item i {
   font-size: 2.5rem;
-  color: #3498db;
+  color:#003d66;
   margin-bottom: 10px;
 }
 
@@ -64,15 +76,16 @@
 
 /* Estilos del newsletter */
 .newsletter {
-  background: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.05);
   padding: 25px;
   border-radius: 8px;
   min-width: 400px;
   max-width: 100%;
+  border-color: #003d66;
 }
 
 .newsletter h3 {
-  color: #3498db;
+  color: #003d66;
   margin-bottom: 15px;
   font-size: 1.2rem;
 }
@@ -81,6 +94,7 @@
   display: flex;
   gap: 10px;
   margin-bottom: 15px;
+  border-color: #2980b9;
 }
 
 .newsletter-form input {
@@ -90,15 +104,16 @@
   background: rgba(255, 255, 255, 0.05);
   color: #fff;
   border-radius: 4px;
+  border-color: #003d66;
   outline: none;
 }
 
 .newsletter-form input::placeholder {
-  color: #95a5a6;
+  color:black;
 }
 
 .newsletter-form button {
-  background: #3498db;
+  background: #003d66;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -118,7 +133,7 @@
 }
 
 .social-contact a {
-  color: #bdc3c7;
+  color:black;
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -152,14 +167,16 @@
   grid-template-columns: 2fr 1fr 1fr 2fr;
   gap: 30px;
   align-items: start;
+  border-color: #003d66;
 }
 
 .footer-section {
   padding: 0 15px;
+  
 }
 
 .footer-section h3 {
-  color: #3498db;
+  color:#003d66;
   margin-bottom: 15px;
   font-size: 1.2rem;
   position: relative;
@@ -173,15 +190,16 @@
   bottom: 0;
   width: 50px;
   height: 2px;
-  background: #3498db;
+  background: #003d66;
 }
 
 .footer-section p, 
 .footer-section a {
-  color: #bdc3c7;
+  color:#003d66;
   line-height: 1.8;
   text-decoration: none;
   transition: color 0.3s ease;
+  
 }
 
 .footer-section a:hover {
@@ -190,10 +208,12 @@
 
 .footer-section ul {
   list-style: none;
+ 
 }
 
 .footer-section ul li {
   margin-bottom: 10px;
+  text-align: center;
 }
 
 .social-links {
@@ -215,19 +235,19 @@
 }
 
 .social-links a:hover {
-  background: #3498db;
+  background: #003d66;
   transform: translateY(-3px);
 }
 
 .footer-bottom {
-  background: #1a252f;
+  background: linear-gradient(90deg, var(--color-bg) 0%, var(--color-accent) 100%);;
   padding: 15px 0;
   text-align: center;
   margin-top: 20px;
 }
 
 .footer-bottom p {
-  color: #7f8c8d;
+  color:black;
   font-size: 0.9rem;
 }
 
@@ -238,13 +258,14 @@
 }
 
 .footer-bottom a:hover {
-  color: #2980b9;
+  color:#003d66;
   text-decoration: underline;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
   .footer-content {
+
       grid-template-columns: repeat(2, 1fr);
       gap: 20px;
   }
@@ -293,7 +314,7 @@
       text-align: center;
   }
   
-  .footer-section.newsletter {
+  .footer-section.newsletter{ 
       grid-column: span 1;
   }
   
@@ -309,4 +330,26 @@
   .newsletter {
       padding: 20px;
   }
+}
+.subscribe-box {
+  border: 2px solid #004080; /* Color y grosor del borde */
+  border-radius: 12px;       /* Bordes redondeados */
+  padding: 20px;             /* Espacio interno */
+  background: rgba(255, 255, 255, 0.05); /* Fondo semi-transparente opcional */
+}
+.footer-section .social-links {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.footer-section .social-links a {
+  color: white;
+  font-size: 24px;
+  transition: transform 0.3s ease;
+}
+
+.footer-section .social-links a:hover {
+  transform: scale(1.2);
 }
