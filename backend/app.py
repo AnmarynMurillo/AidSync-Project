@@ -58,6 +58,7 @@ def get_config():
         }
     })
 
+#Importante correr firebase_auth.initialize_app() antes de usar firebase_auth
 # Rutas de usuario (la lógica está en user_service.py)
 app.add_url_rule('/register', view_func=register_user, methods=['POST'])
 app.add_url_rule('/login', view_func=login_user, methods=['POST'])

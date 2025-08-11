@@ -1,4 +1,5 @@
 // Funcionalidad Header AidSync
+// Este script maneja el menú móvil y el modo oscuro global de AidSync
 // Menú móvil y modo oscuro global
 //AidSync-Project\src\components\js\header.js
 

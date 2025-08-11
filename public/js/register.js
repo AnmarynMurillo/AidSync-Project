@@ -15,6 +15,7 @@ async function loadConfig() {
     } catch (error) {
         console.warn('⚠️ No se pudo cargar configuraciones del backend, usando valores por defecto');
         // Configuración por defecto (fallback)
+        // Firebase v8
         firebaseConfig = {
             apiKey: "AIzaSyAJ395j9EL5Nv81Q70Csc4zRKNp5e1Xrjo",
             authDomain: "expo-project-1040e.firebaseapp.com",
@@ -45,15 +46,16 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         msg.textContent = '';
         // Obtiene los valores del formulario
-        const nombre = form.nombre.value;
-        const edad = form.edad.value;
+        const name = form.name.value;
+        const age = form.age.value;
         const area = form.area.value;
         const email = form.email.value;
         const password = form.password.value;
         const confirmPassword = form.confirmPassword.value;
         // Validación básica en el frontend
         if (password !== confirmPassword) {
-            msg.textContent = 'Las contraseñas no coinciden';
+            msg.textContent = 'Passwords do not match';
+            msg.style.color = 'red';
             return;
         }
         // Usa la URL del backend cargada desde configuraciones
@@ -63,26 +65,26 @@ document.addEventListener('DOMContentLoaded', function() {
             const res = await fetch(registerUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nombre, edad, area, email, password })
+                body: JSON.stringify({ name,age,area,email, password})
             });
             const data = await res.json();
             if (data.success) {
                 msg.style.color = 'green';
-                msg.textContent = 'Registro exitoso. Redirigiendo...';
-                setTimeout(() => window.location.href = '../index.html', 1500);
+                msg.textContent = 'Successfull Register, Redirecting...';
+                setTimeout(() => window.location.href = '/public/pages/login.html', 1500);
             } else {
                 throw new Error(data.message);
             }
         } catch (err) {
             // Si el backend falla, intenta con Firebase JS
-            msg.textContent = 'Intentando registro directo con Firebase...';
+            msg.textContent = 'Trying to register with Firebase...';
             try {
                 // Usar la API de compatibilidad (v8 style) expuesta por los scripts CDN
                 const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
-                await userCredential.user.updateProfile({ displayName: nombre });
+                await userCredential.user.updateProfile({ displayName: name});
                 msg.style.color = 'green';
-                msg.textContent = 'Registro exitoso (Firebase JS). Redirigiendo...';
-                setTimeout(() => window.location.href = '../index.html', 1500);
+                msg.textContent = 'Succesfull Register, Redirecting...';
+                setTimeout(() => window.location.href = '/public/pages/login.html', 1500);
             } catch (firebaseErr) {
                 msg.textContent = 'Error: ' + firebaseErr.message;
             }
