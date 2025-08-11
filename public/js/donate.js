@@ -81,6 +81,12 @@ const CAUSES = [
           e.stopPropagation();
           openModal(c);
         });
+        card.addEventListener('click', e => {
+          // Evita que se dispare dos veces si se hace click en el botón
+          if (!e.target.classList.contains('donate-btn')) {
+            openModal(c);
+          }
+        });
         gallery.appendChild(card);
       });
   }

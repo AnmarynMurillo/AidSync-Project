@@ -36,7 +36,7 @@
 }
 .filter-btn {
   background: var(--cat-color, var(--color-support2, #eaf4f5));
-  color: #222;
+  color: #fff;
   border: none;
   border-radius: 2rem;
   padding: 0.7rem 1.7rem;
@@ -45,11 +45,18 @@
   box-shadow: 0 2px 8px #0001;
   font-size: 1.08rem;
   transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  color: #fff !important;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
 }
 .filter-btn:hover, .filter-btn.active {
   background: #fff;
   box-shadow: 0 4px 16px #0002;
   transform: translateY(-2px) scale(1.04);
+}
+.filter-btn[style*="background: white"], .filter-btn[style*="background: #fff"], .filter-btn.active, .filter-btn:hover {
+  color: #222 !important;
+  text-shadow: none;
 }
 .donate-gallery {
   display: grid;
@@ -98,7 +105,7 @@
 }
 .donate-card .donate-btn {
   background: var(--cat-color, #2563eb);
-  color: #fff;
+  color: #fff !important;
   border: none;
   border-radius: 2rem;
   padding: 0.7rem 2rem;
@@ -108,6 +115,7 @@
   margin-top: 1rem;
   box-shadow: 0 2px 8px #003d6610;
   transition: background 0.2s;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
 }
 .donate-card .donate-btn:hover {
   background: #16a085;
@@ -122,18 +130,24 @@
   justify-content: center;
   z-index: 1000;
 }
+.donate-modal,
 .donate-modal[aria-hidden="false"] {
-  display: flex;
+  display: none !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
 }
 .modal-content {
   background: var(--color-card);
   border-radius: 1.2rem;
-  max-width: 600px;
-  width: 95vw;
+  max-width: 1300px;
+  width: 99vw;
   padding: 2rem;
   position: relative;
   box-shadow: 0 8px 32px #0003;
   animation: modalIn 0.2s;
+  padding-top: 1.5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 @keyframes modalIn {
   from { transform: translateY(40px) scale(0.98); opacity: 0; }
@@ -141,12 +155,20 @@
 }
 .modal-close {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
+  top: 1.2rem;
+  right: 1.2rem;
+  background: #fff;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px #0001;
+  z-index: 10;
   font-size: 2rem;
   color: #888;
+  border: none;
   cursor: pointer;
   transition: color 0.2s;
 }
