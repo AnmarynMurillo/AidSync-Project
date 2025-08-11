@@ -144,7 +144,7 @@
     max-width: 90%;
     width: 600px;
     height: 400px;
-    overflow-y: auto; /* Scroll vertical si el contenido es más alto que 200px */
+    overflow-y:auto; /* Scroll vertical si el contenido es más alto que 200px */
     border: 1px solid #ccc;
     padding: 2rem;
     position: relative;
