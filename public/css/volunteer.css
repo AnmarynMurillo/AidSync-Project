@@ -29,24 +29,57 @@
     margin-bottom: 2rem;
     flex-wrap: wrap;
     justify-content: center;
+    font-family: 'Segoe UI', sans-serif;
   }
+  
+  .volunteer-main {
+    text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .volunteer-main h1 {
+    color: #005080;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+  
+  .volunteer-filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
   .filter-btn {
-    background: var(--cat-color, var(--color-support2, #eaf4f5));
-    color: #222;
+    background: var(--cat-color, #eaf4f5);
+    color: white;
     border: none;
     border-radius: 2rem;
     padding: 0.7rem 1.7rem;
     font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 2px 8px #0001;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
     font-size: 1.08rem;
-    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+    transition: all 0.25s ease;
   }
-  .filter-btn:hover, .filter-btn.active {
-    background: #fff;
-    box-shadow: 0 4px 16px #0002;
-    transform: translateY(-2px) scale(1.04);
+  
+  /* Excepción para "All" */
+  .filter-btn[data-category="all"] {
+    background: white;
+    color: black;
   }
+  
+  /* Hover y activo */
+  .filter-btn:hover, 
+  .filter-btn.active {
+    background: white;
+    color: var(--cat-color);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    transform: translateY(-3px) scale(1.04);
+    border: 2px solid var(--cat-color);
+  }
+  
   .volunteer-gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
