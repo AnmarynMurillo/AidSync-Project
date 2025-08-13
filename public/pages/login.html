@@ -9,11 +9,8 @@
   <link rel="stylesheet" href="/public/css/login.css">
 </head>
 <body style="position:relative;min-height:100vh;">
-  <a href="/index.html" class="logo-top-left" title="Ir a inicio">
-    <img src="/public/assets/logos/logito.ico" alt="AidSync Logo">
-  </a>
-  <a href="/index.html" id="logo-link" style="display:block;width:fit-content;margin:2rem auto 0 auto;">
-    <img src="/public/assets/logos/logito.ico" alt="AidSync Logo" style="width:60px;height:60px;display:block;margin:0 auto;cursor:pointer;filter:drop-shadow(0 2px 8px #003d6610);">
+  <a href="/index.html" id="logo-link" style="display:block;width:fit-content;margin:1rem auto 0 auto;">
+    <img src="/public/assets/logos/logito.ico" alt="AidSync Logo" style="width:120px;height:120px;display:block;margin:0 auto;cursor:pointer;filter:drop-shadow(0 2px 8px #003d6610);">
   </a>
   <main class="login-main">
     <section class="login-section">
@@ -49,7 +46,7 @@
   <script>
     // Mostrar/ocultar contraseña
     document.getElementById('togglePassword').addEventListener('click', function() {
-      const pwd = document.getElementById('password');
+      const pwd = document.getElementById('login-pass');
       const eye = document.getElementById('eyeIcon');
       if (pwd.type === 'password') {
         pwd.type = 'text';
