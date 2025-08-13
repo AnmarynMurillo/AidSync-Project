@@ -1,44 +1,47 @@
 /*
-Estilos básicos para el formulario de registro.
-Puedes personalizar colores y fuentes según tu diseño.
-Todo hecho a punta de sudor de mano y css puro.
+Estilos modernos y consistentes con login para el formulario de registro
+Variables CSS para colores, bordes y sombras
+Animaciones y responsividad mejoradas
 */
+:root {
+    --register-primary: var(--color-primary, #003d66);
+    --register-accent: var(--color-accent, #16a085);
+    --register-bg: var(--color-bg, #fff);
+    --register-card: var(--color-card, #f9f9f9);
+    --register-text: var(--color-text, #003d66);
+    --register-shadow: 0 8px 32px #003d6615;
+    --register-error: #dc3545;
+    --register-success: #16a085;
+    --register-border: var(--color-border, #eaf4f5);
+    --register-input-bg: var(--color-support2, #f7fafc);
+    --register-input-focus: var(--color-support1, #eaf4f5);
+    --register-link: var(--color-accent, #16a085);
+}
+[data-theme="dark"] {
+    --register-bg: var(--color-bg, #003d66);
+    --register-card: var(--color-card, #082940);
+    --register-text: var(--color-text, #eaf4f5);
+    --register-border: var(--color-border, #1a3a4d);
+    --register-input-bg: #232a3a;
+    --register-input-focus: #1a3a4d;
+}
 body {
     font-family: 'Poppins', 'Nunito', Arial, sans-serif;
-    background: linear-gradient(120deg, #eaf4f5 60%, #82dfcd 100%);
+    background: linear-gradient(120deg, var(--register-bg) 60%, #82dfcd 100%);
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
 }
-.logo-top-left {
-  position: absolute;
-  top: 2rem;
-  left: 2rem;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-}
-.logo-top-left img {
-  width: 56px;
-  height: 56px;
-  cursor: pointer;
-  filter: drop-shadow(0 2px 8px var(--login-primary));
-  transition: transform 0.15s, box-shadow 0.2s;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 2px 8px var(--login-primary);
-}
-.logo-top-left img:hover {
-  transform: scale(1.09) rotate(-8deg);
-  box-shadow: 0 4px 16px var(--login-accent);
+#logo-link {
+    margin-top: 2rem;
 }
 form {
-    background: #fff;
-    padding: 2.5rem 2.2rem 2.2rem 2.2rem;
-    border-radius: 1.2rem;
-    box-shadow: 0 8px 32px #003d6615;
+    background: var(--register-card);
+    padding: 2.7rem 2.7rem 2.2rem 2.7rem;
+    border-radius: 2rem;
+    box-shadow: 0 8px 32px var(--register-primary)22;
     display: flex;
     flex-direction: column;
     gap: 1.1rem;
@@ -46,64 +49,89 @@ form {
     max-width: 410px;
     width: 100%;
     margin: 0 auto;
-    border: 2px solid #eaf4f5;
+    border: 2px solid var(--register-border);
     backdrop-filter: blur(2px);
+    animation: modalIn 0.5s cubic-bezier(.4,2,.6,1) both;
 }
-input, button {
+input, select, button {
     padding: 1.1rem 1.2rem;
-    border-radius: 0.7rem;
-    border: 2px solid #eaf4f5;
+    border-radius: 1rem;
+    border: 2px solid var(--register-border);
     font-size: 1.13rem;
     font-family: inherit;
-    box-shadow: 0 1px 4px #003d6608;
+    box-shadow: 0 1px 4px var(--register-primary)08;
     outline: none;
     transition: border 0.2s, background 0.2s, box-shadow 0.2s;
+    background: var(--register-input-bg);
+    color: var(--register-text);
 }
-input:focus {
-    border: 2.5px solid #16a085;
-    background: #eaf4f5;
-    box-shadow: 0 2px 12px #16a08522;
+input:focus, select:focus {
+    border: 2.5px solid var(--register-accent);
+    background: var(--register-input-focus);
+    box-shadow: 0 2px 12px var(--register-accent)22;
+}
+select {
+    cursor: pointer;
 }
 button {
-    background: linear-gradient(90deg, #16a085 0%, #003d66 100%);
+    background: linear-gradient(90deg, var(--register-accent) 0%, var(--register-primary) 100%);
     color: #fff;
     border: none;
-    border-radius: 0.7rem;
+    border-radius: 1rem;
     padding: 1.2rem 2rem;
     font-size: 1.18rem;
     cursor: pointer;
     margin-top: 0.5rem;
     align-self: flex-end;
-    box-shadow: 0 2px 8px #003d6610;
+    box-shadow: 0 2px 8px var(--register-primary)10;
     transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
     font-weight: 800;
     letter-spacing: 0.5px;
 }
 button:hover {
-    background: linear-gradient(90deg, #003d66 0%, #16a085 100%);
+    background: linear-gradient(90deg, var(--register-primary) 0%, var(--register-accent) 100%);
     transform: translateY(-2px) scale(1.04);
-    box-shadow: 0 4px 16px #003d6620;
+    box-shadow: 0 4px 16px var(--register-accent)20;
 }
 #registerMessage {
     margin-top: 1rem;
-    color: #d9534f;
     font-weight: bold;
     font-size: 1.13rem;
     text-align: center;
+    min-height: 1.2em;
+    color: var(--register-accent);
+    transition: color 0.2s;
+}
+#registerMessage.error {
+    color: var(--register-error);
+}
+#registerMessage.success {
+    color: var(--register-success);
 }
 h2 {
-    color: #003d66;
-    font-size: 2.1rem;
+    color: var(--register-primary);
+    font-size: 2.3rem;
     font-weight: 900;
     margin-bottom: 2rem;
     text-align: center;
     letter-spacing: 0.5px;
-    text-shadow: 0 2px 8px #16a08522;
+    text-shadow: 0 2px 8px var(--register-accent)22;
     font-family: 'Poppins', 'Nunito', Arial, sans-serif;
+}
+label {
+    font-size: 1.08rem;
+    color: var(--register-primary);
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+    letter-spacing: 0.1px;
 }
 @media (max-width: 600px) {
     form { padding: 1.2rem 0.7rem; min-width: 0; }
     h2 { font-size: 1.3rem; margin-bottom: 1.2rem; }
+}
+@keyframes modalIn {
+    from { transform: translateY(60px) scale(0.97); opacity: 0; }
+    to { transform: none; opacity: 1; }
 }
 footer {
     background:  linear-gradient(90deg, var(--color-bg) 0%, var(--color-accent) 100%);
@@ -116,47 +144,40 @@ footer {
     border-top: 2px solid var(--color-border);
     font-family: var(--font-family, 'Poppins', 'Nunito', Arial, sans-serif);
 }
-  
-  .footer-row {
+.footer-row {
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
     justify-content: space-between;
-  }
-  
-  .footer-bottom {
+}
+.footer-bottom {
     text-align: center;
     background:#16a08533;
     padding: 1rem;
     font-size: 0.9rem;
-  }
-  
-  .email-subscribe {
+}
+.email-subscribe {
     display: flex;
     max-width: 300px;
-  }
-  
-  .email-subscribe input {
+}
+.email-subscribe input {
     flex: 1;
     padding: 0.5rem;
     border: none;
     border-radius: 4px 0 0 4px;
-  }
-  
-  .email-subscribe button {
+}
+.email-subscribe button {
     background:#001f33;
     color: white;
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 0 4px 4px 0;
-  }
-  
-  .social-icons {
+}
+.social-icons {
     display: flex;
     gap: 1rem;
     margin-top: 0.5rem;
-  }
-  
+}
 .social-icons i {
     background: linear-gradient(135deg, var(--color-primary, #003d66) 0%, var(--color-accent, #16a085) 100%);
     padding: 0.5rem;

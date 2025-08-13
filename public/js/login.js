@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // 2) Fallback a Firebase
-            status.textContent = 'Backend not available, trying Firebase...';
+            status.textContent = 'Trying Firebase login...';
             console.log('▶️ Trying Firebase login...');
             const firebaseRes = await tryFirebaseLogin(email, password);
             if (firebaseRes.success) {

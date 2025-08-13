@@ -8,30 +8,30 @@ Permite cambiar la foto de perfil.
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de Usuario</title>
+    <title>User Profile</title>
     <link rel="stylesheet" href="../css/profile.css">
 </head>
 <body>
-    <h2>Mi Perfil</h2>
+    <h2>My Profile</h2>
     <div id="profileContainer">
         <!-- Foto de perfil -->
         <img id="profilePic" src="../assets/img/default-profile.png" alt="Foto de perfil" width="120" height="120">
         <form id="photoForm" enctype="multipart/form-data">
             <input type="file" id="photoInput" accept="image/*">
-            <button type="submit">Cambiar foto</button>
+            <button type="submit">Change Profile Picture</button>
         </form>
-        <!-- Datos del usuario -->
-        <form id="profileForm">
-            <label>Nombre completo:</label>
-            <input type="text" id="nombre" name="nombre" required><br>
-            <label>Edad:</label>
-            <input type="number" id="edad" name="edad" required><br>
-            <label>Área de voluntariado:</label>
-            <input type="text" id="area" name="area" required><br>
-            <label>Correo electrónico:</label>
-            <input type="email" id="email" name="email" readonly><br>
-            <button type="submit">Guardar cambios</button>
-        </form>
+        <!-- Datos del usuario en modo solo lectura -->
+        <div id="profileData">
+            <p><strong>Full name:</strong> <span id="nombre"></span></p>
+            <p><strong>Age:</strong> <span id="edad"></span></p>
+            <p><strong>Volunteering Area:</strong> <span id="area"></span></p>
+            <p><strong>Email:</strong> <span id="email"></span></p>
+        </div>
+        <div id="profileMessage"></div>
+    </div>
+    <script src="../js/profile.js"></script>
+</body>
+</html>
         <div id="profileMessage"></div>
     </div>
     <script src="../js/profile.js"></script>
