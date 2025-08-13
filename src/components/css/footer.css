@@ -168,11 +168,12 @@
   gap: 30px;
   align-items: start;
   border-color: #003d66;
+ 
 }
 
 .footer-section {
   padding: 0 15px;
-  
+
 }
 
 .footer-section h3 {
@@ -208,12 +209,13 @@
 
 .footer-section ul {
   list-style: none;
+  
  
 }
 
 .footer-section ul li {
   margin-bottom: 10px;
-  text-align: center;
+ 
 }
 
 .social-links {
