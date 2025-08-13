@@ -17,6 +17,7 @@ async function loadConfig() {
     } catch (error) {
         console.warn('⚠️ No se pudo cargar configuraciones del backend, usando valores por defecto');
         // Configuración por defecto (fallback)
+        // Firebase v8
         firebaseConfig = {
             apiKey: "AIzaSyAJ395j9EL5Nv81Q70Csc4zRKNp5e1Xrjo",
             authDomain: "expo-project-1040e.firebaseapp.com",
@@ -77,6 +78,8 @@ async function tryFirebaseLogin(email, password) {
         return { success: true, user: userCred.user };
     } catch (err) {
         console.error('❌ Firebase login error:', err.code);
+        status.textContent = ["password or email is invalid, try again"];
+        console.error('❌ Firebase login error:', err.message);
         return { success: false, message: err.code };
     }
 }
@@ -87,46 +90,66 @@ async function tryFirebaseLogin(email, password) {
 document.addEventListener('DOMContentLoaded', function() {
     // Cargar configuraciones al cargar la página
     loadConfig();
-    
-    document.getElementById('login-form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const status = document.getElementById('login-status');
-        const email = document.getElementById('login-email').value.trim();
-        const password = document.getElementById('login-pass').value;
+    // Conecta con los IDs reales del formulario en login.html
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const status = document.getElementById('login-status');
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-pass').value;
 
-        if (!email || !password) {
-            status.textContent = 'Por favor, complete todos los campos';
-            return;
-        }
-        status.textContent = 'Iniciando sesión...';
+            if (!email || !password) {
+                status.textContent = 'Please fill in all fields';
+                return;
+            }
+            status.textContent = 'Logging in...';
 
-        // 1) Intento con Python backend
-        console.log('▶️ Intentando login backend...');
-        const pythonRes = await tryPythonLogin(email, password);
-        if (pythonRes.success) {
-            console.log('✅ Backend login OK', pythonRes.user);
-            localStorage.setItem('user', JSON.stringify(pythonRes.user));
-            window.location.href = '../index.html';
-            return;
-        }
+            // 1) Intento con Python backend
+            console.log('▶️ Trying backend login...');
+            const pythonRes = await tryPythonLogin(email, password);
+            if (pythonRes.success) {
+                console.log('✅ Backend login OK', pythonRes.user);
+                localStorage.setItem('user', JSON.stringify(pythonRes.user));
+                window.location.href = '/index.html';
+                return;
+            }
 
-        // 2) Fallback a Firebase
-        status.textContent = 'Backend no disponible, intentando Firebase...';
-        console.log('▶️ Intentando login Firebase...');
-        const firebaseRes = await tryFirebaseLogin(email, password);
-        if (firebaseRes.success) {
-            const remember = document.getElementById('login-remember').checked;
-            const storage = remember ? localStorage : sessionStorage;
-            storage.setItem('user', JSON.stringify({ email: firebaseRes.user.email }));
-            window.location.href = '../index.html';
-        } else {
-            status.textContent = {
-                'auth/user-not-found': 'Correo no registrado.',
-                'auth/wrong-password': 'Contraseña incorrecta.',
-                'auth/invalid-email': 'Formato de correo inválido.'
-            }[firebaseRes.message] || 'Error al iniciar sesión';
-        }
-    });
+            // 2) Fallback a Firebase
+            status.textContent = 'Backend not available, trying Firebase...';
+            console.log('▶️ Trying Firebase login...');
+            const firebaseRes = await tryFirebaseLogin(email, password);
+            if (firebaseRes.success) {
+                localStorage.setItem('user', JSON.stringify({ email: firebaseRes.user.email }));
+                window.location.href = '/index.html';
+            } else {
+                // Mensajes bonitos y amigables para el usuario
+                let msg = '';
+                switch (firebaseRes.message) {
+                    case 'auth/user-not-found':
+                        msg = 'The email is not registered.';
+                        break;
+                    case 'auth/wrong-password':
+                        msg = 'Wrong password.';
+                        break;
+                    case 'auth/invalid-email':
+                        msg = 'Invalid mail format.';
+                        break;
+                    case 'app/no-app':
+                        msg = 'There was problem with the conexion. Try again.';
+                        break;
+                    default:
+                        msg = 'Failed to login. Please check your credentials and try again.';
+                }
+                status.textContent = msg;
+                status.classList.remove('success');
+                status.classList.add('error');
+                console.error('❌ Firebase login error:', firebaseRes.message);
+            }
+        });
+    } else {
+        console.error('❌ Login form not found in the DOM');
+    }
 });
 
 // ================================
@@ -137,10 +160,10 @@ function showLogoutPopup() {
   popup.className = 'logout-popup';
   popup.innerHTML = `
     <div class="popup-content">
-      <h3>¿Estás seguro de querer cerrar sesión?</h3>
+      <h3>Are you sure you want to logout?</h3>
       <div class="popup-buttons">
-        <button id="confirm-logout">Sí, cerrar sesión</button>
-        <button id="cancel-logout">Volver al inicio</button>
+        <button id="confirm-logout">Yes, logout</button>
+        <button id="cancel-logout">Go back to index</button>
       </div>
     </div>
   `;
@@ -159,10 +182,10 @@ function showLogoutPopup() {
         // Eliminar información del usuario
         localStorage.removeItem('user');
         // Redirigir a index.html
-        window.location.href = 'index.html';
+        window.location.href = '/index.html';
       }
     } catch (err) {
-      console.error('Error al cerrar sesión:', err);
+      console.error('Error logging out:', err);
     } finally {
       popup.remove();
     }
