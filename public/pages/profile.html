@@ -12,6 +12,10 @@ Permite cambiar la foto de perfil.
     <link rel="stylesheet" href="../css/profile.css">
 </head>
 <body>
+  <!-- Header -->
+  <div id="header-container"></div>
+  
+  <main class="profile-container">
     <h2>Mi Perfil</h2>
     <div id="profileContainer">
         <!-- Foto de perfil -->
@@ -34,6 +38,42 @@ Permite cambiar la foto de perfil.
         </form>
         <div id="profileMessage"></div>
     </div>
-    <script src="../js/profile.js"></script>
+  </main>
+  
+  <!-- Footer -->
+  <div id="footer-container"></div>
+  
+  <!-- Cargador de módulos -->
+  <script src="/src/components/js/loader.js" type="module"></script>
+  
+  <!-- Script del perfil -->
+  <script src="../js/profile.js"></script>
+  
+  <!-- Carga dinámica del header y footer -->
+  <script>
+    // Cargar header
+    fetch('/src/components/html/header.html')
+      .then(r => r.text())
+      .then(html => {
+        const headerContainer = document.getElementById('header-container');
+        if (headerContainer) {
+          headerContainer.innerHTML = html;
+          console.log('Header cargado correctamente');
+        }
+      })
+      .catch(error => console.error('Error al cargar el header:', error));
+
+    // Cargar footer
+    fetch('/src/components/html/footer.html')
+      .then(r => r.text())
+      .then(html => {
+        const footerContainer = document.getElementById('footer-container');
+        if (footerContainer) {
+          footerContainer.innerHTML = html;
+          console.log('Footer cargado correctamente');
+        }
+      })
+      .catch(error => console.error('Error al cargar el footer:', error));
+  </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 // Menú móvil y modo oscuro global
 //AidSync-Project\src\components\js\header.js
 
-document.addEventListener('DOMContentLoaded', function () {
+function initHeader() {
   // --- Modo oscuro global en <html> ---
   function setDarkMode(on) {
     const html = document.documentElement;
@@ -28,48 +28,70 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // --- Menú móvil ---
-  const burger = document.querySelector('.as-header__burger');
-  const mobileMenu = document.getElementById('as-header__mobile-menu');
-  const closeMobile = document.querySelector('.as-header__mobile-close');
+const burger = document.querySelector('.as-header__burger');
+const mobileMenu = document.getElementById('as-header__mobile-menu');
+const closeMobile = document.querySelector('.as-header__mobile-close');
 
-  function openMenu() {
-    if (mobileMenu) {
-      mobileMenu.classList.add('open');
-      burger.setAttribute('aria-expanded', 'true');
-      document.body.style.overflow = 'hidden';
-    }
-  }
-  function closeMenu() {
-    if (mobileMenu) {
-      mobileMenu.classList.remove('open');
-      burger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    }
-  }
-  if (burger) {
-    burger.addEventListener('click', openMenu);
-  }
-  if (closeMobile) {
-    closeMobile.addEventListener('click', closeMenu);
-  }
-  // Cierra el menú si se hace click fuera del panel (solo fondo, no contenido)
+function openMenu() {
   if (mobileMenu) {
-    mobileMenu.addEventListener('mousedown', function (e) {
-      // Solo cierra si el click es exactamente sobre el fondo del menú (no sobre hijos)
-      if (e.target === mobileMenu) closeMenu();
-    });
+    mobileMenu.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    // Asegurarse de que el botón de cierre reciba el foco
+    if (closeMobile) {
+      closeMobile.focus();
+    }
   }
-  // Cierra el menú al hacer click en cualquier enlace del menú móvil
-  document.querySelectorAll('.as-header__mobile-list a').forEach(link => {
-    link.addEventListener('click', closeMenu);
+}
+
+function closeMenu() {
+  if (mobileMenu) {
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+    // Devolver el foco al botón del menú hamburguesa
+    if (burger) {
+      burger.focus();
+    }
+  }
+}
+
+// Añadir eventos
+if (burger) {
+  burger.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (mobileMenu && mobileMenu.classList.contains('open')) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
   });
-  // Refuerza el cierre con teclado (accesibilidad)
-  if (closeMobile) {
-    closeMobile.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-        e.preventDefault();
-        closeMenu();
-      }
-    });
+}
+
+// Cerrar menú al hacer clic fuera
+document.addEventListener('click', function(e) {
+  if (mobileMenu && mobileMenu.classList.contains('open') && 
+      !mobileMenu.contains(e.target) && 
+      e.target !== burger) {
+    closeMenu();
   }
 });
+
+// Cerrar menú con tecla Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && mobileMenu && mobileMenu.classList.contains('open')) {
+    closeMenu();
+  }
+});
+
+// Cerrar menú al hacer clic en los enlaces del menú móvil
+const mobileLinks = document.querySelectorAll('.as-header__mobile-list a');
+mobileLinks.forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+}
+
+// Inicializar el header cuando el DOM esté listo
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initHeader);
+} else {
+  initHeader();
+}
