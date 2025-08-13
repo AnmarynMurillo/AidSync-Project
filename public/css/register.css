@@ -28,25 +28,29 @@ Animaciones y responsividad mejoradas
 body {
     font-family: 'Poppins', 'Nunito', Arial, sans-serif;
     background: linear-gradient(120deg, var(--register-bg) 60%, #82dfcd 100%);
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 #logo-link {
-    margin-top: 2rem;
+    margin-top: 0;
+    margin-bottom: 0.3rem;
 }
 form {
     background: var(--register-card);
-    padding: 2.7rem 2.7rem 2.2rem 2.7rem;
-    border-radius: 2rem;
+    padding: 1.2rem 2rem 1rem 2rem;
+    border-radius: 1.5rem;
     box-shadow: 0 8px 32px var(--register-primary)22;
     display: flex;
     flex-direction: column;
-    gap: 1.1rem;
+    gap: 0.6rem;
     min-width: 320px;
-    max-width: 410px;
+    max-width: 380px;
     width: 100%;
     margin: 0 auto;
     border: 2px solid var(--register-border);
@@ -54,10 +58,10 @@ form {
     animation: modalIn 0.5s cubic-bezier(.4,2,.6,1) both;
 }
 input, select, button {
-    padding: 1.1rem 1.2rem;
-    border-radius: 1rem;
+    padding: 0.9rem 1rem;
+    border-radius: 0.8rem;
     border: 2px solid var(--register-border);
-    font-size: 1.13rem;
+    font-size: 1rem;
     font-family: inherit;
     box-shadow: 0 1px 4px var(--register-primary)08;
     outline: none;
@@ -77,26 +81,26 @@ button {
     background: linear-gradient(90deg, var(--register-accent) 0%, var(--register-primary) 100%);
     color: #fff;
     border: none;
-    border-radius: 1rem;
-    padding: 1.2rem 2rem;
-    font-size: 1.18rem;
+    border-radius: 0.8rem;
+    padding: 0.9rem 1.5rem;
+    font-size: 1.1rem;
     cursor: pointer;
-    margin-top: 0.5rem;
+    margin-top: 0.3rem;
     align-self: flex-end;
     box-shadow: 0 2px 8px var(--register-primary)10;
     transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-    font-weight: 800;
-    letter-spacing: 0.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
 }
 button:hover {
     background: linear-gradient(90deg, var(--register-primary) 0%, var(--register-accent) 100%);
-    transform: translateY(-2px) scale(1.04);
+    transform: translateY(-2px) scale(1.02);
     box-shadow: 0 4px 16px var(--register-accent)20;
 }
 #registerMessage {
-    margin-top: 1rem;
+    margin-top: 0.8rem;
     font-weight: bold;
-    font-size: 1.13rem;
+    font-size: 1rem;
     text-align: center;
     min-height: 1.2em;
     color: var(--register-accent);
@@ -110,24 +114,54 @@ button:hover {
 }
 h2 {
     color: var(--register-primary);
-    font-size: 2.3rem;
+    font-size: 1.8rem;
     font-weight: 900;
-    margin-bottom: 2rem;
+    margin-bottom: 1.2rem;
     text-align: center;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
     text-shadow: 0 2px 8px var(--register-accent)22;
     font-family: 'Poppins', 'Nunito', Arial, sans-serif;
 }
 label {
-    font-size: 1.08rem;
+    font-size: 0.95rem;
     color: var(--register-primary);
-    font-weight: 700;
-    margin-bottom: 0.2rem;
+    font-weight: 600;
+    margin-bottom: 0.1rem;
     letter-spacing: 0.1px;
 }
 @media (max-width: 600px) {
-    form { padding: 1.2rem 0.7rem; min-width: 0; }
-    h2 { font-size: 1.3rem; margin-bottom: 1.2rem; }
+    body {
+        padding: 0;
+        height: 100vh;
+    }
+    form { 
+        padding: 0.8rem 1rem 0.6rem 1rem; 
+        min-width: 0; 
+        max-width: 95vw;
+        gap: 0.5rem;
+        margin: 0 auto;
+    }
+    h2 { 
+        font-size: 1.3rem; 
+        margin-bottom: 0.6rem; 
+    }
+    input, select, button {
+        padding: 0.7rem 0.8rem;
+        font-size: 0.9rem;
+    }
+    button {
+        padding: 0.7rem 1rem;
+        font-size: 0.95rem;
+        margin-top: 0.1rem;
+    }
+    #logo-link {
+        margin-top: 0;
+        margin-bottom: 0.2rem;
+    }
+    #registerMessage {
+        margin-top: 0.4rem;
+        font-size: 0.85rem;
+    }
 }
 @keyframes modalIn {
     from { transform: translateY(60px) scale(0.97); opacity: 0; }
