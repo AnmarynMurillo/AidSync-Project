@@ -61,7 +61,7 @@ const TEAM = [
       foto: '/public/assets/members/Elina.png',
       rol: 'JS Developer',
       desc: 'In charge of JavaScript functionality and dynamic interactions.'
-    }
+    },
   ];
   
   // Carousel with corrected paths
