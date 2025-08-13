@@ -77,110 +77,60 @@ async function cargarPerfil() {
 
 // Maneja el cambio de foto de perfil
 const photoForm = document.getElementById('photoForm');
-photoForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const fileInput = document.getElementById('photoInput');
-    if (!fileInput.files.length) return;
-    const formData = new FormData();
-    formData.append('foto', fileInput.files[0]);
-    try {
-        const idToken = await getIdToken();
-        const headers = idToken ? { 'Authorization': 'Bearer ' + idToken } : {};
-        const res = await fetch(`${backendUrl}/profile/photo`, {
-            method: 'POST',
-            headers,
-            credentials: 'include',
-            body: formData
-        });
-        const data = await res.json();
-        if (data.success && data.foto_url) {
-            document.getElementById('profilePic').src = data.foto_url;
-            document.getElementById('profileMessage').style.color = 'green';
-            document.getElementById('profileMessage').textContent = 'Foto de perfil actualizada.';
-        } else {
-            throw new Error(data.message);
-        }
-    } catch (err) {
-        // Fallback: subir la foto a Firebase Storage y actualizar photoURL en Auth
-        if (typeof firebase !== 'undefined' && firebase.auth().currentUser && firebase.storage) {
-            try {
-                const user = firebase.auth().currentUser;
-                const uid = user.uid;
-                const file = fileInput.files[0];
-                // Crea una referencia en Storage
-                const storageRef = firebase.storage().ref();
-                const profilePicRef = storageRef.child(`profile_pics/${uid}/${file.name}`);
-                // Sube el archivo
-                const snapshot = await profilePicRef.put(file);
-                // Obtiene la URL pública
-                const url = await snapshot.ref.getDownloadURL();
-                // Actualiza el photoURL en Auth
-                await user.updateProfile({ photoURL: url });
-                document.getElementById('profilePic').src = url;
+if (photoForm) {
+    photoForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const fileInput = document.getElementById('photoInput');
+        if (!fileInput.files.length) return;
+        const formData = new FormData();
+        formData.append('foto', fileInput.files[0]);
+        try {
+            const idToken = await getIdToken();
+            const headers = idToken ? { 'Authorization': 'Bearer ' + idToken } : {};
+            const res = await fetch(`${backendUrl}/profile/photo`, {
+                method: 'POST',
+                headers,
+                credentials: 'include',
+                body: formData
+            });
+            const data = await res.json();
+            if (data.success && data.foto_url) {
+                document.getElementById('profilePic').src = data.foto_url;
                 document.getElementById('profileMessage').style.color = 'green';
-                document.getElementById('profileMessage').textContent = 'Foto de perfil actualizada en Firebase (modo fallback).';
-            } catch (firebaseErr) {
-                document.getElementById('profileMessage').style.color = 'red';
-                document.getElementById('profileMessage').textContent = 'Error al subir la foto a Firebase: ' + firebaseErr.message;
+                document.getElementById('profileMessage').textContent = 'Foto de perfil actualizada.';
+            } else {
+                throw new Error(data.message);
             }
-        } else {
-            document.getElementById('profileMessage').style.color = 'red';
-            document.getElementById('profileMessage').textContent = 'Error al conectar con el backend y Firebase.';
-        }
-    }
-});
-
-// Carga el perfil al abrir la página
-window.onload = cargarPerfil;
-    if (!fileInput.files.length) return;
-    const formData = new FormData();
-    formData.append('foto', fileInput.files[0]);
-    try {
-        const idToken = await getIdToken();
-        const headers = idToken ? { 'Authorization': 'Bearer ' + idToken } : {};
-        const res = await fetch(`${backendUrl}/profile/photo`, {
-            method: 'POST',
-            headers,
-            credentials: 'include',
-            body: formData
-        });
-        const data = await res.json();
-        if (data.success && data.foto_url) {
-            document.getElementById('profilePic').src = data.foto_url;
-            document.getElementById('profileMessage').style.color = 'green';
-            document.getElementById('profileMessage').textContent = 'Foto de perfil actualizada.';
-        } else {
-            throw new Error(data.message);
-        }
-    } catch (err) {
-        // Fallback: subir la foto a Firebase Storage y actualizar photoURL en Auth
-        if (typeof firebase !== 'undefined' && firebase.auth().currentUser && firebase.storage) {
-            try {
-                const user = firebase.auth().currentUser;
-                const uid = user.uid;
-                const file = fileInput.files[0];
-                // Crea una referencia en Storage
-                const storageRef = firebase.storage().ref();
-                const profilePicRef = storageRef.child(`profile_pics/${uid}/${file.name}`);
-                // Sube el archivo
-                const snapshot = await profilePicRef.put(file);
-                // Obtiene la URL pública
-                const url = await snapshot.ref.getDownloadURL();
-                // Actualiza el photoURL en Auth
-                await user.updateProfile({ photoURL: url });
-                document.getElementById('profilePic').src = url;
-                document.getElementById('profileMessage').style.color = 'green';
-                document.getElementById('profileMessage').textContent = 'Foto de perfil actualizada en Firebase (modo fallback).';
-            } catch (firebaseErr) {
+        } catch (err) {
+            // Fallback: subir la foto a Firebase Storage y actualizar photoURL en Auth
+            if (typeof firebase !== 'undefined' && firebase.auth().currentUser && firebase.storage) {
+                try {
+                    const user = firebase.auth().currentUser;
+                    const uid = user.uid;
+                    const file = fileInput.files[0];
+                    // Crea una referencia en Storage
+                    const storageRef = firebase.storage().ref();
+                    const profilePicRef = storageRef.child(`profile_pics/${uid}/${file.name}`);
+                    // Sube el archivo
+                    const snapshot = await profilePicRef.put(file);
+                    // Obtiene la URL pública
+                    const url = await snapshot.ref.getDownloadURL();
+                    // Actualiza el photoURL en Auth
+                    await user.updateProfile({ photoURL: url });
+                    document.getElementById('profilePic').src = url;
+                    document.getElementById('profileMessage').style.color = 'green';
+                    document.getElementById('profileMessage').textContent = 'Foto de perfil actualizada en Firebase (modo fallback).';
+                } catch (firebaseErr) {
+                    document.getElementById('profileMessage').style.color = 'red';
+                    document.getElementById('profileMessage').textContent = 'Error al subir la foto a Firebase: ' + firebaseErr.message;
+                }
+            } else {
                 document.getElementById('profileMessage').style.color = 'red';
-                document.getElementById('profileMessage').textContent = 'Error al subir la foto a Firebase: ' + firebaseErr.message;
+                document.getElementById('profileMessage').textContent = 'Error al conectar con el backend y Firebase.';
             }
-        } else {
-            document.getElementById('profileMessage').style.color = 'red';
-            document.getElementById('profileMessage').textContent = 'Error al conectar con el backend y Firebase.';
         }
-    }
-});
+    });
+}
 
 // Carga el perfil al abrir la página
 window.onload = cargarPerfil;
