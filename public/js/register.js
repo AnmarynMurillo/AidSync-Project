@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 msg.style.color = 'green';
                 msg.textContent = 'Successfull Register, Redirecting...';
-                setTimeout(() => window.location.href = '/public/pages/login.html', 1500);
+                setTimeout(() => window.location.assign('login.html'), 1500);
             } else {
                 throw new Error(data.message);
             }
@@ -81,10 +81,19 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 // Usar la API de compatibilidad (v8 style) expuesta por los scripts CDN
                 const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
-                await userCredential.user.updateProfile({ displayName: name});
+                await userCredential.user.updateProfile({ displayName: name });
+                // Guardar datos extra en Realtime Database
+                if (firebase.database) {
+                    await firebase.database().ref('users/' + userCredential.user.uid).set({
+                        age,
+                        area,
+                        email,
+                        name
+                    });
+                }
                 msg.style.color = 'green';
                 msg.textContent = 'Succesfull Register, Redirecting...';
-                setTimeout(() => window.location.href = '/public/pages/login.html', 1500);
+                setTimeout(() => window.location.assign('login.html'), 1500);
             } catch (firebaseErr) {
                 msg.textContent = 'Error: ' + firebaseErr.message;
             }
