@@ -71,4 +71,16 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+
+  // Cierra el menú si se redimensiona la ventana a desktop
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 900) {
+      closeMenu();
+    }
+  });
+
+  // Comprobación inicial al cargar la página
+  if (window.innerWidth > 900) {
+    closeMenu();
+  }
 });

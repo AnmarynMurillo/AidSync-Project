@@ -17,7 +17,7 @@
   background: linear-gradient(90deg, var(--color-bg) 0%, var(--color-accent) 100%);
 }
 
-.as-header__container {
+.as-header__content {
   max-width: 1280px;
   margin: 0 auto;
   display: flex;
@@ -129,9 +129,7 @@
 }
 
 .as-header__global-actions {
-  display: flex;
-  gap: 0.7rem;
-  align-items: center;
+  display: contents; /* Use contents to avoid creating a flex container that affects the burger menu */
 }
 .as-header__icon-btn {
   background: transparent;
@@ -166,7 +164,7 @@
 }
 
 .as-header__burger {
-  display: none;
+  display: none; /* Oculto por defecto en desktop */
   flex-direction: column;
   gap: 0.3rem;
   background: transparent;
