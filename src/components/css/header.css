@@ -1,11 +1,12 @@
 /* AidSync Header Styles - adaptado a la paleta institucional */
+/*AidSync-Project\src\components\css\header.css */
 
-.as-header__container {
+.as-header {
   width: 100%;
   min-height: 72px;
   background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
   box-shadow: var(--color-shadow);
-  border-radius:normal;
+  border-radius: 0;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -14,7 +15,8 @@
   backdrop-filter: blur(8px);
 }
 [data-theme="dark"] .as-header {
-  background: linear-gradient(90deg, var(--color-bg) 0%, var(--color-accent) 100%);
+  background: linear-gradient(90deg, var(--color-card) 0%, var(--color-accent) 100%);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .as-header__content {
@@ -47,12 +49,16 @@
   outline-offset: 2px;
 }
 .as-header__slogan {
-  color: var(#fff, var(--color-text));
+  color: var(--color-text);
   font-size: 1.1rem;
   font-weight: 500;
   letter-spacing: 0.08em;
-  text-shadow: 0 2px 8px #ffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   user-select: none;
+}
+
+[data-theme="dark"] .as-header__slogan {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .as-header__nav {
@@ -77,8 +83,16 @@
   border-radius: 0.7rem;
   transition: background var(--transition), color var(--transition);
 }
+
 [data-theme="dark"] .as-header__nav-link {
-  color: #fff;
+  color: var(--color-text);
+  opacity: 0.9;
+}
+
+[data-theme="dark"] .as-header__nav-link:hover,
+[data-theme="dark"] .as-header__nav-link:focus-visible {
+  color: var(--color-accent);
+  opacity: 1;
 }
 .as-header__nav-link:hover,
 .as-header__nav-link:focus-visible {
@@ -194,7 +208,7 @@
 .as-header__mobile-menu {
   position: fixed;
   top: 0;
-  right: -0.5vw;
+  right: -100vw;
   width: 85vw;
   max-width: 340px;
   height: 100vh;
@@ -302,8 +316,53 @@
   outline-offset: 2px;
 }
 
+/* Mejorar la transición y posición del menú móvil */
 .as-header__mobile-menu {
-  will-change: right;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 85%;
+  max-width: 340px;
+  height: 100vh;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  padding: 2.2rem 1.5rem 1.5rem;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  will-change: transform;
+  overflow-y: auto;
+}
+
+[data-theme="dark"] .as-header__mobile-menu {
+  background: linear-gradient(90deg, var(--color-bg) 0%, var(--color-accent) 100%);
+}
+
+.as-header__mobile-menu.open {
+  transform: translateX(0);
+}
+
+/* Estilos para el botón de cerrar */
+.as-header__mobile-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--color-text);
+  cursor: pointer;
+  padding: 0.5rem;
+  line-height: 1;
+}
+
+/* Mejorar la accesibilidad en el foco */
+.as-header__mobile-close:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .as-header.sticky {

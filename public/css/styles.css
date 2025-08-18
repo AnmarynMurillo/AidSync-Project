@@ -37,26 +37,29 @@
   font-family: 'Poppins', 'Nunito', Arial, sans-serif;
 }
 [data-theme="dark"] {
-  --color-bg: #003d66;
-  --color-card: #082940;
-  --color-border: #001f33;
-  --color-text: #fff;
+  --color-bg: #001f33;
+  --color-card: #003d66;
+  --color-border: #005580;
+  --color-text: #ffffff;
   --color-text-secondary: #eaf4f5;
+  --color-primary: #4db8ff;
   --color-accent: #16a085;
   --color-support1: #82dfcd;
-  --color-support2: #001f33;
+  --color-support2: #003d66;
   --color-placeholder: #82dfcd;
-  --color-shadow: 0 2px 16px #ffffff20;
+  --color-shadow: 0 2px 16px #00000040;
+  color: var(--color-text);
 }
 
 /* Global Styles */
 body {
   background: var(--color-bg);
-  color: var(--color-primary);
+  color: var(--color-text);
   font-family: inherit;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 h2, h3 {
@@ -102,10 +105,10 @@ h2, h3 {
   position: relative;
 }
 .carousel-image {
+  filter: brightness(0.68) saturate(1.1) blur(8px);
   width: 100vw;
   height: 680px;
   object-fit: cover;
-  filter: brightness(0.68) saturate(1.1) blur(0.2px);
   border-radius: 0;
   transition: filter 0.25s cubic-bezier(.4,0,.2,1);
 }
