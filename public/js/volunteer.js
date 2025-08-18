@@ -110,8 +110,13 @@ const VOLUNTEERS = [
       <ul class="modal-reqs">
         ${vol.requisitos.map(r => `<li>${translateRequirement(r)}</li>`).join('')}
       </ul>
-      <button class="modal-signup">Sign Up</button>
+      <button id="modal-signup">Sign Up</button>
     `;
+    const signupBtn = document.getElementById('modal-signup');
+    signupBtn.addEventListener('click', () => {
+      // Redirige a la página de registro
+      window.location.href = '/public/pages/register.html'; // Cambia la ruta si es diferente, por ejemplo: '/registro'
+    });
     modal.setAttribute('aria-hidden', 'false');
     modal.focus();
   }

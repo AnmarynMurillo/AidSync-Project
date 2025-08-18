@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/src/components/css/footer.css">
     <link rel="stylesheet" href="/public/css/donate.css">
     <script defer src="/public/js/donate.js"></script>
-</head>
+    
 <body>
   <!-- Header -->
   <div id="header-container"></div>
@@ -56,6 +56,55 @@
   
   <!-- Carga dinámica del header y footer -->
   <script>
+    //confetiiii
+    document.addEventListener("DOMContentLoaded", function() {
+    const modal = document.querySelector("#difference-modal");
+
+    if (modal && modal.getAttribute("aria-hidden") === "false") {
+        lanzarCorazones();
+    }
+
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.attributeName === "aria-hidden" && modal.getAttribute("aria-hidden") === "false") {
+                lanzarCorazones();
+            }
+        });
+    });
+
+    if (modal) {
+        observer.observe(modal, { attributes: true });
+    }
+
+    function lanzarCorazones() {
+        const duration = 3000;
+        const end = Date.now() + duration;
+
+        (function frame() {
+            crearCorazon();
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        })();
+    }
+
+    function crearCorazon() {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.textContent = "❤️";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = (Math.random() * 16 + 16) + "px";
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 4000);
+    }
+});
+    // Carga header/footer
+    fetch('/src/components/html/header.html').then(r=>r.text()).then(h=>document.getElementById('header-container').innerHTML=h);
+    fetch('/src/components/html/footer.html').then(r=>r.text()).then(f=>document.getElementById('footer-container').innerHTML=f);
+
     // Cargar header
     fetch('/src/components/html/header.html')
       .then(r => r.text())
@@ -79,6 +128,7 @@
         }
       })
       .catch(error => console.error('Error al cargar el footer:', error));
+
 
     // Show modal on page load and close after 5 seconds
     window.addEventListener('DOMContentLoaded', function() {
@@ -109,5 +159,7 @@
       }
     });
   </script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
 </body>
 </html>
