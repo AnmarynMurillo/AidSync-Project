@@ -222,3 +222,60 @@ if (document.getElementById('header-container')) {
 } else {
   document.addEventListener('DOMContentLoaded', initDarkModeHeader);
 }
+let currentFoundation = 0;
+const track = document.querySelector('.foundation-cards');
+const cards = document.querySelectorAll('.foundation-card');
+let cardWidth = cards[0].offsetWidth + 20; // 20 = gap entre tarjetas
+
+const nextArrow = document.querySelector('.foundation-arrow.right');
+const prevArrow = document.querySelector('.foundation-arrow.left');
+
+function updateFoundationSlide() {
+  track.style.transform = `translateX(-${currentFoundation * cardWidth}px)`;
+}
+
+function nextFoundationSlide() {
+  if (currentFoundation < cards.length - 1) {
+    currentFoundation++;
+  } else {
+    currentFoundation = 0; // opcional: vuelve al inicio
+  }
+  updateFoundationSlide();
+}
+
+function prevFoundationSlide() {
+  if (currentFoundation > 0) {
+    currentFoundation--;
+  } else {
+    currentFoundation = cards.length - 1; // opcional: ir al final
+  }
+  updateFoundationSlide();
+}
+
+// animación de flecha al hacer clic
+function animateArrow(arrow) {
+  arrow.style.transform = 'translateX(10px)';
+  setTimeout(() => {
+    arrow.style.transform = 'translateX(0)';
+  }, 200);
+}
+
+// eventos de clic en flechas
+nextArrow.addEventListener('click', () => {
+  nextFoundationSlide();
+  animateArrow(nextArrow);
+});
+
+prevArrow.addEventListener('click', () => {
+  prevFoundationSlide();
+  animateArrow(prevArrow);
+});
+
+// recalcular ancho de tarjetas al redimensionar
+window.addEventListener('resize', () => {
+  cardWidth = cards[0].offsetWidth + 20;
+  updateFoundationSlide();
+});
+
+// inicializa posición
+updateFoundationSlide();
