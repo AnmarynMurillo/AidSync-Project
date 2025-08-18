@@ -197,7 +197,7 @@
   .modal-body .modal-reqs li {
     margin-bottom: 0.3rem;
   }
-  .modal-body .modal-signup {
+  .modal-body #modal-signup {
     display: block;
     margin: 1.5rem auto 0 auto;
     background: #2563eb;
@@ -211,7 +211,7 @@
     box-shadow: 0 2px 8px #003d6610;
     transition: background 0.2s;
   }
-  .modal-body .modal-signup:hover {
+  .modal-body #modal-signup:hover {
     background: #16a085;
   }
   @media (max-width: 900px) {

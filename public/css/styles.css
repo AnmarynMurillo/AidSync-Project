@@ -101,10 +101,10 @@ h2, h3 {
   position: relative;
 }
 .carousel-image {
+  filter: brightness(0.68) saturate(1.1) blur(8px);
   width: 100vw;
   height: 680px;
   object-fit: cover;
-  filter: brightness(0.68) saturate(1.1) blur(0.2px);
   border-radius: 0;
   transition: filter 0.25s cubic-bezier(.4,0,.2,1);
 }
