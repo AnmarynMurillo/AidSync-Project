@@ -1,8 +1,9 @@
 # user_service.py
 # Lógica de usuario: registro, login seguro, perfil y actualización
 
-from flask import request, jsonify, session
-from firebase_admin import auth as firebase_auth, storage
+from flask import request, jsonify
+from firebase_admin import auth as firebase_auth, storage, db
+from src.database.firestore_service import db as firestore_db
 import requests
 import logging
 import os
@@ -78,6 +79,18 @@ def register_user():
         # db.collection('users').document(user.uid).set({
         #     'nombre': nombre, 'edad': edad_int, 'area': area, 'email': email
         # })
+
+        # Guardar datos extra en Realtime Database
+        try:
+            db.reference(f'users/{user.uid}').set({
+                'name': nombre,
+                'age': edad_int,
+                'area': area,
+                'email': email
+            })
+        except Exception as db_err:
+            logging.warning(f"No se pudo guardar en Realtime Database: {db_err}")
+
         logging.info("Usuario registrado: %s", email)
         return jsonify({"success": True, "message": "Usuario registrado correctamente"}), 201
     except Exception as e:
@@ -111,8 +124,6 @@ def login_user():
         if resp.status_code != 200:
             return jsonify({"success": False, "message": "Credenciales inválidas"}), 401
         id_token = resp.json().get('idToken')
-        session['user_email'] = email  # Simulación de sesión
-        session['id_token'] = id_token
         logging.info("Usuario autenticado: %s", email)
         return jsonify({"success": True, "message": "Login exitoso", "idToken": id_token}), 200
     except Exception as e:
@@ -121,18 +132,23 @@ def login_user():
 
 def get_profile():
     """
-    Devuelve el perfil del usuario autenticado (simulación usando sesión).
+    Devuelve el perfil del usuario autenticado usando el ID Token.
     """
     try:
-        email = session.get('user_email')
-        if not email:
-            return jsonify({"success": False, "message": "No autenticado"}), 401
-        user = firebase_auth.get_user_by_email(email)
-        # Aquí podrías obtener datos extra de Firestore
+        auth_header = request.headers.get('Authorization', None)
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"success": False, "message": "No token provided"}), 401
+        id_token = auth_header.split(' ')[1]
+        decoded_token = firebase_auth.verify_id_token(id_token)
+        uid = decoded_token['uid']
+        user = firebase_auth.get_user(uid)
+        # Obtén datos extra de Firestore
+        doc = firestore_db.collection('users').document(uid).get()
+        extra = doc.to_dict() if doc.exists else {}
         user_data = {
             "nombre": user.display_name or "",
-            "edad": 0,  # Debes obtener de Firestore
-            "area": "", # Debes obtener de Firestore
+            "edad": extra.get("edad", 0),
+            "area": extra.get("area", ""),
             "email": user.email,
             "foto_url": user.photo_url or None
         }
@@ -146,9 +162,12 @@ def update_profile():
     Actualiza el perfil del usuario autenticado (nombre, edad, área).
     """
     try:
-        email = session.get('user_email')
-        if not email:
-            return jsonify({"success": False, "message": "No autenticado"}), 401
+        auth_header = request.headers.get('Authorization', None)
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"success": False, "message": "No token provided"}), 401
+        id_token = auth_header.split(' ')[1]
+        decoded_token = firebase_auth.verify_id_token(id_token)
+        uid = decoded_token['uid']
         data = request.get_json(force=True, silent=True)
         if not data:
             return jsonify({"success": False, "message": "No se recibieron datos"}), 400
@@ -157,10 +176,13 @@ def update_profile():
         area = data.get("area", "").strip()
         if not nombre:
             return jsonify({"success": False, "message": "Nombre requerido"}), 400
-        user = firebase_auth.get_user_by_email(email)
-        firebase_auth.update_user(user.uid, display_name=nombre)
-        # Aquí deberías actualizar edad y área en Firestore
-        logging.info("Perfil actualizado para: %s", email)
+        firebase_auth.update_user(uid, display_name=nombre)
+        # Actualiza edad y área en Firestore
+        firestore_db.collection('users').document(uid).set({
+            "edad": edad,
+            "area": area
+        }, merge=True)
+        logging.info("Perfil actualizado para: %s", uid)
         return jsonify({"success": True, "message": "Perfil actualizado"}), 200
     except Exception as e:
         logging.error("Error en /profile/update: %s", e)
@@ -171,23 +193,26 @@ def update_photo():
     Sube o actualiza la foto de perfil del usuario autenticado.
     """
     try:
-        email = session.get('user_email')
-        if not email:
-            return jsonify({"success": False, "message": "No autenticado"}), 401
+        auth_header = request.headers.get('Authorization', None)
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({"success": False, "message": "No token provided"}), 401
+        id_token = auth_header.split(' ')[1]
+        decoded_token = firebase_auth.verify_id_token(id_token)
+        uid = decoded_token['uid']
         if 'foto' not in request.files:
             return jsonify({"success": False, "message": "No se envió archivo"}), 400
         file = request.files['foto']
         if file.filename == '':
             return jsonify({"success": False, "message": "Nombre de archivo vacío"}), 400
-        user = firebase_auth.get_user_by_email(email)
+        user = firebase_auth.get_user(uid)
         bucket = storage.bucket()
-        blob = bucket.blob(f'profile_pics/{user.uid}.jpg')
+        blob = bucket.blob(f'profile_pics/{uid}.jpg')
         blob.upload_from_file(file, content_type=file.content_type)
         blob.make_public()
         photo_url = blob.public_url
-        firebase_auth.update_user(user.uid, photo_url=photo_url)
-        logging.info("Foto de perfil actualizada para: %s", email)
+        firebase_auth.update_user(uid, photo_url=photo_url)
+        logging.info("Foto de perfil actualizada para: %s", uid)
         return jsonify({"success": True, "foto_url": photo_url}), 200
     except Exception as e:
         logging.error("Error en /profile/photo: %s", e)
-        return jsonify({"success": False, "message": "Error interno del servidor"}), 500 
+        return jsonify({"success": False, "message": "Error interno del servidor"}), 500
