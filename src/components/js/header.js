@@ -1,9 +1,17 @@
-// Funcionalidad Header AidSync
-// Este script maneja el menú móvil y el modo oscuro global de AidSync
-// Menú móvil y modo oscuro global
-//AidSync-Project\src\components\js\header.js
+/**
+ * Header functionality for AidSync
+ * Handles mobile menu and dark mode
+ */
+
+// Prevent multiple initializations
+if (typeof window.asHeaderInitialized === 'undefined') {
+  window.asHeaderInitialized = false;
+}
 
 function initHeader() {
+  // Prevent multiple initializations
+  if (window.asHeaderInitialized) return;
+  window.asHeaderInitialized = true;
   // --- Modo oscuro global en <html> ---
   function setDarkMode(on) {
     const html = document.documentElement;

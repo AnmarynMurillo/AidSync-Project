@@ -10,14 +10,16 @@ Permite cambiar la foto de perfil.
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <link rel="stylesheet" href="../css/profile.css">
+    <!-- Cargar estilos del header -->
+    <link rel="stylesheet" href="/src/components/css/header.css">
 </head>
 <body>
     <h2>My Profile</h2>
   <!-- Header -->
-  <div id="header-container"></div>
-  
-  <main class="profile-container">
-    <h2>Mi Perfil</h2>
+    <div id="header-container"></div>
+    
+    <main class="profile-container">
+        <h2>Mi Perfil</h2>
     <div id="profileContainer">
         <!-- Foto de perfil -->
         <img id="profilePic" src="../assets/img/default-profile.png" alt="Foto de perfil" width="120" height="120">
@@ -39,15 +41,15 @@ Permite cambiar la foto de perfil.
 </html>
         <div id="profileMessage"></div>
     </div>
-  </main>
-  
-  <!-- Footer -->
-  <div id="footer-container"></div>
-  
-  <!-- Cargador de módulos -->
-  <script src="/src/components/js/loader.js" type="module"></script>
-  
-  <!-- Script del perfil -->
+    </main>
+    
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+    
+    <!-- Cargador de componentes -->
+    <script src="/src/components/js/loader.js" type="module"></script>
+    
+    <!-- Script del perfil -->
   <script src="../js/profile.js"></script>
   
   <!-- Carga dinámica del header y footer -->

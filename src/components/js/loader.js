@@ -1,59 +1,56 @@
 /**
- * Cargador automático de módulos de AidSync
- * Este script se encarga de cargar e inicializar automáticamente
- * los componentes necesarios en cada página. es decir, es posible añadir nuevos (ejm: footer.js)
+ * AidSync Component Loader
+ * This script is responsible for loading and initializing
+ * the necessary components on each page.
  */
 
 (function() {
-  // Lista de módulos a cargar
-  const modules = {
-    header: {
-      path: '/src/components/js/header.js',
-      selector: '.as-header',
-      loaded: false
+  // Function to load scripts
+  const loadScript = (src, onload, type = 'text/javascript') => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.type = type;
+    if (type === 'text/javascript') {
+      script.defer = true;
     }
-    // Puedes añadir más módulos aquí en el futuro
+    script.onload = onload;
+    script.onerror = (error) => console.error(`Error loading script ${src}:`, error);
+    document.head.appendChild(script);
   };
 
-  /**
-   * Carga un módulo si su elemento contenedor está presente en la página
-   * @param {string} moduleName - Nombre del módulo a cargar
-   */
-  function loadModule(moduleName) {
-    const module = modules[moduleName];
+  // Function to load modules
+  const loadModule = (module) => {
     if (!module || module.loaded) return;
 
     const element = document.querySelector(module.selector);
     if (element) {
-      // Crear script
-      const script = document.createElement('script');
-      script.src = module.path;
-      script.type = 'module';
-      script.onload = () => {
-        console.log(`Módulo ${moduleName} cargado correctamente`);
-        module.loaded = true;
-      };
-      script.onerror = (error) => {
-        console.error(`Error al cargar el módulo ${moduleName}:`, error);
-      };
-      
-      document.head.appendChild(script);
+      loadScript(
+        module.path,
+        () => {
+          console.log(`Module ${module.name} loaded successfully`);
+          module.loaded = true;
+        },
+        module.type === 'module' ? 'module' : 'text/javascript'
+      );
     }
-  }
+  };
 
-  /**
-   * Inicializa todos los módulos necesarios
-   */
-  function initModules() {
-    Object.keys(modules).forEach(moduleName => {
-      loadModule(moduleName);
-    });
-  }
-
-  // Inicializar cuando el DOM esté listo
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initModules);
-  } else {
-    setTimeout(initModules, 0);
-  }
+  // Load utils first
+  loadScript('/src/components/js/utils.js', () => {
+    console.log('Utils loaded, initializing components');
+    
+    // List of modules to load
+    const modules = [
+      {
+        name: 'header',
+        path: '/src/components/js/header.js',
+        selector: '.as-header',
+        loaded: false,
+        type: 'script'
+      }
+    ];
+    
+    // Load all modules
+    modules.forEach(module => loadModule(module));
+  });
 })();
