@@ -230,14 +230,14 @@
   justify-content: center;
   width: 36px;
   height: 36px;
-  background: rgba(255, 255, 255, 0.1);
+  background: #003d66;
   border-radius: 50%;
   transition: all 0.3s ease;
   color: #ecf0f1;
 }
 
 .social-links a:hover {
-  background: #003d66;
+  background:white;
   transform: translateY(-3px);
 }
 
