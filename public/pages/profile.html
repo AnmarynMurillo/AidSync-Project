@@ -1,39 +1,80 @@
-<!--
-Página de perfil de usuario.
-Muestra y permite editar los datos del usuario autenticado.
-Permite cambiar la foto de perfil.
--->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de Usuario</title>
+    <title>Mi Perfil - AidSync</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="../css/profile.css">
 </head>
 <body>
-    <h2>Mi Perfil</h2>
-    <div id="profileContainer">
-        <!-- Foto de perfil -->
-        <img id="profilePic" src="../assets/img/default-profile.png" alt="Foto de perfil" width="120" height="120">
-        <form id="photoForm" enctype="multipart/form-data">
-            <input type="file" id="photoInput" accept="image/*">
-            <button type="submit">Cambiar foto</button>
-        </form>
-        <!-- Datos del usuario -->
-        <form id="profileForm">
-            <label>Nombre completo:</label>
-            <input type="text" id="nombre" name="nombre" required><br>
-            <label>Edad:</label>
-            <input type="number" id="edad" name="edad" required><br>
-            <label>Área de voluntariado:</label>
-            <input type="text" id="area" name="area" required><br>
-            <label>Correo electrónico:</label>
-            <input type="email" id="email" name="email" readonly><br>
-            <button type="submit">Guardar cambios</button>
-        </form>
-        <div id="profileMessage"></div>
+    <div class="profile-container">
+        <!-- Header with profile info -->
+        <header class="profile-header">
+            <div class="profile-pic-container">
+                <img id="profilePic" src="../assets/img/default-profile.png" alt="Foto de perfil" class="profile-pic">
+                <label for="photoInput" class="edit-photo-btn">
+                    <i class="fas fa-camera"></i>
+                    <input type="file" id="photoInput" accept="image/*" hidden>
+                </label>
+            </div>
+            <div class="profile-info">
+                <h1 id="nombre" class="animate__animated animate__fadeIn">Nombre del Usuario</h1>
+                <p id="area" class="tag"><i class="fas fa-hands-helping"></i> Voluntario en Ayuda Humanitaria</p>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="projectsCount">12</span>
+                        <span class="stat-label">Proyectos</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="hoursCount">156</span>
+                        <span class="stat-label">Horas</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="impact">3.5k</span>
+                        <span class="stat-label">Impacto</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Profile Navigation -->
+        <nav class="profile-nav">
+            <button class="nav-item active" data-tab="projects">Mis Proyectos</button>
+            <button class="nav-item" data-tab="recommendations">Recomendados</button>
+            <button class="nav-item" data-tab="donations">Donaciones</button>
+        </nav>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- My Projects Section -->
+            <div class="tab-pane active" id="projects-tab">
+                <h2><i class="fas fa-project-diagram"></i> Mis Proyectos de Voluntariado</h2>
+                <div class="projects-grid" id="myProjects">
+                    <!-- Project cards will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!-- Recommendations Section -->
+            <div class="tab-pane" id="recommendations-tab">
+                <h2><i class="fas fa-lightbulb"></i> Proyectos Recomendados</h2>
+                <div class="projects-grid" id="recommendedProjects">
+                    <!-- Recommended projects will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!-- Donations Section -->
+            <div class="tab-pane" id="donations-tab">
+                <h2><i class="fas fa-hand-holding-heart"></i> Haz una Diferencia</h2>
+                <div class="donations-grid" id="donationOptions">
+                    <!-- Donation options will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <script src="../js/profile.js"></script>
 </body>
 </html>
