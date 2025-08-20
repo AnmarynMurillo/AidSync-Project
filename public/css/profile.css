@@ -1,55 +1,370 @@
 /*
-Estilos básicos para la página de perfil de usuario.
-Puedes personalizar colores y fuentes según tu diseño.
+Perfil de usuario - Maquetación y estilo usando la paleta global de styles.css
+Enfoque solo en CSS; se incluyen selectores compatibles con el HTML actual y
+selectores preparados para futuras secciones (stats y achievements).
 */
+
+:root {
+    /* usa variables definidas en public/css/styles.css */
+}
+
+/* Base */
 body {
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
+    background: var(--color-bg);
+    color: var(--color-primary);
+    font-family: 'Poppins', 'Nunito', Arial, sans-serif;
+    margin: 0;
 }
+
+/* Contenedor principal (compat: main.profile-container o #profileContainer) */
+main.profile-container {
+    max-width: 1200px;
+    margin: 0 auto 2.5rem auto;
+    padding: 0 1rem;
+}
+
+/* Hero para armonizar con el sitio */
+.hero-profile {
+    background: linear-gradient(90deg, var(--color-support2) 60%, var(--color-support1) 100%);
+    padding: 70px 0 50px 0;
+    border-radius: 0 0 32px 32px;
+    margin: 0 0 2.5rem 0;
+    box-shadow: 0 8px 32px rgba(0,61,102,0.10);
+    text-align: center;
+}
+.hero-profile h2 {
+    color: var(--color-primary);
+    font-weight: 900;
+    font-size: 2.3rem;
+    margin: 0 0 0.5rem 0;
+}
+.hero-profile p {
+    color: var(--color-primary);
+    font-size: 1.08rem;
+    margin: 0;
+}
+
+/* Si solo existe #profileContainer, lo tratamos como la columna izquierda */
 #profileContainer {
-    background: #fff;
+    background: var(--color-card);
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 20px;
+    box-shadow: var(--color-shadow);
+    border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* Layout en 2 columnas cuando haya .profile-layout (preparado) */
+.profile-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto 3rem auto;
+    padding: 0 1rem;
+}
+
+.profile-left, .profile-right {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Tarjetas */
+.profile-card, .stats-card, .achievements-card {
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary) 100%);
+    padding: 2rem;
+    border-radius: 20px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 8px 32px rgba(0,61,102,0.10);
+}
+
+.profile-card:hover,
+.stats-card:hover,
+.achievements-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 61, 102, 0.15);
+}
+
+/* Foto de perfil */
+.profile-photo-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 1rem;
 }
-img#profilePic {
+
+.profile-photo-frame {
+    position: relative;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #007bff;
+    overflow: hidden;
+    border: 4px solid var(--color-accent);
+    box-shadow: 0 4px 16px rgba(22, 160, 133, 0.2);
+    background: var(--color-bg);
 }
-form {
+
+img#profilePic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Controles de foto */
+.photo-controls {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0.75rem;
     width: 100%;
-    max-width: 300px;
+    max-width: 320px;
 }
-input, button {
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+
+#photoForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
-button {
-    background: #007bff;
+
+#photoInput {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px dashed var(--color-accent);
+    border-radius: 10px;
+    background: var(--color-bg);
+}
+
+#photoForm button,
+#removePhotoBtn {
+    padding: 0.75rem 1.25rem;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(22, 160, 133, 0.2);
+    transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+#photoForm button {
+    background: var(--color-accent);
+    color: #fff;
+}
+
+#photoForm button:hover {
+    background: var(--color-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 61, 102, 0.22);
+}
+
+#removePhotoBtn {
+    background: var(--color-accent);
     color: #fff;
     border: none;
+}
+
+#removePhotoBtn:hover {
+    background: var(--color-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 61, 102, 0.22);
+}
+
+/* Formulario de datos personales (preparado) */
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #fff;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 0.8rem 0.9rem;
+    font-family: inherit;
+    color: var(--color-text);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(22, 160, 133, 0.12);
+}
+
+/* Campo contraseña con botón ojo (preparado) */
+.password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-field input {
+    flex: 1;
+    border-radius: 10px 0 0 10px;
+}
+
+.password-toggle {
+    background: var(--color-accent);
+    color: #fff;
+    border: none;
+    height: 42px;
+    width: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 10px 10px 0;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background var(--transition);
 }
-button:hover {
-    background: #0056b3;
+
+.password-toggle:hover {
+    background: var(--color-primary);
 }
+
+/* Datos leídos actuales (#profileData) para que luzcan como tarjetas */
+#profileData p {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 0.8rem 0.9rem;
+    margin: 0;
+}
+
+#profileData p + p { margin-top: 0.6rem; }
+
 #profileMessage {
     margin-top: 1rem;
-    color: #d9534f;
-    font-weight: bold;
+    font-weight: 700;
+}
+
+/* Estadísticas (preparado) */
+.stats-card h3,
+.achievements-card h3 {
+    text-align: center;
+    margin-top: 0;
+    color: #fff;
+}
+
+/* Si se añade un título dentro de la sección de datos del usuario */
+.profile-card h3 { color: #fff; }
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 1rem;
+}
+
+.stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-accent), var(--color-primary));
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(22, 160, 133, 0.3);
+}
+
+.stat-number { font-size: 1.4rem; font-weight: 800; color: var(--color-primary); }
+.stat-label { color: var(--color-placeholder); font-size: 0.9rem; }
+
+/* Logros (preparado) */
+.achievements-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.achievement-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    padding: 0.9rem;
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.achievement-item:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0, 61, 102, 0.1); }
+
+.achievement-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--color-accent);
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 16px rgba(22, 160, 133, 0.30);
+    transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+
+.achievement-item:hover .achievement-icon {
+    background: var(--color-primary);
+    box-shadow: 0 8px 24px rgba(22, 160, 133, 0.25);
+    transform: translateY(-1px);
+}
+
+.achievement-title { font-weight: 700; color: var(--color-primary); }
+.achievement-desc { color: var(--color-placeholder); font-size: 0.9rem; }
+
+/* Botón regresar Home en esquina superior izquierda */
+.back-home-btn {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 1100;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 2px 10px rgba(0, 61, 102, 0.10);
+    transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+
+.back-home-btn i { font-size: 1.1rem; }
+
+.back-home-btn:hover {
+    background: var(--color-primary);
+    box-shadow: 0 8px 24px rgba(22, 160, 133, 0.18);
+    transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .profile-layout { grid-template-columns: 1fr; }
 }
