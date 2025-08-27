@@ -1,0 +1,56 @@
+<!-- 
+Formulario de registro de usuario. 
+Campos: nombre completo, edad, área de voluntariado, correo, contraseña y confirmar contraseña. 
+Al enviar, los datos se envían al backend por JS. Si falla, intenta con Firebase JS. 
+-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | AidSync</title>
+    <link rel="icon" href="/public/assets/logos/logito.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../css/register.css">
+</head>
+<body>
+    <a href="/index.html" id="logo-link">
+      <img src="/public/assets/logos/logito.ico" alt="AidSync Logo">
+    </a>
+    <div class="register-main">
+      <div class="register-section">
+        <h1>Register</h1>
+        <form id="registerForm" class="register-form">
+          <input type="text" id="name" name="name" placeholder="Name" required>
+          <input type="number" id="age" name="age" placeholder="Age" required>
+          <label for="area">Volunteering Area</label>
+          <select id="area" name="area" required>
+            <option value="Education">Education</option>
+            <option value="Health">Health</option>
+            <option value="Environment">Environment</option>
+            <option value="Social Welfare">Social Welfare</option>
+          </select>
+          <input type="email" id="email" name="email" placeholder="Email" required>
+          <input type="password" id="password" name="password" placeholder="Password" required>
+          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
+          <button type="submit" class="register-btn">Register</button>
+          <div id="registerMessage"></div>
+        </form>
+        <div class="register-links">
+          Already have an account? <a href="login.html">Log in</a>
+        </div>
+      </div>
+    </div>
+    <div id="footer-container"></div>
+    <script>
+      window.BACKEND_URL = window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:5000' : 'http://localhost:5000';
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="/public/js/register.js"></script>
+</body>
+</html>
+</html>
+    <script src="/public/js/register.js"></script>
+</body>
+</html>

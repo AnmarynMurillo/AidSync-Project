@@ -1,0 +1,62 @@
+<!--este archivo es login.html y es el archivo de la pagina de login-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | AidSync</title>
+  <link rel="icon" href="/public/assets/logos/logito.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/public/css/login.css">
+</head>
+<body style="position:relative;min-height:100vh;">
+  <a href="/index.html" id="logo-link" style="display:block;width:fit-content;margin:1rem auto 0 auto;">
+    <img src="/public/assets/logos/logito.ico" alt="AidSync Logo" style="width:120px;height:120px;display:block;margin:0 auto;cursor:pointer;filter:drop-shadow(0 2px 8px #003d6610);">
+  </a>
+  <main class="login-main">
+    <section class="login-section">
+        <!--Index Area files-->
+      <h1>Log in</h1>
+      <form class="login-form" id="loginForm" autocomplete="on">
+        <div class="login-row">
+          <label for="email">Email</label>
+          <input type="text" id="login-email" name="email" placeholder="Electronic Mail" required autocomplete="email">
+        </div>
+        <div class="login-row">
+          <label for="password">Password</label>
+          <div style="position:relative;display:flex;align-items:center;">
+            <input type="password" id="login-pass" name="password" placeholder="Password" required autocomplete="current-password" style="width:100%;">
+            <button type="button" id="togglePassword" aria-label="Show / Hide Password" style="position:absolute;right:10px;background:none;border:none;cursor:pointer;font-size:1.1em;color:#888;">
+              <span id="eyeIcon">👁️</span>
+            </button>
+          </div>
+        </div>
+        <button class="login-btn" type="submit">Log in</button>
+        <div id="login-status" class="login-status"></div>
+      </form>
+      <div class="login-links">
+        You don't have an account? <a href="register.html">Register</a>
+      </div>
+    </section>
+  </main>
+  <div id="footer-container"></div>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="../js/login.js"></script>
+  <script>
+    // Mostrar/ocultar contraseña
+    document.getElementById('togglePassword').addEventListener('click', function() {
+      const pwd = document.getElementById('login-pass');
+      const eye = document.getElementById('eyeIcon');
+      if (pwd.type === 'password') {
+        pwd.type = 'text';
+        eye.textContent = '🙈';
+      } else {
+        pwd.type = 'password';
+        eye.textContent = '👁️';
+      }
+    });
+    // Detecta si la página se está sirviendo desde 127.0.0.
+  </script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Contact Us  | AidSync</title>
+    <link rel="icon" href="/public/assets/logos/logito.ico" type="imagen/x-icon">
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="/src/components/css/header.css">
+    <link rel="stylesheet" href="/src/components/css/footer.css">
+    <script defer src="/public/js/donate.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #fff;
+      color:#00113B;
+    }
+
+    header,
+    footer,
+    nav,
+    section,
+    main {
+      width: 100%;
+    }
+
+    .topbar {
+      background: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .topbar .left,
+    .topbar .right {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      padding: 1rem 2rem;
+    }
+
+    nav ul a {
+      text-decoration: none;
+      color: #00113B;
+      font-weight: 500;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+    }
+
+    .breadcrumb {
+      color: #FF6A00;
+      margin-bottom: 1rem;
+    }
+
+    .contact-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    form {
+      flex: 1;
+      min-width: 300px;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    input,
+    textarea {
+      padding: 0.8rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 100%;
+      font-family: 'Poppins';
+    }
+
+    .send-btn {
+      background: #004080;
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      max-width: 150px;
+    }
+
+    .contact-info {
+      background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);;
+      color: white;
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-icons i {
+      background:#004080;
+      padding: 0.5rem;
+      border-radius: 50%;
+      color: white;
+    }
+
+    .map {
+      width: 100%;
+      height: 300px;
+      background: #eee;
+      margin: 2rem 0;
+    }
+
+    footer {
+      background: #00113B;
+      color: white;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .footer-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      background: #004080;
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .email-subscribe {
+      display: flex;
+      max-width: 300px;
+    }
+
+    .email-subscribe input {
+      flex: 1;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 4px 0 0 4px;
+    }
+
+    .email-subscribe button {
+      background:#004080;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0 4px 4px 0;
+    }
+  </style>
+</head>
+
+  <body>
+    <!-- Header -->
+    <div id="header-container"></div>
+  <main>
+    <div class="hero">
+    
+      <h1>Contact Us</h1>
+    </div>
+
+    <section class="contact-section">
+      <form>
+        <input type="text" placeholder="First Name *" required />
+        <input type="text" placeholder="Last Name *" required />
+        <input type="email" placeholder="Email *" required />
+        <input type="text" placeholder="Phone Number *" required />
+        <input type="text" placeholder="Subject *" required />
+        <textarea placeholder="Your Message *" rows="5" required></textarea>
+        <button type="submit" class="send-btn">Send Message</button>
+      </form>
+
+      <div class="contact-info">
+        <h3>Address</h3>
+        <p> 2GM4+6Q7, C. e, Panamá, Provincia de Panamá </p>
+        <h3>Contact</h3>
+        <p>Phone: +507 000-0000 <br>Email: contacto@aidsync.org</p>
+        <h3>Open Time</h3>
+        <p>Mon - Fri: 10:00 - 20:00<br>Sat - Sun: 11:00 - 18:00</p>
+        <h3>Stay Connected</h3>
+        <div class="social-icons">
+          <i class="fab fa-facebook-f"></i>
+          <i class="fab fa-instagram"></i>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+  
+  <!-- Cargador de módulos -->
+  <script src="/src/components/js/loader.js" type="module"></script>
+  
+  <!-- Carga dinámica del header y footer -->
+  <script>
+    // Cargar header
+    fetch('/src/components/html/header.html')
+      .then(r => r.text())
+      .then(html => {
+        const headerContainer = document.getElementById('header-container');
+        if (headerContainer) {
+          headerContainer.innerHTML = html;
+          console.log('Header cargado correctamente');
+        }
+      })
+      .catch(error => console.error('Error al cargar el header:', error));
+
+    // Cargar footer
+    fetch('/src/components/html/footer.html')
+      .then(r => r.text())
+      .then(html => {
+        const footerContainer = document.getElementById('footer-container');
+        if (footerContainer) {
+          footerContainer.innerHTML = html;
+          console.log('Footer cargado correctamente');
+        }
+      })
+      .catch(error => console.error('Error al cargar el footer:', error));
+  </script>
+    </body>
+
+</html>
