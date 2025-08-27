@@ -33,6 +33,7 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+    font-family: 'Poppins', 'Nunito', Arial, sans-serif;
 }
 .login-main {
   height: 100vh;
