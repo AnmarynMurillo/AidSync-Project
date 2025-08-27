@@ -37,26 +37,29 @@
   font-family: 'Poppins', 'Nunito', Arial, sans-serif;
 }
 [data-theme="dark"] {
-  --color-bg: #003d66;
-  --color-card: #082940;
-  --color-border: #001f33;
-  --color-text: #fff;
+  --color-bg: #001f33;
+  --color-card: #003d66;
+  --color-border: #005580;
+  --color-text: #ffffff;
   --color-text-secondary: #eaf4f5;
+  --color-primary: #4db8ff;
   --color-accent: #16a085;
   --color-support1: #82dfcd;
-  --color-support2: #001f33;
+  --color-support2: #003d66;
   --color-placeholder: #82dfcd;
-  --color-shadow: 0 2px 16px #ffffff20;
+  --color-shadow: 0 2px 16px #00000040;
+  color: var(--color-text);
 }
 
 /* Global Styles */
 body {
   background: var(--color-bg);
-  color: var(--color-primary);
+  color: var(--color-text);
   font-family: inherit;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 h2, h3 {
@@ -102,16 +105,16 @@ h2, h3 {
   position: relative;
 }
 .carousel-image {
+  filter: brightness(0.68) saturate(1.1) ;
   width: 100vw;
   height: 680px;
   object-fit: cover;
-  filter: brightness(0.68) saturate(1.1) blur(0.2px);
   border-radius: 0;
   transition: filter 0.25s cubic-bezier(.4,0,.2,1);
 }
 .carousel-overlay-content {
-  position: absolute;
-  right: 5vw;
+  position:absolute;
+ left: 30vw;
   top: 50%;
   transform: translateY(-50%);
   z-index: 3;
@@ -185,23 +188,6 @@ h2, h3 {
 .carousel-btn.outline:hover {
   background: var(--color-accent);
   color: #fff;
-}
-.carousel-arrow {
-  background: linear-gradient(135deg, var(--color-accent) 60%, var(--color-primary) 100%);
-  color: #fff;
-  border: none;
-  font-size: 2.2rem;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 3;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 10px rgba(0,61,102,0.10);
-  opacity: 0.92;
 }
 .carousel-arrow.left { left: 18px; }
 .carousel-arrow.right { right: 18px; }
@@ -343,14 +329,9 @@ h2, h3 {
 .area-card.social-welfare {
   background: var(--color-social);
 }
-.area-card img {
-  width: 100%;
-  height: 90px;
-  object-fit: cover;
-  border-radius: 18px 18px 0 0;
-  margin-bottom: 0.5rem;
-}
+
 .areas-support h2 {
+  color: var(--color-primary);
   text-align: center;
   font-size: 2.4rem;
   font-weight: 900;
@@ -446,6 +427,7 @@ h2, h3 {
   box-shadow: 0 8px 32px rgba(0,61,102,0.10);
 }
 .foundations-support h2 {
+  color: var(--color-primary);
   text-align: center;
   font-size: 2.4rem;
   font-weight: 900;
@@ -458,14 +440,18 @@ h2, h3 {
   justify-content: center;
   gap: 1.7rem;
   margin-top: 2.2rem;
+  position: relative;
 }
 .foundation-cards {
   display: flex;
-  gap: 1.7rem;
+  gap:20px;
   overflow: hidden;
-  width: 1200px;
   min-height: 260px;
   transition: width 0.2s;
+  flex-wrap: nowrap;
+  width: 100%;
+  position: relative;
+  z-index: 1;
 }
 .foundation-card {
   background: var(--color-support2);
@@ -482,6 +468,9 @@ h2, h3 {
   transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
   overflow: hidden;
+  gap: 20px;
+  flex-wrap: nowrap;
+
 }
 .foundation-card img {
   width: 100%;
@@ -518,8 +507,28 @@ h2, h3 {
   box-shadow: 0 2px 10px rgba(0,61,102,0.10);
   opacity: 0.92;
   display: flex;
+  z-index: 2;
   align-items: center;
   justify-content: center;
+  transition: transform 0.2s ease;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+.foundation-arrow:active {
+  transform: scale(0.9) translateY(2px); /* se achica y baja un poquito */
+}
+.foundation-track {
+  display: flex;
+  gap: 20px; /* mismo que en JS */
+  transition: transform 0.5s ease;
+  overflow: hidden;
+}
+.foundation-arrow.left {
+  left: 0;
+}
+
+.foundation-arrow.right {
+  right: 0;
 }
 .foundation-arrow:hover {
   background: var(--color-accent);
