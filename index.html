@@ -54,7 +54,7 @@
                 <img src="public/assets/img/Carrusel_1/Educacion.jpg" alt="Education">
                 <div class="area-card-content">
                     <h3>Education</h3>
-                    <a href="/public/pages/volunteer.html" class="join-btn">Join</a>
+                    <a href="/public/pages/volunteer.html?category=educacion" class="join-btn">Join</a>
                     <div class="area-card-description">We support access to quality education for all, empowering communities through knowledge.</div>
                 </div>
             </div>
@@ -62,7 +62,7 @@
                 <img src="public/assets/img/Carrusel_1/health.png" alt="Health">
                 <div class="area-card-content">
                     <h3>Health</h3>
-                    <a href="/public/pages/volunteer.html" class="join-btn">Join</a>
+                    <a href="/public/pages/volunteer.html?category=salud" class="join-btn">Join</a>
                     <div class="area-card-description">We promote health initiatives and access to medical care for vulnerable populations.</div>
                 </div>
             </div>
@@ -70,7 +70,7 @@
                 <img src="public/assets/img/Carrusel_1/environment.jpg" alt="Environment">
                 <div class="area-card-content">
                     <h3>Environment</h3>
-                    <a href="/public/pages/volunteer.html" class="join-btn">Join</a>
+                    <a href="/public/pages/volunteer.html?category=ambiente" class="join-btn">Join</a>
                     <div class="area-card-description">We drive smart environmental actions for a sustainable future.</div>
                 </div>
             </div>
@@ -78,10 +78,11 @@
                 <img src="public/assets/img/Carrusel_1/Social_welfare.png" alt="Social Welfare">
                 <div class="area-card-content">
                     <h3>Social Welfare</h3>
-                    <a href="/public/pages/volunteer.html" class="join-btn">Join</a>
+                    <a href="/public/pages/volunteer.html?category=bienestar" class="join-btn">Join</a>
                     <div class="area-card-description">We foster social inclusion and well-being for all.</div>
                 </div>
             </div>
+            
         </div>
         <!-- Modal for area descriptions -->
         <!-- <div class="area-modal" id="areaModal">
@@ -201,7 +202,19 @@
     </section>
     <!--footer-->
     <div id="footer-container"></div>
-  <!-- Cargador de componentes -->
-  <script src="/src/components/js/loader.js" type="module"></script>
+  <script>
+    // Carga header y footer dinámicamente
+    fetch('/src/components/html/header.html')
+      .then(r => r.text())
+      .then(h => {
+        document.getElementById('header-container').innerHTML = h;
+        // Cargar el JS del header después de que el header esté en el DOM
+        const script = document.createElement('script');
+        script.src = 'src/components/js/header.js';
+        document.body.appendChild(script);
+      });
+    fetch('/src/components/html/footer.html').then(r=>r.text()).then(f=>document.getElementById('footer-container').innerHTML=f);
+  </script>
+  <script src="//code.tidio.co/kapcayhoc2ibnyndqp1zqgvdvvpszt2c.js" async></script>
 </body>
 </html>

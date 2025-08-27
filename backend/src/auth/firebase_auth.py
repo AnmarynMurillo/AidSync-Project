@@ -3,6 +3,9 @@
 import firebase_admin
 from firebase_admin import credentials, auth
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Ruta al archivo de configuración (ajustada para la estructura actual)
 FIREBASE_CONFIG_PATH = os.path.join(os.path.dirname(__file__), '../../firebase_config.json')
@@ -11,5 +14,6 @@ FIREBASE_CONFIG_PATH = os.path.join(os.path.dirname(__file__), '../../firebase_c
 if not firebase_admin._apps:
     cred = credentials.Certificate(FIREBASE_CONFIG_PATH)
     firebase_admin.initialize_app(cred, {
-        'storageBucket': '<TU_BUCKET>.appspot.com'  # Reemplaza por tu bucket real si usas storage
+        'storageBucket': os.environ.get('FIREBASE_STORAGE_BUCKET'),
+        'databaseURL': os.environ.get('FIREBASE_DATABASE_URL')
     })

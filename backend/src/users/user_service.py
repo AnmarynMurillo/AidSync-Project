@@ -41,10 +41,11 @@ def register_user():
         if not data:
             return jsonify({"success": False, "message": "No se recibieron datos"}), 400
 
-        nombre = data.get("nombre", "").strip()
-        edad = data.get("edad")
-        area = data.get("area", "").strip()
-        email = data.get("email", "").strip().lower()
+        # Acepta claves en español e inglés desde el frontend
+        nombre = (data.get("nombre") or data.get("name") or "").strip()
+        edad = data.get("edad") if "edad" in data else data.get("age")
+        area = (data.get("area") or "").strip()
+        email = (data.get("email") or "").strip().lower()
         password = data.get("password", "")
 
         # Validaciones estrictas
@@ -80,11 +81,11 @@ def register_user():
         #     'nombre': nombre, 'edad': edad_int, 'area': area, 'email': email
         # })
 
-        # Guardar datos extra en Realtime Database
+        # Guardar datos extra en Realtime Database (schema consistente en español)
         try:
             db.reference(f'users/{user.uid}').set({
-                'name': nombre,
-                'age': edad_int,
+                'nombre': nombre,
+                'edad': edad_int,
                 'area': area,
                 'email': email
             })
@@ -142,14 +143,50 @@ def get_profile():
         decoded_token = firebase_auth.verify_id_token(id_token)
         uid = decoded_token['uid']
         user = firebase_auth.get_user(uid)
-        # Obtén datos extra de Firestore
-        doc = firestore_db.collection('users').document(uid).get()
-        extra = doc.to_dict() if doc.exists else {}
+        # Intenta primero desde Realtime Database (según requerimiento)
+        rt_data = {}
+        try:
+            rt_ref = db.reference(f'users/{uid}')
+            rt_data = rt_ref.get() or {}
+        except Exception as rt_err:
+            logging.warning("No se pudo obtener datos de Realtime DB: %s", rt_err)
+
+        # Obtén datos extra de Firestore (fallback opcional)
+        extra = {}
+        try:
+            doc = firestore_db.collection('users').document(uid).get()
+            extra = doc.to_dict() if doc.exists else {}
+        except Exception as fs_err:
+            logging.warning("No se pudo obtener datos de Firestore: %s", fs_err)
+
+        nombre = (
+            rt_data.get("name") or
+            rt_data.get("nombre") or
+            extra.get("nombre") or
+            (user.display_name or "")
+        )
+        edad = (
+            rt_data.get("age") or
+            rt_data.get("edad") or
+            extra.get("edad") or
+            0
+        )
+        area = (
+            rt_data.get("area") or
+            extra.get("area") or
+            ""
+        )
+        email = (
+            rt_data.get("email") or
+            user.email
+        )
+
         user_data = {
-            "nombre": user.display_name or "",
-            "edad": extra.get("edad", 0),
-            "area": extra.get("area", ""),
-            "email": user.email,
+            "uid": uid,
+            "nombre": nombre,
+            "edad": edad,
+            "area": area,
+            "email": email,
             "foto_url": user.photo_url or None
         }
         return jsonify({"success": True, "user": user_data}), 200

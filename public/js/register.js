@@ -79,23 +79,42 @@ document.addEventListener('DOMContentLoaded', function() {
             // Si el backend falla, intenta con Firebase JS
             msg.textContent = 'Trying to register with Firebase...';
             try {
-                // Usar la API de compatibilidad (v8 style) expuesta por los scripts CDN
-                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                // Verifica si el correo ya existe en Firebase Auth antes de crear la cuenta
+                let exists = false;
+                try {
+                    // Firebase v8 no tiene getUserByEmail en JS, así que intentamos crear y capturamos el error
+                    await firebase.auth().createUserWithEmailAndPassword(email, password);
+                } catch (firebaseErr) {
+                    if (firebaseErr.code === 'auth/email-already-in-use') {
+                        exists = true;
+                        msg.textContent = 'This email is already registered in Firebase.';
+                        msg.style.color = 'red';
+                        return;
+                    } else {
+                        throw firebaseErr;
+                    }
+                }
+                // Si no existe, el usuario ya fue creado arriba
+                const userCredential = firebase.auth().currentUser
+                    ? { user: firebase.auth().currentUser }
+                    : await firebase.auth().signInWithEmailAndPassword(email, password);
+
                 await userCredential.user.updateProfile({ displayName: name });
                 // Guardar datos extra en Realtime Database
                 if (firebase.database) {
                     await firebase.database().ref('users/' + userCredential.user.uid).set({
-                        age,
+                        edad: age,
                         area,
                         email,
-                        name
+                        nombre: name
                     });
                 }
                 msg.style.color = 'green';
                 msg.textContent = 'Succesfull Register, Redirecting...';
-                setTimeout(() => window.location.assign('login.html'), 1500);
+                setTimeout(() => window.location.assign('/public/pages/login.html'), 1500);
             } catch (firebaseErr) {
                 msg.textContent = 'Error: ' + firebaseErr.message;
+                msg.style.color = 'red';
             }
         }
     });
