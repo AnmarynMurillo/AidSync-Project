@@ -1,370 +1,415 @@
 /*
-Perfil de usuario - Maquetación y estilo usando la paleta global de styles.css
-Enfoque solo en CSS; se incluyen selectores compatibles con el HTML actual y
-selectores preparados para futuras secciones (stats y achievements).
+Estilos básicos para la página de perfil de usuario.
+Puedes personalizar colores y fuentes según tu diseño.
 */
-
 :root {
-    /* usa variables definidas en public/css/styles.css */
+    --primary-color: #2563eb;
+    --secondary-color: #1e40af;
+    --accent-color: #3b82f6;
+    --background: #f8fafc;
+    --card-bg: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --border-radius: 12px;
+    --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --transition: all 0.3s ease;
 }
 
-/* Base */
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    background: var(--color-bg);
-    color: var(--color-primary);
-    font-family: 'Poppins', 'Nunito', Arial, sans-serif;
-    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background);
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding: 20px;
 }
 
-/* Contenedor principal (compat: main.profile-container o #profileContainer) */
-main.profile-container {
+/* Profile Container */
+.profile-container {
     max-width: 1200px;
-    margin: 0 auto 2.5rem auto;
-    padding: 0 1rem;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-out;
 }
 
-/* Hero para armonizar con el sitio */
-.hero-profile {
-    background: linear-gradient(90deg, var(--color-support2) 60%, var(--color-support1) 100%);
-    padding: 70px 0 50px 0;
-    border-radius: 0 0 32px 32px;
-    margin: 0 0 2.5rem 0;
-    box-shadow: 0 8px 32px rgba(0,61,102,0.10);
-    text-align: center;
-}
-.hero-profile h2 {
-    color: var(--color-primary);
-    font-weight: 900;
-    font-size: 2.3rem;
-    margin: 0 0 0.5rem 0;
-}
-.hero-profile p {
-    color: var(--color-primary);
-    font-size: 1.08rem;
-    margin: 0;
-}
-
-/* Si solo existe #profileContainer, lo tratamos como la columna izquierda */
-#profileContainer {
-    background: var(--color-card);
-    padding: 2rem;
-    border-radius: 20px;
-    box-shadow: var(--color-shadow);
-    border: 1px solid var(--color-border);
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-}
-
-/* Layout en 2 columnas cuando haya .profile-layout (preparado) */
-.profile-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto 3rem auto;
-    padding: 0 1rem;
-}
-
-.profile-left, .profile-right {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-/* Tarjetas */
-.profile-card, .stats-card, .achievements-card {
-    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary) 100%);
-    padding: 2rem;
-    border-radius: 20px;
-    border: 1px solid var(--color-border);
-    box-shadow: 0 8px 32px rgba(0,61,102,0.10);
-}
-
-.profile-card:hover,
-.stats-card:hover,
-.achievements-card:hover {
-    box-shadow: 0 8px 25px rgba(0, 61, 102, 0.15);
-}
-
-/* Foto de perfil */
-.profile-photo-section {
+/* Profile Header */
+.profile-header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    text-align: center;
+    position: relative;
 }
 
-.profile-photo-frame {
+.profile-pic-container {
     position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.profile-pic {
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    overflow: hidden;
-    border: 4px solid var(--color-accent);
-    box-shadow: 0 4px 16px rgba(22, 160, 133, 0.2);
-    background: var(--color-bg);
-}
-
-img#profilePic {
-    width: 100%;
-    height: 100%;
+    border: 4px solid white;
     object-fit: cover;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: var(--transition);
+}
+
+.profile-pic:hover {
+    transform: scale(1.05);
+}
+
+.edit-photo-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: var(--accent-color);
+    color: white;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-}
-
-/* Controles de foto */
-.photo-controls {
     display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    width: 100%;
-    max-width: 320px;
-}
-
-#photoForm {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-#photoInput {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px dashed var(--color-accent);
-    border-radius: 10px;
-    background: var(--color-bg);
-}
-
-#photoForm button,
-#removePhotoBtn {
-    padding: 0.75rem 1.25rem;
-    border-radius: 10px;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(22, 160, 133, 0.2);
-    transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
-}
-
-#photoForm button {
-    background: var(--color-accent);
-    color: #fff;
-}
-
-#photoForm button:hover {
-    background: var(--color-primary);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(0, 61, 102, 0.22);
-}
-
-#removePhotoBtn {
-    background: var(--color-accent);
-    color: #fff;
-    border: none;
-}
-
-#removePhotoBtn:hover {
-    background: var(--color-primary);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(0, 61, 102, 0.22);
-}
-
-/* Formulario de datos personales (preparado) */
-.profile-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-}
-
-.form-group label {
-    font-weight: 600;
-    color: #fff;
-}
-
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group input[type="password"] {
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: 10px;
-    padding: 0.8rem 0.9rem;
-    font-family: inherit;
-    color: var(--color-text);
-}
-
-.form-group input:focus {
-    outline: none;
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px rgba(22, 160, 133, 0.12);
-}
-
-/* Campo contraseña con botón ojo (preparado) */
-.password-field {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.password-field input {
-    flex: 1;
-    border-radius: 10px 0 0 10px;
-}
-
-.password-toggle {
-    background: var(--color-accent);
-    color: #fff;
-    border: none;
-    height: 42px;
-    width: 42px;
-    display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 0 10px 10px 0;
     cursor: pointer;
-    transition: background var(--transition);
+    border: none;
+    transition: var(--transition);
 }
 
-.password-toggle:hover {
-    background: var(--color-primary);
+.edit-photo-btn:hover {
+    background: var(--secondary-color);
+    transform: rotate(15deg);
 }
 
-/* Datos leídos actuales (#profileData) para que luzcan como tarjetas */
-#profileData p {
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: 10px;
-    padding: 0.8rem 0.9rem;
-    margin: 0;
+.profile-info h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#profileData p + p { margin-top: 0.6rem; }
-
-#profileMessage {
-    margin-top: 1rem;
-    font-weight: 700;
+.tag {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
 }
 
-/* Estadísticas (preparado) */
-.stats-card h3,
-.achievements-card h3 {
-    text-align: center;
-    margin-top: 0;
-    color: #fff;
-}
-
-/* Si se añade un título dentro de la sección de datos del usuario */
-.profile-card h3 { color: #fff; }
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.2rem;
+/* Stats */
+.stats {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    max-width: 400px;
+    margin: 1.5rem auto 0;
 }
 
 .stat-item {
+    text-align: center;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    min-width: 90px;
+    transition: var(--transition);
+}
+
+.stat-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+/* Navigation */
+.profile-nav {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: 16px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    overflow-x: auto;
+}
+
+.nav-item {
+    flex: 1;
     padding: 1rem;
+    border: none;
+    background: none;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    position: relative;
+    transition: var(--transition);
+    white-space: nowrap;
+    min-width: 150px;
 }
 
-.stat-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--color-accent), var(--color-primary));
-    color: #fff;
-    display: inline-flex;
+.nav-item:hover {
+    color: var(--primary-color);
+}
+
+.nav-item.active {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary-color);
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Tab Content */
+.tab-content {
+    padding: 2rem;
+}
+
+.tab-pane {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.tab-content h2 {
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    display: flex;
     align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 16px rgba(22, 160, 133, 0.3);
+    gap: 0.5rem;
 }
 
-.stat-number { font-size: 1.4rem; font-weight: 800; color: var(--color-primary); }
-.stat-label { color: var(--color-placeholder); font-size: 0.9rem; }
+.tab-content h2 i {
+    color: var(--primary-color);
+}
 
-/* Logros (preparado) */
-.achievements-grid {
+/* Projects Grid */
+.projects-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
 }
 
-.achievement-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: 20px;
-    padding: 0.9rem;
-    transition: transform var(--transition), box-shadow var(--transition);
-}
-
-.achievement-item:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0, 61, 102, 0.1); }
-
-.achievement-icon {
-    width: 50px;
-    height: 50px;
-    background: var(--color-accent);
-    border-radius: 50%;
+.project-card {
+    background: white;
+    border-radius: var(--border-radius);
     overflow: hidden;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    border: 1px solid #e2e8f0;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.project-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.project-content {
+    padding: 1.25rem;
+}
+
+.project-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.project-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.project-meta {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 1.2rem;
-    box-shadow: 0 4px 16px rgba(22, 160, 133, 0.30);
-    transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
 }
 
-.achievement-item:hover .achievement-icon {
-    background: var(--color-primary);
-    box-shadow: 0 8px 24px rgba(22, 160, 133, 0.25);
-    transform: translateY(-1px);
+.project-category {
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
 }
 
-.achievement-title { font-weight: 700; color: var(--color-primary); }
-.achievement-desc { color: var(--color-placeholder); font-size: 0.9rem; }
+/* Donations Grid */
+.donations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
 
-/* Botón regresar Home en esquina superior izquierda */
-.back-home-btn {
-    position: fixed;
-    top: 16px;
-    left: 16px;
-    z-index: 1100;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: var(--color-accent);
-    color: #fff;
+.donation-option {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    border: 1px solid #e2e8f0;
+}
+
+.donation-option:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.donation-icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.donation-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0.5rem 0;
+}
+
+.donation-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
     text-decoration: none;
-    box-shadow: 0 2px 10px rgba(0, 61, 102, 0.10);
-    transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+    font-weight: 500;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
 }
 
-.back-home-btn i { font-size: 1.1rem; }
-
-.back-home-btn:hover {
-    background: var(--color-primary);
-    box-shadow: 0 8px 24px rgba(22, 160, 133, 0.18);
-    transform: translateY(-1px);
+.btn:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-    .profile-layout { grid-template-columns: 1fr; }
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .stats {
+        flex-direction: column;
+        gap: 1rem;
+        max-width: 200px;
+    }
+    
+    .stat-item {
+        width: 100%;
+    }
+    
+    .profile-nav {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .nav-item {
+        min-width: 120px;
+        font-size: 0.9rem;
+        padding: 0.75rem 0.5rem;
+    }
+    
+    .projects-grid,
+    .donations-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Loading Animation */
+@keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+}
+
+.loading {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+    border-radius: 4px;
+    color: transparent;
+    position: relative;
+    overflow: hidden;
 }
