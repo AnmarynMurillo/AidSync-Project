@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AidSync - About Us</title>
+    <link rel="stylesheet" href="about.2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Incluir estilos del header y footer -->
+    <link rel="stylesheet" href="../src/components/css/header.css">
+    <link rel="stylesheet" href="../src/components/css/footer.css">
+</head>
+<body>
+    <!-- Incluir header -->
+    <div id="header-placeholder"></div>
+
+    <main>
+        <!-- Hero Section with Dynamic Text -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">We are a team of <span id="dynamic-text" class="dynamic-word">thinkers</span>.</h1>
+                <p class="hero-subtitle">Creating innovative solutions for a better tomorrow</p>
+            </div>
+        </section>
+        
+        <!-- Full-screen Banner Carousel -->
+        <section class="banner-carousel">
+            <div class="carousel-container">
+                <div class="carousel-slide">
+                    <div class="slide" style="background-image: url('../../public/assets/aidsync_moments/momento 1.jpeg');">
+                        <div class="banner-overlay"></div>
+                        <div class="banner-content">
+                            <h2>Nuestro Equipo</h2>
+                            <p>Conoce a las mentes detrás de AidSync</p>
+                        </div>
+                    </div>
+                    <div class="slide" style="background-image: url('../../public/assets/aidsync_moments/momento 2.jpeg');">
+                        <div class="banner-overlay"></div>
+                        <div class="banner-content">
+                            <h2>Nuestra Misión</h2>
+                            <p>Conectando voluntarios con propósito</p>
+                        </div>
+                    </div>
+                    <div class="slide" style="background-image: url('../../public/assets/aidsync_moments/momento 3.jpeg');">
+                        <div class="banner-overlay"></div>
+                        <div class="banner-content">
+                            <h2>Nuestros Valores</h2>
+                            <p>Compromiso, innovación y comunidad</p>
+                        </div>
+                    </div>
+                    <div class="slide" style="background-image: url('../../public/assets/aidsync_moments/momento 4.jpg');">
+                        <div class="banner-overlay"></div>
+                        <div class="banner-content">
+                            <h2>Únete a Nosotros</h2>
+                            <p>Sé parte del cambio que quieres ver</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control prev" aria-label="Previous slide">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-control next" aria-label="Next slide">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <div class="carousel-dots">
+                    <!-- Dots will be added by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section class="team-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Meet Our Team</h2>
+                    <p>Passionate individuals working together to make a difference</p>
+                </div>
+                
+                <div class="team-carousel-container">
+                    <button class="carousel-control prev" aria-label="Previous slide">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <div class="team-carousel" aria-live="polite">
+                        <!-- Team members will be dynamically inserted here by JavaScript -->
+                    </div>
+                    
+                    <button class="carousel-control next" aria-label="Next slide">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    
+                    <div class="team-carousel-dots" role="tablist">
+                        <!-- Dots will be dynamically inserted here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission & Vision Section -->
+        <section class="mission-vision">
+            <div class="container">
+                <h1 class="section-title">Our Mission and Vision</h1>
+                <div class="mission-vision-grid">
+                    <div class="mission">
+                        <div class="icon"><i class="fas fa-bullseye"></i></div>
+                        <h2>Our Mission</h2>
+                        <p>AidSync connects volunteers with foundations through an easy and modern platform, making social help faster and more accessible.</p>
+                    </div>
+                    <div class="vision">
+                        <div class="icon"><i class="fas fa-eye"></i></div>
+                        <h2>Our Vision</h2>
+                        <p>To become the number one volunteering platform in Panama, inspiring young people to create positive change with technology.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Values Section -->
+        <section class="values-section">
+            <div class="container">
+                <h2 class="section-title">Our Core Values</h2>
+                <div class="values-grid">
+                    <div class="value-card" data-aos="fade-up">
+                        <div class="value-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <h3>Connection</h3>
+                        <p>Bridging the gap between those who want to help and those in need</p>
+                    </div>
+                    <div class="value-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="value-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3>Innovation</h3>
+                        <p>Using technology to revolutionize social impact</p>
+                    </div>
+                    <div class="value-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="value-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3>Commitment</h3>
+                        <p>Dedicated to making a lasting difference</p>
+                    </div>
+                    <div class="value-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="value-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Inclusion</h3>
+                        <p>Embracing diversity in all its forms</p>
+                    </div>
+                    <div class="value-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="value-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3>Empathy</h3>
+                        <p>Understanding and sharing the feelings of others</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logo Explanation -->
+        <section class="logo-section">
+            <div class="container">
+                <h1 class="section-title">Our Logo Explained</h1>
+                <div class="logo-content">
+                    <div class="logo-image" data-aos="fade-right">
+                        <img src="../../public/assets/logos/Logo_logo.png" alt="AidSync Logo" class="logo-explain-img">
+                    </div>
+                    <div class="logo-text" data-aos="fade-left">
+                        <p>Our logo represents three interconnected figures: the volunteer, the person in need, and AidSync, the connector that unites them. The flowing lines symbolize the seamless connection and continuous support we facilitate.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mantras Section -->
+        <section class="mantras-section">
+            <div class="container">
+                <h2 class="section-title">Our Mantras</h2>
+                <div class="mantras-grid">
+                    <div class="mantra-card" data-aos="zoom-in">
+                        <i class="fas fa-sync-alt"></i>
+                        <p>"Your time, their hope, one sync away"</p>
+                    </div>
+                    <div class="mantra-card" data-aos="zoom-in" data-aos-delay="100">
+                        <i class="fas fa-globe-americas"></i>
+                        <p>"One sync, one mission, a world of change"</p>
+                    </div>
+                    <div class="mantra-card" data-aos="zoom-in" data-aos-delay="200">
+                        <i class="fas fa-hands-helping"></i>
+                        <p>"Give time, spark hope, sync change"</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Incluir footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Incluir scripts necesarios -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Cargar header y footer
+        $(document).ready(function(){
+            // Cargar header
+            $("#header-placeholder").load("../src/components/html/header.html", function() {
+                // Asegurar que los enlaces del header sean relativos
+                $(".as-header__nav-link").each(function() {
+                    let href = $(this).attr('href');
+                    if (href && !href.startsWith('http') && !href.startsWith('/')) {
+                        $(this).attr('href', '../../public/pages/' + href.split('/').pop());
+                    }
+                });
+            });
+            
+            // Cargar footer
+            $("#footer-placeholder").load("../src/components/html/footer.html", function() {
+                // Asegurar que los enlaces del footer sean relativos
+                $("footer a").each(function() {
+                    let href = $(this).attr('href');
+                    if (href && !href.startsWith('http') && !href.startsWith('#')) {
+                        $(this).attr('href', '../../public/pages/' + href.split('/').pop());
+                    }
+                });
+            });
+        });
+    </script>
+    <script src="about.2.js"></script>
+</body>
+</html>
