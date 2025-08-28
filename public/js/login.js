@@ -6,6 +6,16 @@
 let firebaseConfig = null;
 let backendUrl = null;
 
+// Helper global para decodificar uid desde el idToken (JWT)
+function decodeUidFromJwt(token) {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.user_id || payload.uid || null;
+  } catch {
+    return null;
+  }
+}
+
 async function loadConfig() {
     try {
         const response = await fetch('http://localhost:5000/api/config');
@@ -37,11 +47,11 @@ async function loadConfig() {
 // 2. INICIALIZAR FIREBASE
 // ================================
 function initializeFirebase() {
-    if (typeof firebase !== 'undefined' && firebase.apps && !firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    } else if (typeof firebase !== 'undefined' && !firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
+  // evita inicializar si no hay config aún
+  if (!firebaseConfig) return;
+  if (typeof firebase !== 'undefined' && (!firebase.apps || !firebase.apps.length)) {
+    firebase.initializeApp(firebaseConfig);
+  }
 }
 
 // ================================
@@ -68,13 +78,6 @@ async function tryPythonLogin(email, password, timeout = 2000) {
     }
 }
 
-function decodeUidFromJwt(token) {
-    try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        return payload.user_id || payload.uid || null;
-    } catch (e) { return null; }
-}
-
 // ================================
 // 4. LOGIN VÍA FIREBASE (FALLBACK)
 // ================================
@@ -95,6 +98,7 @@ async function tryFirebaseLogin(email, password) {
 document.addEventListener('DOMContentLoaded', function() {
     // Cargar configuraciones al cargar la página
     loadConfig();
+
     // Conecta con los IDs reales del formulario en login.html
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
@@ -180,14 +184,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // agrega helper para esperar inicialización de Firebase
 function waitForFirebaseInit(timeout = 3000) {
-    return new Promise((resolve) => {
-        const start = Date.now();
-        (function check() {
-            if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length) return resolve(true);
-            if (Date.now() - start > timeout) return resolve(false);
-            setTimeout(check, 100);
-        })();
-    });
+  return new Promise((resolve) => {
+    const start = Date.now();
+    (function check() {
+      if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length) return resolve(true);
+      if (Date.now() - start > timeout) return resolve(false);
+      setTimeout(check, 100);
+    })();
+  });
 }
 
 // ================================
@@ -214,13 +218,11 @@ function showLogoutPopup() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
-      
       const data = await res.json();
       if (data.success) {
-        // Eliminar información del usuario
         localStorage.removeItem('user');
-        // Redirigir a index.html
-        window.location.assign = '/index.html';
+        // FIX: usar la función correctamente
+        window.location.assign('/index.html');
       }
     } catch (err) {
       console.error('Error logging out:', err);
