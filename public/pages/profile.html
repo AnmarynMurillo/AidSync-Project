@@ -1,134 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>My Profile | AidSync</title>
-	<link rel="icon" href="/public/assets/logos/logito.ico" type="image/x-icon">
-	<link rel="stylesheet" href="../css/styles.css">
-	<link rel="stylesheet" href="../css/profile.css">
-	<link rel="stylesheet" href="/src/components/css/footer.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-	<script src="../js/profile.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="../css/profile.css">
+    <!-- Firebase v8 en orden correcto -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 </head>
 <body>
-	<a href="/index.html" class="back-home-btn" aria-label="Back to home">
-		<i class="fas fa-arrow-left"></i>
-	</a>
-
-	<main class="profile-container">
-		<section class="hero-profile">
-			<h2>My Profile</h2>
-			<p>Manage your personal information and view your achievements</p>
-		</section>
-		<div class="profile-layout">
-			<!-- Columna izquierda -->
-			<section class="profile-left">
-				<div class="profile-card">
-					<div class="profile-photo-section">
-						<div class="profile-photo-frame">
-							<img id="profilePic" src="../assets/img/default-profile.png" alt="Foto de perfil" width="150" height="150">
-						</div>
-						<div class="photo-controls">
-							<form id="photoForm" enctype="multipart/form-data">
-								<input type="file" id="photoInput" accept="image/*">
-								<button type="submit">Change Photo</button>
-							</form>
-							<button type="button" id="removePhotoBtn">Remove Photo</button>
-						</div>
-					</div>
-
-					<form class="profile-form" id="profileForm" autocomplete="off">
-						<div class="form-group">
-							<label for="fullName">Full Name</label>
-							<input type="text" id="fullName" name="fullName" placeholder="John Doe">
-						</div>
-						<div class="form-group">
-							<label for="email">Email</label>
-							<input type="email" id="email" name="email" placeholder="john.doe@example.com" readonly>
-						</div>
-						<div class="form-group">
-							<label for="password">Password</label>
-							<div class="password-field">
-								<input type="password" id="password" name="password" value="••••••••" readonly>
-								<button type="button" class="password-toggle" aria-label="Show password">
-									<i class="fas fa-eye"></i>
-								</button>
-							</div>
-						</div>
-					</form>
-
-					<div id="profileMessage"></div>
-				</div>
-			</section>
-
-			<!-- Columna derecha -->
-			<section class="profile-right">
-				<div class="stats-card">
-					<h3>My Statistics</h3>
-					<div class="stats-grid">
-						<div class="stat-item">
-							<div class="stat-icon"><i class="fas fa-hand-holding-heart"></i></div>
-							<div class="stat-content">
-								<div class="stat-number" id="donationCount">0</div>
-								<div class="stat-label">Donations Made</div>
-							</div>
-						</div>
-						<div class="stat-item">
-							<div class="stat-icon"><i class="fas fa-users"></i></div>
-							<div class="stat-content">
-								<div class="stat-number" id="volunteerCount">0</div>
-								<div class="stat-label">Volunteer Activities</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="achievements-card">
-					<h3>My Achievements</h3>
-					<div class="achievements-grid">
-						<div class="achievement-item">
-							<div class="achievement-icon"><i class="fas fa-medal"></i></div>
-							<div class="achievement-content">
-								<div class="achievement-title">First Donation</div>
-								<div class="achievement-desc">Complete your first donation</div>
-							</div>
-						</div>
-						<div class="achievement-item">
-							<div class="achievement-icon"><i class="fas fa-star"></i></div>
-							<div class="achievement-content">
-								<div class="achievement-title">Volunteer Hero</div>
-								<div class="achievement-desc">Participate in 5 volunteer activities</div>
-							</div>
-						</div>
-						<div class="achievement-item">
-							<div class="achievement-icon"><i class="fas fa-trophy"></i></div>
-							<div class="achievement-content">
-								<div class="achievement-title">Community Leader</div>
-								<div class="achievement-desc">Lead a volunteer initiative</div>
-							</div>
-						</div>
-						<div class="achievement-item">
-							<div class="achievement-icon"><i class="fas fa-heart"></i></div>
-							<div class="achievement-content">
-								<div class="achievement-title">Generous Donor</div>
-								<div class="achievement-desc">Make 10 donations</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>
-	</main>
-
-	<!-- Footer -->
-	<div id="footer-container"></div>
-    <script>
-      fetch('/src/components/html/footer.html')
-        .then(r => r.text())
-        .then(html => { const fc = document.getElementById('footer-container'); if (fc) fc.innerHTML = html; });
-    </script>
+    <h2>My Profile</h2>
+    <div id="profileContainer">
+        <!-- Foto de perfil -->
+        <img id="profilePic" src="../assets/img/default-profile.png" alt="Foto de perfil" width="120" height="120">
+        <form id="photoForm" enctype="multipart/form-data">
+            <input type="file" id="photoInput" accept="image/*">
+            <button type="submit">Change Profile Picture</button>
+        </form>
+        <!-- Datos del usuario en modo solo lectura -->
+        <div id="profileData">
+            <p><strong>Full name:</strong> <span id="nombre"></span></p>
+            <p><strong>Age:</strong> <span id="edad"></span></p>
+            <p><strong>Volunteering Area:</strong> <span id="area"></span></p>
+            <p><strong>Email:</strong> <span id="email"></span></p>
+        </div>
+        <div id="profileMessage"></div>
+    </div>
+    <script src="../js/profile.js"></script>
 </body>
 </html>
-
 
