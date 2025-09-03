@@ -6,6 +6,16 @@
 let firebaseConfig = null;
 let backendUrl = null;
 
+// Helper global para decodificar uid desde el idToken (JWT)
+function decodeUidFromJwt(token) {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.user_id || payload.uid || null;
+  } catch {
+    return null;
+  }
+}
+
 async function loadConfig() {
     try {
         const response = await fetch('http://localhost:5000/api/config');
@@ -37,11 +47,11 @@ async function loadConfig() {
 // 2. INICIALIZAR FIREBASE
 // ================================
 function initializeFirebase() {
-    if (typeof firebase !== 'undefined' && firebase.apps && !firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    } else if (typeof firebase !== 'undefined' && !firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
+  // evita inicializar si no hay config aún
+  if (!firebaseConfig) return;
+  if (typeof firebase !== 'undefined' && (!firebase.apps || !firebase.apps.length)) {
+    firebase.initializeApp(firebaseConfig);
+  }
 }
 
 // ================================
@@ -60,7 +70,7 @@ async function tryPythonLogin(email, password, timeout = 2000) {
         });
         clearTimeout(timer);
         const data = await res.json();
-        return { success: data.success, message: data.message, user: data.user };
+        return { success: data.success, message: data.message, idToken: data.idToken };
     } catch (err) {
         clearTimeout(timer);
         console.warn('⚠️ Python login failed or timed out:', err);
@@ -77,10 +87,8 @@ async function tryFirebaseLogin(email, password) {
         console.log('✅ Firebase login success:', userCred.user.email);
         return { success: true, user: userCred.user };
     } catch (err) {
-        console.error('❌ Firebase login error:', err.code);
-        status.textContent = ["password or email is invalid, try again"];
-        console.error('❌ Firebase login error:', err.message);
-        return { success: false, message: err.code };
+        console.error('❌ Firebase login error:', err.code, err.message);
+        return { success: false, message: err.code || err.message };
     }
 }
 
@@ -90,6 +98,7 @@ async function tryFirebaseLogin(email, password) {
 document.addEventListener('DOMContentLoaded', function() {
     // Cargar configuraciones al cargar la página
     loadConfig();
+
     // Conecta con los IDs reales del formulario en login.html
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
@@ -101,27 +110,48 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (!email || !password) {
                 status.textContent = 'Please fill in all fields';
+                status.classList.remove('success');
+                status.classList.add('error');
                 return;
             }
             status.textContent = 'Logging in...';
+            status.classList.remove('error', 'success');
 
             // 1) Intento con Python backend
             console.log('▶️ Trying backend login...');
             const pythonRes = await tryPythonLogin(email, password);
             if (pythonRes.success) {
-                console.log('✅ Backend login OK', pythonRes.user);
-                localStorage.setItem('user', JSON.stringify(pythonRes.user));
-                window.location.href = '/index.html';
+                console.log('✅ Backend login OK');
+                // Guarda idToken/uid si vienen del backend
+                if (pythonRes.idToken) {
+                    localStorage.setItem('idToken', pythonRes.idToken);
+                    try { const uid = decodeUidFromJwt(pythonRes.idToken); if (uid) localStorage.setItem('uid', uid); } catch(e){}
+                }
+                localStorage.setItem('user', JSON.stringify({ email }));
+                status.textContent = 'Login successful! Redirecting...';
+                status.classList.remove('error');
+                status.classList.add('success');
+                setTimeout(() => { window.location.href = '/public/pages/profile.html'; }, 800);
                 return;
             }
 
-            // 2) Fallback a Firebase
+            // 2) Fallback a Firebase: espera inicialización
             status.textContent = 'Trying Firebase login...';
-            console.log('▶️ Trying Firebase login...');
+            await waitForFirebaseInit(3000);
             const firebaseRes = await tryFirebaseLogin(email, password);
             if (firebaseRes.success) {
+                // obtiene token de Firebase y guarda uid
+                try {
+                    const token = await firebaseRes.user.getIdToken();
+                    localStorage.setItem('idToken', token);
+                    const uid = decodeUidFromJwt(token);
+                    if (uid) localStorage.setItem('uid', uid);
+                } catch (e) { console.warn('No idToken from firebase:', e); }
                 localStorage.setItem('user', JSON.stringify({ email: firebaseRes.user.email }));
-                window.location.href = '/index.html';
+                status.textContent = 'Login successful! Redirecting...';
+                status.classList.remove('error');
+                status.classList.add('success');
+                setTimeout(() => { window.location.href = '/public/pages/profile.html'; }, 800);
             } else {
                 // Mensajes bonitos y amigables para el usuario
                 let msg = '';
@@ -136,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         msg = 'Invalid mail format.';
                         break;
                     case 'app/no-app':
-                        msg = 'There was problem with the conexion. Try again.';
+                        msg = 'There was a problem with the connection. Try again.';
                         break;
                     default:
                         msg = 'Failed to login. Please check your credentials and try again.';
@@ -150,7 +180,59 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.error('❌ Login form not found in the DOM');
     }
+
+    // Forgot password (NEW)
+    const forgot = document.getElementById('forgot-password-link');
+    if (forgot) {
+      forgot.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const status = document.getElementById('login-status');
+        let email = (document.getElementById('login-email')?.value || '').trim();
+        if (!email) {
+          email = (prompt('Enter your email to reset your password:') || '').trim();
+        }
+        if (!email) {
+          status.textContent = 'Please enter your email.';
+          status.classList.remove('success');
+          status.classList.add('error');
+          return;
+        }
+        status.textContent = 'Sending reset email...';
+        status.classList.remove('error', 'success');
+        await loadConfig();              // ensure config
+        await waitForFirebaseInit(3000); // ensure Firebase app
+        try {
+          await firebase.auth().sendPasswordResetEmail(email);
+          status.textContent = 'Password reset email sent. Check your inbox.';
+          status.classList.remove('error');
+          status.classList.add('success');
+        } catch (err) {
+          let msg = 'Could not send reset email.';
+          switch (err.code) {
+            case 'auth/invalid-email': msg = 'Invalid email.'; break;
+            case 'auth/user-not-found': msg = 'No user found with that email.'; break;
+            case 'auth/too-many-requests': msg = 'Too many attempts. Try again later.'; break;
+          }
+          status.textContent = msg;
+          status.classList.remove('success');
+          status.classList.add('error');
+          console.error('reset error:', err);
+        }
+      });
+    }
 });
+
+// agrega helper para esperar inicialización de Firebase
+function waitForFirebaseInit(timeout = 3000) {
+  return new Promise((resolve) => {
+    const start = Date.now();
+    (function check() {
+      if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length) return resolve(true);
+      if (Date.now() - start > timeout) return resolve(false);
+      setTimeout(check, 100);
+    })();
+  });
+}
 
 // ================================
 // 6. POPUP DE LOGOUT (sin cambio)
@@ -176,13 +258,11 @@ function showLogoutPopup() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
-      
       const data = await res.json();
       if (data.success) {
-        // Eliminar información del usuario
         localStorage.removeItem('user');
-        // Redirigir a index.html
-        window.location.href = '/index.html';
+        // FIX: usar la función correctamente
+        window.location.assign('/index.html');
       }
     } catch (err) {
       console.error('Error logging out:', err);
