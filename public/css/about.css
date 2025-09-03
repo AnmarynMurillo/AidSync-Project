@@ -188,12 +188,11 @@ a {
 }
 
 .team-carousel {
-    display: flex;
-    gap: 2rem;
-    overflow: hidden;
-    scroll-behavior: smooth;
-    padding: 1rem 0;
-    margin: 0 -1rem;
+  display: flex;
+  gap: 2rem;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  padding: 2rem 0;
 }
 
 .team-member {
