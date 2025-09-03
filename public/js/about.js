@@ -1,57 +1,57 @@
+// Dynamic Text Rotation
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize Carousels
     initBannerCarousel();
     initTeamCarousel();
     
-    // Existing code
-    // Dynamic Text Rotation
+    // Dynamic Text Configuration
     const dynamicText = document.getElementById('dynamic-text');
-    const words = ['thinkers', 'innovators', 'creators', 'problem solvers', 'visionaries'];
-    let wordIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    let typeSpeed = 100; // Typing speed in milliseconds
-    let deleteSpeed = 30; // Deleting speed in milliseconds
-    let pauseTime = 2000; // Pause time between words in milliseconds
-
-    function typeEffect() {
-        const currentWord = words[wordIndex];
-        
-        if (isDeleting) {
-            // Delete characters
-            dynamicText.textContent = currentWord.substring(0, charIndex - 1).toLowerCase();
-            charIndex--;
-        } else {
-            // Type characters
-            dynamicText.textContent = currentWord.substring(0, charIndex + 1).toLowerCase();
-            charIndex++;
-        }
-
-        // Check if we've finished typing the word
-        if (!isDeleting && charIndex === currentWord.length) {
-            // Pause at the end of the word
-            isDeleting = true;
-            setTimeout(typeEffect, pauseTime);
-            return;
-        }
-
-        // Check if we've finished deleting the word
-        if (isDeleting && charIndex === 0) {
-            isDeleting = false;
-            // Move to the next word
-            wordIndex = (wordIndex + 1) % words.length;
-        }
-
-        // Set typing speed
-        const speed = isDeleting ? deleteSpeed : typeSpeed;
-        setTimeout(typeEffect, speed);
-    }
-
-    // Start the typing effect
     if (dynamicText) {
-        // Add cursor effect
+        const words = ['thinkers', 'innovators', 'creators', 'problem solvers', 'visionaries'];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typeSpeed = 100;
+        const deleteSpeed = 30;
+        const pauseTime = 2000;
+
+        /**
+         * Type effect function
+         * Handles the typing and deleting of characters
+         */
+        function typeEffect() {
+            const currentWord = words[wordIndex];
+            
+            if (isDeleting) {
+                // Delete characters
+                dynamicText.textContent = currentWord.substring(0, charIndex - 1).toLowerCase();
+                charIndex--;
+            } else {
+                // Type characters
+                dynamicText.textContent = currentWord.substring(0, charIndex + 1).toLowerCase();
+                charIndex++;
+            }
+
+            // Check if we've finished typing the word
+            if (!isDeleting && charIndex === currentWord.length) {
+                isDeleting = true;
+                setTimeout(typeEffect, pauseTime);
+                return;
+            }
+
+            // Check if we've finished deleting the word
+            if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+            }
+
+            // Set typing speed
+            const speed = isDeleting ? deleteSpeed : typeSpeed;
+            setTimeout(typeEffect, speed);
+        }
+
+        // Start the typing effect
         dynamicText.classList.add('typing-cursor');
-        // Start typing after a short delay
         setTimeout(typeEffect, 1000);
     }
 
@@ -217,6 +217,10 @@ function initTeamCarousel() {
         carouselContainer.appendChild(dotsContainer);
     }
     
+    // Auto-slide variables
+    let autoSlideInterval;
+    const AUTO_SLIDE_INTERVAL = 4000; // 4 seconds
+    
     const teamMembers = [
         {
             name: 'Anmaryn Murillo',
@@ -230,7 +234,7 @@ function initTeamCarousel() {
             }
         },
         {
-            name: 'Dushka Hernandez',
+            name: 'Dushka Jimenez',
             role: 'UI/UX Designer',
             image: '../../public/assets/members/Dushka.png',
             bio: 'Transforming ideas into beautiful and intuitive user experiences.',
@@ -241,7 +245,7 @@ function initTeamCarousel() {
             }
         },
         {
-            name: 'Elina Villalobos',
+            name: 'Elina Perez',
             role: 'Frontend Developer',
             image: '../../public/assets/members/Elina.png',
             bio: 'Building responsive and accessible web applications.',
@@ -252,7 +256,7 @@ function initTeamCarousel() {
             }
         },
         {
-            name: 'Emily Rojas',
+            name: 'Emily Bulgin',
             role: 'Backend Developer',
             image: '../../public/assets/members/Emily.png',
             bio: 'Creating robust and scalable server-side solutions.',
@@ -274,7 +278,7 @@ function initTeamCarousel() {
             }
         },
         {
-            name: 'Jhostan Rojas',
+            name: 'Jhostan Jimenez',
             role: 'Mobile Developer',
             image: '../../public/assets/members/Jhostan.png',
             bio: 'Building cross-platform mobile experiences.',
@@ -285,7 +289,7 @@ function initTeamCarousel() {
             }
         },
         {
-            name: 'Josue Rojas',
+            name: 'Josue Rodriguez',
             role: 'DevOps Engineer',
             image: '../../public/assets/members/Josue.png',
             bio: 'Automating deployments and ensuring system reliability.',
@@ -296,7 +300,7 @@ function initTeamCarousel() {
             }
         },
         {
-            name: 'Juan Murillo',
+            name: 'Juan Morales',
             role: 'QA Engineer',
             image: '../../public/assets/members/Juan.png',
             bio: 'Ensuring the highest quality in every release.',
@@ -307,7 +311,7 @@ function initTeamCarousel() {
             }
         },
         {
-            name: 'Luis Murillo',
+            name: 'Luis Camargo',
             role: 'Data Scientist',
             image: '../../public/assets/members/Luis.png',
             bio: 'Extracting insights from complex data sets.',
@@ -318,7 +322,7 @@ function initTeamCarousel() {
             }
         },
         {
-            name: 'Patricia Rojas',
+            name: 'Patricia Fernandez',
             role: 'Product Manager',
             image: '../../public/assets/members/Patricia.png',
             bio: 'Defining product vision and strategy.',
@@ -329,7 +333,7 @@ function initTeamCarousel() {
             }
         },
         {
-            name: 'Stephany Rojas',
+            name: 'Stephany Dominguez',
             role: 'UX Researcher',
             image: '../../public/assets/members/Stephany.png',
             bio: 'Understanding user needs and behaviors.',
@@ -404,21 +408,53 @@ function initTeamCarousel() {
         if (!item) return;
         
         const itemWidth = item.offsetWidth + 32; // width + gap
+        const maxIndex = Math.max(0, teamMembers.length - itemsPerView);
+        
+        // Ensure currentIndex is within bounds
+        currentIndex = Math.max(0, Math.min(currentIndex, maxIndex));
+        
         const newPosition = -currentIndex * itemWidth * itemsPerView;
+        carousel.style.transition = 'transform 0.5s ease-in-out';
         carousel.style.transform = `translateX(${newPosition}px)`;
         
         // Update active dot
+        const activeDotIndex = Math.min(
+            Math.floor(currentIndex / itemsPerView),
+            document.querySelectorAll('.dot').length - 1
+        );
+        
         document.querySelectorAll('.dot').forEach((dot, i) => {
-            dot.classList.toggle('active', i === Math.floor(currentIndex / itemsPerView));
+            dot.classList.toggle('active', i === activeDotIndex);
         });
         
         // Update button states
         prevBtn.disabled = currentIndex <= 0;
-        nextBtn.disabled = currentIndex >= teamMembers.length - itemsPerView;
+        nextBtn.disabled = currentIndex >= maxIndex;
         
         // Add/remove disabled state for better UX
         prevBtn.classList.toggle('disabled', prevBtn.disabled);
         nextBtn.classList.toggle('disabled', nextBtn.disabled);
+    }
+    
+    // Auto-slide functionality
+    function startAutoSlide() {
+        stopAutoSlide();
+        autoSlideInterval = setInterval(() => {
+            const maxIndex = Math.max(0, teamMembers.length - itemsPerView);
+            if (currentIndex >= maxIndex) {
+                currentIndex = 0; // Reset to first slide
+            } else {
+                currentIndex++;
+            }
+            updateCarousel();
+        }, AUTO_SLIDE_INTERVAL);
+    }
+    
+    function stopAutoSlide() {
+        if (autoSlideInterval) {
+            clearInterval(autoSlideInterval);
+            autoSlideInterval = null;
+        }
     }
     
     // Event listeners
@@ -426,12 +462,19 @@ function initTeamCarousel() {
         if (currentIndex > 0) {
             currentIndex--;
             updateCarousel();
+            resetAutoSlide();
         }
     });
     
     nextBtn.addEventListener('click', () => {
-        if (currentIndex < teamMembers.length - itemsPerView) {
+        const maxIndex = Math.max(0, teamMembers.length - itemsPerView);
+        if (currentIndex < maxIndex) {
             currentIndex++;
+            updateCarousel();
+            resetAutoSlide();
+        } else {
+            // If at the end, loop back to start
+            currentIndex = 0;
             updateCarousel();
         }
     });
@@ -440,10 +483,21 @@ function initTeamCarousel() {
     dotsContainer.addEventListener('click', (e) => {
         const dot = e.target.closest('.dot');
         if (dot) {
-            currentIndex = parseInt(dot.dataset.index);
+            currentIndex = parseInt(dot.dataset.index) * itemsPerView;
             updateCarousel();
+            resetAutoSlide();
         }
     });
+    
+    // Pause auto-slide on hover
+    carouselContainer.addEventListener('mouseenter', stopAutoSlide);
+    carouselContainer.addEventListener('mouseleave', startAutoSlide);
+    
+    // Reset auto-slide timer on interaction
+    function resetAutoSlide() {
+        stopAutoSlide();
+        startAutoSlide();
+    }
     
     // Touch support for mobile
     let touchStartX = 0;
@@ -487,4 +541,11 @@ function initTeamCarousel() {
     // Initialize
     renderTeam();
     updateCarousel();
+    startAutoSlide(); // Start auto-sliding
+    
+    // Recalculate on window resize
+    window.addEventListener('resize', () => {
+        itemsPerView = calculateItemsPerView();
+        updateCarousel();
+    });
 }
