@@ -101,15 +101,23 @@ def register():
         password = data.get("password")
         name = data.get("name")
         age = data.get("age")
+        username = (data.get("username") or "").strip()            # NEW
         area = data.get("area")
+        account_type = (data.get("accountType") or "").strip().lower()
 
         # Validaciones básicas
-        if not email or not password or not name or not age or not area:
+        if not email or not password or not name or not age or not username or not area or not account_type:
             return jsonify({"success": False, "message": "All fields are required."}), 400
         if not is_valid_email(email):
             return jsonify({"success": False, "message": "Invalid email format."}), 400
         if not is_strong_password(password):
             return jsonify({"success": False, "message": "Password too weak."}), 400
+        # Username simple check (3-20, alfanumérico y _ . -)
+        if not re.match(r"^[A-Za-z0-9_.-]{3,20}$", username):
+            return jsonify({"success": False, "message": "Invalid username format."}), 400
+        allowed_types = {"volunteer", "foundation", "fundation"}
+        if account_type not in allowed_types:
+            return jsonify({"success": False, "message": "Invalid account type."}), 400
 
         # Verifica si el correo ya existe en Firebase Auth
         try:
@@ -118,10 +126,10 @@ def register():
         except firebase_auth.UserNotFoundError:
             pass
 
-        # 1) Ejecutar el registro real
+        # Ejecutar el registro real (register_user lee todo desde request.get_json())
         reg_resp = register_user()
 
-        # 2) Si el registro fue exitoso, iniciar sesión automáticamente reutilizando /login
+        # Auto-login + redirect (sin cambios)
         try:
             status_code = getattr(reg_resp, "status_code", 200)
             reg_json = None

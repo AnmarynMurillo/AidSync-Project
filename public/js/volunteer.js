@@ -195,6 +195,7 @@ const VOLUNTEERS = [
     modalBody.innerHTML = `
       <img src="${vol.img}" alt="${vol.nombre}">
       <h2>${vol.nombre}</h2>
+      
       <div class="modal-desc">${vol.descLarga}</div>
       <div class="modal-map">${vol.mapa}</div>
       <ul class="modal-reqs">
@@ -210,7 +211,7 @@ const VOLUNTEERS = [
     modal.setAttribute('aria-hidden', 'false');
     modal.focus();
   }
-  
+
   function closeModal() {
     modal.setAttribute('aria-hidden', 'true');
     modalBody.innerHTML = '';
@@ -250,3 +251,4 @@ const VOLUNTEERS = [
     };
     return translations[req] || req;
   }
+ 

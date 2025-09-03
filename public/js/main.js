@@ -1,19 +1,19 @@
 // Hero Carousel Data
 const carouselSlides = [
   {
-    img: 'public/assets/img/Carrusel_1/Educacion.jpg',
+    img: 'assets/img/Carrusel_1/Educacion.jpg',
     text: 'Education that transforms'
   },
   {
-    img: 'public/assets/img/Carrusel_1/health.png',
+    img: 'assets/img/Carrusel_1/health.png',
     text: 'Healthcare in sync'
   },
   {
-    img: 'public/assets/img/Carrusel_1/environment.jpg',
+    img: 'assets/img/Carrusel_1/environment.jpg',
     text: 'Smart environmental action'
   },
   {
-    img: 'public/assets/img/Carrusel_1/Social_welfare.png',
+    img: 'assets/img/Carrusel_1/Social_welfare.png',
     text: 'Social impact, aligned'
   }
 ];
