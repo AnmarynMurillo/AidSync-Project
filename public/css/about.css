@@ -525,27 +525,6 @@ a {
     font-size: 0.9rem;
   }
 }
-    background: #ccc;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    transition: all 0.3s ease;
-}
-
-.team-carousel-dots .dot.active {
-    background: var(--color-primary);
-    transform: scale(1.2);
-}
-
-.team-carousel-dots .dot:hover:not(.active) {
-    background: var(--color-accent);
-    transform: scale(1.1);
-}
-
-.team-carousel-dots .dot {
-    width: 10px;
-    height: 10px;
-}
 
 /* Responsive adjustments */
 @media (min-width: 640px) {
