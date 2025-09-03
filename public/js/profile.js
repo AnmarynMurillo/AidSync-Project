@@ -2,17 +2,17 @@
 
 // backend por defecto (asegúrate que Flask corre en este host:port)
 let firebaseConfig = null;
-let backendUrl = 'http://localhost:5000';
+let backendUrl = null;
 let imgbbKey = null; // si no estaba ya definido
 
 async function loadConfig() {
     try {
         // Pedimos la configuración directamente al backend (evita solicitar /api/config
         // al servidor estático que sirve los archivos en otro origen)
-        const res = await fetch('http://localhost:5000/api/config', { credentials: 'include' });
+        const res = await fetch('/api/config', { credentials: 'include' });
         const cfg = await res.json();
         firebaseConfig = cfg.firebase;
-        backendUrl = cfg.backend && cfg.backend.url ? cfg.backend.url : backendUrl;
+        backendUrl = (cfg.backend && cfg.backend.url) || 'http://localhost:5000';
         imgbbKey = (cfg.imgbb && cfg.imgbb.apiKey) || null;
         initializeFirebase();
     } catch (e) {
