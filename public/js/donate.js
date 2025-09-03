@@ -4,7 +4,7 @@ const CAUSES = [
     {
       id: 1,
       nombre: 'Casa Esperanza Foundation',
-      categoria: 'wellbeing',
+      categoria: 'welfare',
       color: '#eab308',
       colorHover: '#ca8a04',
       img: '../assets/img/donation/socialwelfare.png',

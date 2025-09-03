@@ -180,6 +180,46 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.error('❌ Login form not found in the DOM');
     }
+
+    // Forgot password (NEW)
+    const forgot = document.getElementById('forgot-password-link');
+    if (forgot) {
+      forgot.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const status = document.getElementById('login-status');
+        let email = (document.getElementById('login-email')?.value || '').trim();
+        if (!email) {
+          email = (prompt('Enter your email to reset your password:') || '').trim();
+        }
+        if (!email) {
+          status.textContent = 'Please enter your email.';
+          status.classList.remove('success');
+          status.classList.add('error');
+          return;
+        }
+        status.textContent = 'Sending reset email...';
+        status.classList.remove('error', 'success');
+        await loadConfig();              // ensure config
+        await waitForFirebaseInit(3000); // ensure Firebase app
+        try {
+          await firebase.auth().sendPasswordResetEmail(email);
+          status.textContent = 'Password reset email sent. Check your inbox.';
+          status.classList.remove('error');
+          status.classList.add('success');
+        } catch (err) {
+          let msg = 'Could not send reset email.';
+          switch (err.code) {
+            case 'auth/invalid-email': msg = 'Invalid email.'; break;
+            case 'auth/user-not-found': msg = 'No user found with that email.'; break;
+            case 'auth/too-many-requests': msg = 'Too many attempts. Try again later.'; break;
+          }
+          status.textContent = msg;
+          status.classList.remove('success');
+          status.classList.add('error');
+          console.error('reset error:', err);
+        }
+      });
+    }
 });
 
 // agrega helper para esperar inicialización de Firebase
