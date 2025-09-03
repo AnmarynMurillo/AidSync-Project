@@ -40,7 +40,7 @@
   width: auto;
   border-radius: 0.5rem;
   box-shadow: var(--color-shadow);
-  background: var(--color-card);
+  background: transparent;  /* Transparent background for logo */
   padding: 0.2rem 0.4rem;
   transition: box-shadow var(--transition);
 }
@@ -49,7 +49,7 @@
   outline-offset: 2px;
 }
 .as-header__slogan {
-  color: var(--color-text);
+  color: #ffffff;  /* White text for better contrast */
   font-size: 1.1rem;
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -75,7 +75,7 @@
   padding: 0;
 }
 .as-header__nav-link {
-  color: var(--color-primary);
+  color: #3fd8bc;  /* Even lighter teal for maximum visibility */
   font-size: 1.08rem;
   font-weight: 600;
   text-decoration: none;
