@@ -297,6 +297,10 @@ const CAUSES = [
       successMsg.textContent = 'Thank you for your donation of $' + amount + '!';
       setTimeout(() => {
         closeModal();
+      }, 2000);
+    });
+  }
+  
   // Initialize filter buttons
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
