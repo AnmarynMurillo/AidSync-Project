@@ -729,14 +729,3 @@ body {
 @media (max-width: 500px) {
   #difference-modal .modal-content { min-width: 0; width: 95vw; }
 }
-.heart {
-  position: fixed;
-  bottom: -20px;
-  font-size: 24px;
-  animation: subir 4s linear forwards;
-  pointer-events: none;
-}
-@keyframes subir {
-  0%   { transform: translateY(0) scale(1); opacity: 1; }
-  100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
-}

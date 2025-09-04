@@ -20,8 +20,18 @@ Al enviar, los datos se envían al backend por JS. Si falla, intenta con Firebas
       <div class="register-section">
         <h1>Register</h1>
         <form id="registerForm" class="register-form">
+          <!-- Name -->
           <input type="text" id="name" name="name" placeholder="Name" required>
+          <!-- Age -->
           <input type="number" id="age" name="age" placeholder="Age" required>
+          <!-- Email (moved up) -->
+          <input type="email" id="email" name="email" placeholder="Email" required>
+          <!-- Username (NEW) -->
+          <input type="text" id="username" name="username" placeholder="Username" required>
+          <!-- Password -->
+          <input type="password" id="password" name="password" placeholder="Password" required>
+          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
+          <!-- Volunteering Area -->
           <label for="area">Volunteering Area</label>
           <select id="area" name="area" required>
             <option value="Education">Education</option>
@@ -29,11 +39,17 @@ Al enviar, los datos se envían al backend por JS. Si falla, intenta con Firebas
             <option value="Environment">Environment</option>
             <option value="Social Welfare">Social Welfare</option>
           </select>
-          <input type="email" id="email" name="email" placeholder="Email" required>
-          <input type="password" id="password" name="password" placeholder="Password" required>
-          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
+
+          <!-- Account Type -->
+          <label for="accountType">Account Type</label>
+          <select id="accountType" name="accountType" required>
+            <option value="" disabled selected>Select type</option>
+            <option value="volunteer">Volunteer</option>
+            <option value="foundation">Foundation</option>
+          </select>
+
           <button type="submit" class="register-btn">Register</button>
-          <div id="registerMessage"></div>
+          <div id="registerMessage" role="status" aria-live="polite"></div>
         </form>
         <div class="register-links">
           Already have an account? <a href="login.html">Log in</a>
@@ -47,10 +63,6 @@ Al enviar, los datos se envían al backend por JS. Si falla, intenta con Firebas
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <script src="/public/js/register.js"></script>
-</body>
-</html>
-</html>
     <script src="/public/js/register.js"></script>
 </body>
 </html>

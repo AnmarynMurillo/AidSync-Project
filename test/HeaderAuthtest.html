@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Header Test - AidSync</title>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Auth Header Styles -->
+    <link rel="stylesheet" href="../src/components/css/auth-header.css">
+    
+    <style>
+        /* Test page specific styles */
+        body {
+            font-family: 'Poppins', 'Nunito', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            transition: background var(--transition), color var(--transition);
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-top: 6rem; /* Space for fixed header */
+        }
+        
+        .test-content {
+            background: var(--color-card);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            box-shadow: var(--color-shadow);
+            transition: background var(--transition), box-shadow var(--transition);
+        }
+        
+        .test-buttons {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .test-btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .login-btn {
+            background: var(--color-accent);
+            color: white;
+        }
+        
+        .logout-btn {
+            background: #ea4335;
+            color: white;
+        }
+        
+        .simulate-user {
+            background: var(--color-primary);
+            color: white;
+        }
+        
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-btn:active {
+            transform: translateY(0);
+        }
+        
+        #testOutput {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--color-card);
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+            font-family: monospace;
+            white-space: pre-wrap;
+            transition: all var(--transition);
+        }
+        
+        .test-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .status-logged-in {
+            background: rgba(52, 168, 83, 0.1);
+            color: #34a853;
+        }
+        
+        .status-logged-out {
+            background: rgba(234, 67, 53, 0.1);
+            color: #ea4335;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include the auth header component -->
+    <div id="authHeaderContainer">
+        <!-- The auth header will be loaded here -->
+    </div>
+    
+    <!-- Test Content -->
+    <div class="test-container">
+        <div class="test-content">
+            <h1>Authentication Header Test</h1>
+            <p>This page tests the authentication-aware header component. Use the buttons below to simulate different authentication states.</p>
+            
+            <div class="test-status status-logged-out" id="authStatus">Not logged in</div>
+            
+            <div class="test-buttons">
+                <button id="simulateLogin" class="test-btn login-btn">Simulate Login</button>
+                <button id="simulateLogout" class="test-btn logout-btn" disabled>Simulate Logout</button>
+                <button id="simulateUser" class="test-btn simulate-user">Load Test User</button>
+            </div>
+            
+            <h3>User Data:</h3>
+            <div id="testOutput" class="test-output">No user data available</div>
+        </div>
+    </div>
+
+    <!-- Load the auth header component -->
+    <script>
+        // Initialize test controls
+        function initTestControls() {
+            const authStatus = document.getElementById('authStatus');
+            const testOutput = document.getElementById('testOutput');
+            const simulateLoginBtn = document.getElementById('simulateLogin');
+            const simulateLogoutBtn = document.getElementById('simulateLogout');
+            const simulateUserBtn = document.getElementById('simulateUser');
+            
+            // Check initial auth state
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            updateAuthUI(isLoggedIn);
+            
+            // Simulate login
+            if (simulateLoginBtn) {
+                simulateLoginBtn.addEventListener('click', () => {
+                    // Simulate successful login
+                    localStorage.setItem('isLoggedIn', 'true');
+                    updateAuthUI(true);
+                    if (simulateUserBtn) simulateUserBtn.click();
+                });
+            }
+            
+            // Simulate logout
+            if (simulateLogoutBtn) {
+                simulateLogoutBtn.addEventListener('click', () => {
+                    // Simulate logout
+                    localStorage.removeItem('isLoggedIn');
+                    updateAuthUI(false);
+                    testOutput.textContent = 'No user data available';
+                    
+                    // Hide auth header
+                    const authHeader = document.getElementById('authHeader');
+                    if (authHeader) {
+                        authHeader.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Simulate user data
+            if (simulateUserBtn) {
+                simulateUserBtn.addEventListener('click', () => {
+                    const testUser = {
+                        name: 'Test User',
+                        email: 'test@example.com',
+                        avatar: 'https://via.placeholder.com/150',
+                        role: 'tester'
+                    };
+                    
+                    // Update UI with test user data
+                    testOutput.textContent = `Name: ${testUser.name}\nEmail: ${testUser.email}\nRole: ${testUser.role}`;
+                    
+                    // Update auth header with test user data
+                    updateAuthHeader(testUser);
+                });
+            }
+            
+            // Update auth UI based on login state
+            function updateAuthUI(isLoggedIn) {
+                if (!authStatus) return;
+                
+                if (isLoggedIn) {
+                    authStatus.textContent = 'Logged in';
+                    authStatus.className = 'test-status status-logged-in';
+                    if (simulateLoginBtn) simulateLoginBtn.disabled = true;
+                    if (simulateLogoutBtn) simulateLogoutBtn.disabled = false;
+                    if (simulateUserBtn) simulateUserBtn.disabled = false;
+                } else {
+                    authStatus.textContent = 'Not logged in';
+                    authStatus.className = 'test-status status-logged-out';
+                    testOutput.textContent = 'No user data available';
+                    if (simulateLoginBtn) simulateLoginBtn.disabled = false;
+                    if (simulateLogoutBtn) simulateLogoutBtn.disabled = true;
+                    if (simulateUserBtn) simulateUserBtn.disabled = true;
+                }
+            }
+            
+            // Update auth header with user data
+            function updateAuthHeader(userData) {
+                if (!userData) return;
+                
+                // Wait for the auth header to be fully loaded
+                const checkHeader = setInterval(() => {
+                    const userNameElements = document.querySelectorAll('#userName, #dropdownName, #mobileUserName');
+                    const userEmailElements = document.querySelectorAll('#dropdownEmail, #mobileUserEmail');
+                    const userAvatarElements = document.querySelectorAll('#userAvatar, #dropdownAvatar, #mobileUserAvatar');
+                    
+                    if (userNameElements.length > 0) {
+                        clearInterval(checkHeader);
+                        
+                        // Update user info in the header
+                        userNameElements.forEach(el => el.textContent = userData.name);
+                        userEmailElements.forEach(el => el.textContent = userData.email);
+                        userAvatarElements.forEach(el => el.src = userData.avatar);
+                        
+                        // Show the auth header
+                        const authHeader = document.getElementById('authHeader');
+                        if (authHeader) {
+                            authHeader.style.display = 'block';
+                        }
+                    }
+                }, 100);
+            }
+        }
+        
+        // Load auth header component when DOM is loaded
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load auth header HTML
+            try {
+                const response = await fetch('../src/components/html/auth-header.html');
+                const html = await response.text();
+                const container = document.getElementById('authHeaderContainer');
+                if (container) {
+                    container.innerHTML = html;
+                    
+                    // Load auth header JS
+                    const script = document.createElement('script');
+                    script.src = '../src/components/js/auth-header.js';
+                    script.onload = initTestControls; // Initialize test controls after script loads
+                    document.body.appendChild(script);
+                }
+            } catch (error) {
+                console.error('Error loading auth header:', error);
+                const container = document.getElementById('authHeaderContainer');
+                if (container) {
+                    container.innerHTML = '<div class="error">Error loading auth header. Check console for details.</div>';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

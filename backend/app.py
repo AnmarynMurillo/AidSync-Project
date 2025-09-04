@@ -41,9 +41,13 @@ def add_cors_headers(response):
     else:
         response.headers['Access-Control-Allow-Origin'] = configured_origin
     response.headers['Access-Control-Allow-Credentials'] = 'true'
-    # Permitir estos encabezados en preflight (Authorization es importante)
-    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    # Permitir estos encabezados en preflight (incluye Accept)
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization, Accept'
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+    # Recomendado para proxies/CDN
+    response.headers['Vary'] = 'Origin'
+    # Opcional: cache del preflight
+    response.headers['Access-Control-Max-Age'] = '86400'
     return response
 
 # Inicializa Firebase
@@ -97,26 +101,75 @@ def register():
         password = data.get("password")
         name = data.get("name")
         age = data.get("age")
+        username = (data.get("username") or "").strip()            # NEW
         area = data.get("area")
+        account_type = (data.get("accountType") or "").strip().lower()
 
         # Validaciones básicas
-        if not email or not password or not name or not age or not area:
+        if not email or not password or not name or not age or not username or not area or not account_type:
             return jsonify({"success": False, "message": "All fields are required."}), 400
         if not is_valid_email(email):
             return jsonify({"success": False, "message": "Invalid email format."}), 400
         if not is_strong_password(password):
             return jsonify({"success": False, "message": "Password too weak."}), 400
+        # Username simple check (3-20, alfanumérico y _ . -)
+        if not re.match(r"^[A-Za-z0-9_.-]{3,20}$", username):
+            return jsonify({"success": False, "message": "Invalid username format."}), 400
+        allowed_types = {"volunteer", "foundation", "fundation"}
+        if account_type not in allowed_types:
+            return jsonify({"success": False, "message": "Invalid account type."}), 400
 
         # Verifica si el correo ya existe en Firebase Auth
         try:
             firebase_auth.get_user_by_email(email)
-            # Si no lanza excepción, el usuario ya existe
             return jsonify({"success": False, "message": "This email is already registered."}), 409
         except firebase_auth.UserNotFoundError:
-            pass  # El usuario no existe, se puede crear
+            pass
 
-        # Llama a la lógica de registro real (user_service)
-        return register_user()
+        # Ejecutar el registro real (register_user lee todo desde request.get_json())
+        reg_resp = register_user()
+
+        # Auto-login + redirect (sin cambios)
+        try:
+            status_code = getattr(reg_resp, "status_code", 200)
+            reg_json = None
+            try:
+                reg_json = reg_resp.get_json()
+            except Exception:
+                reg_json = None
+
+            if status_code in (200, 201) and reg_json and reg_json.get("success"):
+                # Crear un contexto de petición para llamar login_user con las mismas credenciales
+                with app.test_request_context('/login', method='POST', json={'email': email, 'password': password}):
+                    login_resp = login_user()
+
+                # Construir la respuesta final con autoLogin + redirect y copiar cookies
+                try:
+                    login_json = login_resp.get_json() or {}
+                except Exception:
+                    login_json = {}
+
+                payload = {
+                    **login_json,
+                    "success": True,
+                    "autoLogin": True,
+                    "redirect": "/public/pages/blog.html"
+                }
+                final_resp = make_response(jsonify(payload), 200)
+
+                # Forward de Set-Cookie para conservar la sesión creada por login_user
+                for h, v in login_resp.headers:
+                    if h.lower() == 'set-cookie':
+                        final_resp.headers.add('Set-Cookie', v)
+
+                return final_resp
+
+            # Si el registro no fue exitoso, retornar tal cual
+            return reg_resp
+        except Exception as e:
+            logging.error(f"Auto-login after register failed: {e}")
+            return reg_resp
+
     except Exception as e:
         logging.error(f"Error in /register: {e}\n{traceback.format_exc()}")
         return jsonify({"success": False, "message": "Internal server error."}), 500
