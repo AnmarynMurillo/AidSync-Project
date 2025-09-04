@@ -4,7 +4,7 @@ const CAUSES = [
     {
       id: 1,
       nombre: 'Casa Esperanza Foundation',
-      categoria: 'wellbeing',
+      categoria: 'welfare',
       color: '#eab308',
       colorHover: '#ca8a04',
       img: '../assets/img/donation/socialwelfare.png',
@@ -297,6 +297,10 @@ const CAUSES = [
       successMsg.textContent = 'Thank you for your donation of $' + amount + '!';
       setTimeout(() => {
         closeModal();
+      }, 2000);
+    });
+  }
+  
   // Initialize filter buttons
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
