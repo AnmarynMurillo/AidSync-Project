@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Foundations - AidSync</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="/public/css/map.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header will be injected here by loader.js -->
+    <main class="map-container">
+        <div class="map-controls">
+            <div class="filters">
+                <h3>Filter by Category</h3>
+                <div class="category-filters">
+                    <label class="category-filter" data-category="all">
+                        <input type="checkbox" checked> All Categories
+                    </label>
+                    <label class="category-filter" data-category="blue">
+                        <input type="checkbox" checked> <i class="fas fa-hands-helping" style="color: #3498db;"></i> Community Support
+                    </label>
+                    <label class="category-filter" data-category="green">
+                        <input type="checkbox" checked> <i class="fas fa-leaf" style="color: #2ecc71;"></i> Environment
+                    </label>
+                    <label class="category-filter" data-category="red">
+                        <input type="checkbox" checked> <i class="fas fa-heart" style="color: #e74c3c;"></i> Health
+                    </label>
+                    <label class="category-filter" data-category="yellow">
+                        <input type="checkbox" checked> <i class="fas fa-graduation-cap" style="color: #f1c40f;"></i> Education
+                    </label>
+                </div>
+                <div class="distance-filter">
+                    <h3>Distance</h3>
+                    <select id="distance-range">
+                        <option value="5">5 km</option>
+                        <option value="10" selected>10 km</option>
+                        <option value="25">25 km</option>
+                        <option value="50">50 km</option>
+                        <option value="100">100 km</option>
+                        <option value="0">Show All</option>
+                    </select>
+                </div>
+                <button id="locate-me" class="btn-locate">
+                    <i class="fas fa-location-arrow"></i> Use My Location
+                </button>
+            </div>
+        </div>
+        <div id="map"></div>
+        <div class="map-legend">
+            <h4>Legend</h4>
+            <div class="legend-item"><span class="legend-color blue"></span> Community</div>
+            <div class="legend-item"><span class="legend-color green"></span> Environment</div>
+            <div class="legend-item"><span class="legend-color red"></span> Health</div>
+            <div class="legend-item"><span class="legend-color yellow"></span> Education</div>
+            <div class="legend-item"><span class="legend-color user-location"></span> Your Location</div>
+        </div>
+    </main>
+
+    <!-- Foundation Info Modal -->
+    <div id="foundation-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="foundation-details">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
+    <script src="/public/js/map.js" type="module"></script>
+</body>
+</html>

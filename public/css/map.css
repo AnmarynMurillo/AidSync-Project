@@ -1,0 +1,226 @@
+/* Base styles */
+:root {
+    --primary-color: #003d66;
+    --accent-color: #16a085;
+    --text-color: #333;
+    --light-gray: #f5f5f5;
+    --border-color: #ddd;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+/* Map container */
+.map-container {
+    display: flex;
+    height: calc(100vh - 80px);
+    position: relative;
+}
+
+/* Map element */
+#map {
+    flex: 1;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Map controls */
+.map-controls {
+    width: 300px;
+    background: white;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    overflow-y: auto;
+    z-index: 10;
+}
+
+.map-controls h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+/* Category filters */
+.category-filters {
+    margin-bottom: 1.5rem;
+}
+
+.category-filter {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.category-filter:hover {
+    background-color: var(--light-gray);
+}
+
+.category-filter input[type="checkbox"] {
+    margin-right: 0.75rem;
+    cursor: pointer;
+}
+
+/* Distance filter */
+.distance-filter {
+    margin-bottom: 1.5rem;
+}
+
+#distance-range {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* Locate me button */
+.btn-locate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.btn-locate:hover {
+    background-color: var(--accent-color);
+}
+
+.btn-locate i {
+    margin-right: 0.5rem;
+}
+
+/* Map legend */
+.map-legend {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: white;
+    padding: 1rem;
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    z-index: 10;
+    font-size: 0.9rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.legend-color {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 0.5rem;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
+}
+
+.legend-color.blue { background-color: #3498db; }
+.legend-color.green { background-color: #2ecc71; }
+.legend-color.red { background-color: #e74c3c; }
+.legend-color.yellow { background-color: #f1c40f; }
+.legend-color.user-location { 
+    background-color: #9b59b6;
+    border: 2px solid white;
+    box-shadow: 0 0 0 1px #9b59b6;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+.close-modal:hover {
+    color: var(--accent-color);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .map-container {
+        flex-direction: column;
+    }
+    
+    .map-controls {
+        width: 100%;
+        max-height: 40vh;
+        overflow-y: auto;
+    }
+    
+    .map-legend {
+        bottom: 10px;
+        right: 10px;
+        font-size: 0.8rem;
+        padding: 0.5rem;
+    }
+}
+
+/* Custom marker clusters */
+.marker-cluster {
+    background-clip: padding-box;
+    border-radius: 50%;
+}
+
+.marker-cluster div {
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+    margin-top: 5px;
+    text-align: center;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.marker-cluster span {
+    line-height: 30px;
+}
