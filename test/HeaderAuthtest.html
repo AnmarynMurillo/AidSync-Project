@@ -3,16 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auth Header Test - AidSync</title>
+    <title>Header Tester - AidSync</title>
     
-    <!-- Font Awesome for icons -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Auth Header Styles -->
-    <link rel="stylesheet" href="../src/components/css/auth-header.css">
+    <!-- Base CSS that should be included in all pages -->
+    <link rel="stylesheet" href="../public/css/base.css">
+    <link rel="stylesheet" href="../public/css/theme.css">
+    
+    <!-- Header styles (both guest and auth) -->
+    <link rel="stylesheet" href="../public/css/header.css">
+    <link rel="stylesheet" href="../public/css/auth-header.css">
+    
+    <!-- Test page styles -->
+    <link rel="stylesheet" href="../public/css/test.css">
     
     <style>
         /* Test page specific styles */
+        :root {
+            --color-primary: #4a6cf7;
+            --color-success: #28a745;
+            --color-danger: #dc3545;
+            --color-bg: #f8f9fa;
+            --color-text: #212529;
+            --color-card: #fff;
+            --transition: all 0.3s ease;
+        }
+        
         body {
             font-family: 'Poppins', 'Nunito', Arial, sans-serif;
             margin: 0;
@@ -26,7 +44,58 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
-            padding-top: 6rem; /* Space for fixed header */
+            padding-top: 100px; /* Space for header */
+        }
+        
+        .test-section {
+            background: var(--color-card);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .test-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+        
+        .test-btn--primary {
+            background-color: var(--color-primary);
+            color: white;
+        }
+        
+        .test-btn--success {
+            background-color: var(--color-success);
+            color: white;
+        }
+        
+        .test-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .test-state {
+            padding: 1rem;
+            background: rgba(0,0,0,0.05);
+            border-radius: 6px;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
         }
         
         .test-content {
@@ -34,7 +103,7 @@
             padding: 2rem;
             border-radius: 12px;
             margin-top: 2rem;
-            box-shadow: var(--color-shadow);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             transition: background var(--transition), box-shadow var(--transition);
         }
         
@@ -111,9 +180,33 @@
     </style>
 </head>
 <body>
-    <!-- Include the auth header component -->
-    <div id="authHeaderContainer">
-        <!-- The auth header will be loaded here -->
+    <!-- Header container - will be replaced with either guest or auth header -->
+    <div id="headerContainer">
+        <!-- Header will be loaded here -->
+    </div>
+    
+    <!-- Test content -->
+    <div class="test-container">
+        <h1>Header Tester</h1>
+        
+        <div class="test-section">
+            <h2>Test Controls</h2>
+            <div class="test-buttons">
+                <button id="loadGuestHeader" class="test-btn test-btn--primary">
+                    <i class="fas fa-user"></i> Show Guest Header
+                </button>
+                <button id="loadAuthHeader" class="test-btn test-btn--success">
+                    <i class="fas fa-user-shield"></i> Show Authenticated Header
+                </button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Current State</h2>
+            <div id="currentState" class="test-state">
+                No header loaded
+            </div>
+        </div>
     </div>
     
     <!-- Test Content -->
@@ -135,8 +228,28 @@
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
     <!-- Load the auth header component -->
     <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAJ395j9EL5Nv81Q70Csc4zRKNp5e1Xrjo",
+            authDomain: "expo-project-1040e.firebaseapp.com",
+            databaseURL: "https://expo-project-1040e-default-rtdb.firebaseio.com",
+            projectId: "expo-project-1040e",
+            storageBucket: "expo-project-1040e.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdef123456"
+        };
+        
+        // Initialize Firebase if not already initialized
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         // Initialize test controls
         function initTestControls() {
             const authStatus = document.getElementById('authStatus');
@@ -241,29 +354,86 @@
             }
         }
         
-        // Load auth header component when DOM is loaded
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Load auth header HTML
+        // Test user data
+        const testUser = {
+            displayName: 'Test User',
+            email: 'test@example.com',
+            photoURL: 'https://ui-avatars.com/api/?name=Test+User&background=4a6cf7&color=fff',
+            uid: 'test123'
+        };
+        
+        // Load header component
+        async function loadHeader(type = 'guest') {
+            const headerFile = type === 'auth' ? 'auth-header.html' : 'header.html';
+            const headerScript = type === 'auth' ? 'auth-header.js' : 'header.js';
+            const container = document.getElementById('headerContainer');
+            
+            if (!container) return;
+            
             try {
-                const response = await fetch('../src/components/html/auth-header.html');
-                const html = await response.text();
-                const container = document.getElementById('authHeaderContainer');
-                if (container) {
-                    container.innerHTML = html;
-                    
-                    // Load auth header JS
-                    const script = document.createElement('script');
-                    script.src = '../src/components/js/auth-header.js';
-                    script.onload = initTestControls; // Initialize test controls after script loads
-                    document.body.appendChild(script);
-                }
+                // Load header HTML
+                const response = await fetch(`../src/components/html/${headerFile}`);
+                if (!response.ok) throw new Error(`Failed to load ${type} header`);
+                
+                container.innerHTML = await response.text();
+                updateState(`${type.toUpperCase()} header loaded`);
+                
+                // Load and initialize header script
+                const script = document.createElement('script');
+                script.src = `../src/components/js/${headerScript}`;
+                script.onload = () => {
+                    if (type === 'auth' && window.authHeader) {
+                        // Simulate authenticated user
+                        window.authHeader.currentUser = testUser;
+                        window.authHeader.updateAuthUI(testUser);
+                        updateState('Authenticated header initialized with test user');
+                    } else if (window.header) {
+                        // Initialize guest header if needed
+                        window.header.init();
+                        updateState('Guest header initialized');
+                    }
+                };
+                script.onerror = () => updateState(`Error loading ${headerScript}`, true);
+                document.body.appendChild(script);
+                
             } catch (error) {
-                console.error('Error loading auth header:', error);
-                const container = document.getElementById('authHeaderContainer');
-                if (container) {
-                    container.innerHTML = '<div class="error">Error loading auth header. Check console for details.</div>';
-                }
+                console.error(`Error loading ${type} header:`, error);
+                updateState(`Error: ${error.message}`, true);
             }
+        }
+        
+        // Update state display
+        function updateState(message, isError = false) {
+            const stateElement = document.getElementById('currentState');
+            if (stateElement) {
+                stateElement.textContent = message;
+                stateElement.style.color = isError ? 'var(--color-danger)' : 'inherit';
+                console.log(`[Header Tester] ${message}`);
+            }
+        }
+        
+        // Initialize test page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load guest header by default
+            loadHeader('guest');
+            
+            // Set up test buttons
+            document.getElementById('loadGuestHeader')?.addEventListener('click', () => {
+                updateState('Loading guest header...');
+                loadHeader('guest');
+            });
+            
+            document.getElementById('loadAuthHeader')?.addEventListener('click', () => {
+                updateState('Loading authenticated header...');
+                loadHeader('auth');
+            });
+            
+            // Handle back/forward navigation
+            window.addEventListener('pageshow', (event) => {
+                if (event.persisted) {
+                    loadHeader('guest');
+                }
+            });
         });
     </script>
 </body>

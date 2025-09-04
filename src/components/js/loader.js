@@ -47,6 +47,15 @@
         selector: '.as-header',
         loaded: false,
         type: 'script'
+      },
+      {
+        name: 'auth-header',
+        path: '/src/components/js/auth-header.js',
+        selector: '#authHeader',
+        loaded: false,
+        type: 'script',
+        // Load after the main header is loaded
+        dependsOn: ['header']
       }
     ];
     
