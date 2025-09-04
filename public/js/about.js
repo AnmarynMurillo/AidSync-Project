@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
         let isDeleting = false;
         const typeSpeed = 100;
         const deleteSpeed = 30;
-        const pauseTime = 2000;
 
         /**
          * Type effect function
@@ -35,8 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // Check if we've finished typing the word
             if (!isDeleting && charIndex === currentWord.length) {
                 isDeleting = true;
-                setTimeout(typeEffect, pauseTime);
-                return;
             }
 
             // Check if we've finished deleting the word
@@ -104,8 +101,6 @@ function initBannerCarousel() {
     if (!carouselSlide) return; // Exit if no carousel found
     
     let currentIndex = 0;
-    let slideInterval;
-    const slideIntervalTime = 5000; // 5 seconds
 
     // Create dots
     slides.forEach((_, index) => {
@@ -133,27 +128,18 @@ function initBannerCarousel() {
     function nextSlide() {
         currentIndex = (currentIndex + 1) % slides.length;
         updateCarousel();
-        resetInterval();
     }
 
     // Previous slide
     function prevSlide() {
         currentIndex = (currentIndex - 1 + slides.length) % slides.length;
         updateCarousel();
-        resetInterval();
     }
 
     // Go to specific slide
     function goToSlide(index) {
         currentIndex = index;
         updateCarousel();
-        resetInterval();
-    }
-
-    // Reset interval
-    function resetInterval() {
-        clearInterval(slideInterval);
-        slideInterval = setInterval(nextSlide, slideIntervalTime);
     }
 
     // Event listeners
@@ -195,12 +181,9 @@ function initBannerCarousel() {
     // Pause on hover
     const carousel = document.querySelector('.banner-carousel');
     if (carousel) {
-        carousel.addEventListener('mouseenter', () => clearInterval(slideInterval));
-        carousel.addEventListener('mouseleave', () => resetInterval());
+        carousel.addEventListener('mouseenter', () => {});
+        carousel.addEventListener('mouseleave', () => {});
     }
-
-    // Start the interval
-    resetInterval();
 }
 
 // Team Carousel Functionality
@@ -216,10 +199,6 @@ function initTeamCarousel() {
         dotsContainer.className = 'team-carousel-dots';
         carouselContainer.appendChild(dotsContainer);
     }
-    
-    // Auto-slide variables
-    let autoSlideInterval;
-    const AUTO_SLIDE_INTERVAL = 4000; // 4 seconds
     
     const teamMembers = [
         {
@@ -356,15 +335,31 @@ function initTeamCarousel() {
     function calculateItemsPerView() {
         const width = window.innerWidth;
         if (width < 768) return 1;
-        if (width < 1024) return 2;
+        if (width < 1200) return 2;
         return 3;
     }
     
-    // Handle window resize
-    window.addEventListener('resize', () => {
+    // Debounce function
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+    
+    // Handle window resize with debounce
+    function handleResize() {
         itemsPerView = calculateItemsPerView();
+        currentIndex = 0; // Reset to first item on resize
         updateCarousel();
-    });
+    }
+    
+    window.addEventListener('resize', debounce(handleResize, 150));
     
     // Generate team member cards
     function renderTeam() {
@@ -404,16 +399,36 @@ function initTeamCarousel() {
     
     // Update carousel position
     function updateCarousel() {
-        const item = document.querySelector('.team-member');
-        if (!item) return;
+        const items = document.querySelectorAll('.team-member');
+        if (!items.length) return;
         
-        const itemWidth = item.offsetWidth + 32; // width + gap
+        // Get the first team member to calculate dimensions
+        const firstItem = items[0];
+        if (!firstItem) return;
+        
+        // Get the width of the carousel container
+        const container = carousel.parentElement;
+        const containerWidth = container.offsetWidth;
+        
+        // Get the width of a single item including its margin
+        const itemStyle = window.getComputedStyle(firstItem);
+        const itemWidth = firstItem.offsetWidth + 
+                         parseFloat(itemStyle.marginLeft) + 
+                         parseFloat(itemStyle.marginRight);
+        
+        // Calculate how many items fit in the viewport
+        const itemsPerView = Math.max(1, Math.floor(containerWidth / itemWidth));
+        
+        // Calculate the maximum index we can go to
         const maxIndex = Math.max(0, teamMembers.length - itemsPerView);
         
         // Ensure currentIndex is within bounds
         currentIndex = Math.max(0, Math.min(currentIndex, maxIndex));
         
-        const newPosition = -currentIndex * itemWidth * itemsPerView;
+        // Calculate the new position
+        const newPosition = -currentIndex * itemWidth;
+        
+        // Apply the transform with smooth transition
         carousel.style.transition = 'transform 0.5s ease-in-out';
         carousel.style.transform = `translateX(${newPosition}px)`;
         
@@ -436,47 +451,27 @@ function initTeamCarousel() {
         nextBtn.classList.toggle('disabled', nextBtn.disabled);
     }
     
-    // Auto-slide functionality
-    function startAutoSlide() {
-        stopAutoSlide();
-        autoSlideInterval = setInterval(() => {
-            const maxIndex = Math.max(0, teamMembers.length - itemsPerView);
-            if (currentIndex >= maxIndex) {
-                currentIndex = 0; // Reset to first slide
-            } else {
-                currentIndex++;
-            }
-            updateCarousel();
-        }, AUTO_SLIDE_INTERVAL);
-    }
-    
-    function stopAutoSlide() {
-        if (autoSlideInterval) {
-            clearInterval(autoSlideInterval);
-            autoSlideInterval = null;
-        }
-    }
-    
     // Event listeners
     prevBtn.addEventListener('click', () => {
+        const maxIndex = Math.max(0, teamMembers.length - itemsPerView);
         if (currentIndex > 0) {
             currentIndex--;
-            updateCarousel();
-            resetAutoSlide();
+        } else {
+            // If at the start, loop to the end
+            currentIndex = maxIndex;
         }
+        updateCarousel();
     });
     
     nextBtn.addEventListener('click', () => {
         const maxIndex = Math.max(0, teamMembers.length - itemsPerView);
         if (currentIndex < maxIndex) {
             currentIndex++;
-            updateCarousel();
-            resetAutoSlide();
         } else {
             // If at the end, loop back to start
             currentIndex = 0;
-            updateCarousel();
         }
+        updateCarousel();
     });
     
     // Dot navigation
@@ -485,19 +480,8 @@ function initTeamCarousel() {
         if (dot) {
             currentIndex = parseInt(dot.dataset.index) * itemsPerView;
             updateCarousel();
-            resetAutoSlide();
         }
     });
-    
-    // Pause auto-slide on hover
-    carouselContainer.addEventListener('mouseenter', stopAutoSlide);
-    carouselContainer.addEventListener('mouseleave', startAutoSlide);
-    
-    // Reset auto-slide timer on interaction
-    function resetAutoSlide() {
-        stopAutoSlide();
-        startAutoSlide();
-    }
     
     // Touch support for mobile
     let touchStartX = 0;
@@ -541,7 +525,6 @@ function initTeamCarousel() {
     // Initialize
     renderTeam();
     updateCarousel();
-    startAutoSlide(); // Start auto-sliding
     
     // Recalculate on window resize
     window.addEventListener('resize', () => {
