@@ -2,10 +2,113 @@
 
 // Datos de ejemplo para publicaciones
 const BLOG_POSTS = [
+  // Health Organizations
+  {
+    id: 7,
+    titulo: 'Dona Vida: Saving Lives Through Blood Donation',
+    imagen: '/public/assets/img/donation/BRIGADA-MEDICA.jpg',
+    extracto: 'Dona Vida is a non-profit foundation that promotes voluntary blood donation in Panama.',
+    contenido: 'Dona Vida is a non-profit foundation that seeks to promote voluntary blood donation. The blood donated through Dona Vida strengthens the blood banks of its partner hospitals: Hospital Santo Tomás, Hospital del Niño, Instituto Oncológico Nacional, and Hospital Luis "Chicho" Fábrega. Your donation can save up to three lives!',
+    autor: 'AidSync Team',
+    fecha: '2025-06-15',
+    destacado: true,
+    video: '',
+    comentarios: []
+  },
+  {
+    id: 8,
+    titulo: 'United Way Panamá: Comprehensive Support for Vulnerable Communities',
+    imagen: '/public/assets/img/support_organization/saludparatodos.jpg',
+    extracto: 'United Way Panamá provides essential support and resources to those in need.',
+    contenido: 'United Way Panamá is dedicated to improving lives through various initiatives. Donations help supply basic needs, medicines, and support for beneficiaries, including emotional and psychological care, assistance to people in situations of domestic violence, economic support for families at risk, and educational and technological innovation. They also ensure job continuity for staff working directly with vulnerable populations.',
+    autor: 'AidSync Team',
+    fecha: '2025-06-10',
+    destacado: true,
+    video: '',
+    comentarios: []
+  },
+  
+  // Education Organizations
+  {
+    id: 9,
+    titulo: 'Una Empresa Un Aula: Transforming Education in Panama',
+    imagen: '/public/assets/img/support_organization/educa_futuro.jpg',
+    extracto: 'Support public education through classroom adoption and donations.',
+    contenido: '• Adopt a classroom: Sponsor a classroom with an initial donation and periodic contributions, improving infrastructure and receiving progress updates.\n\n• Solidarity sum, in-kind donations, skills donation, or networking donation: versatile options that allow support with material goods, professional services, and connections. This initiative promotes public education through online monetary donations or bank transfers.',
+    autor: 'AidSync Team',
+    fecha: '2025-06-05',
+    destacado: false,
+    video: '',
+    comentarios: []
+  },
+  {
+    id: 10,
+    titulo: 'Fundación Educativa Juan Pablo II: Empowering Youth Through Education',
+    imagen: '/public/assets/img/Carrusel_1/Educacion.jpg',
+    extracto: 'Providing scholarships to underprivileged Panamanian youth for over three decades.',
+    contenido: 'FEJPS is a non-profit foundation that grants school and university scholarships to underprivileged Panamanian youth with high academic and personal potential. For more than three decades, they have awarded over 3,200 scholarships, with an impact of more than $15 million in university education. At the secondary level, they have provided more than 2,500 scholarships with a 92% graduation rate.\n\nYou can support their mission through monthly or one-time tax-deductible donations via ACH transfers or recurring credit card payments.',
+    autor: 'AidSync Team',
+    fecha: '2025-05-30',
+    destacado: false,
+    video: '',
+    comentarios: []
+  },
+  
+  // Environment Organizations
+  {
+    id: 11,
+    titulo: 'Ecobio Panamá: Protecting Our Natural Heritage',
+    imagen: '/public/assets/img/Carrusel_1/environment.jpg',
+    extracto: 'Dedicated to conserving Panama\'s unique biodiversity through sustainable initiatives.',
+    contenido: 'At Ecobio Panamá, we work tirelessly to protect our country\'s unique biodiversity. Our projects focus on ecosystem conservation, environmental education, and sustainable development. You can support our projects financially - every contribution, no matter the size, makes a big difference in preserving Panama\'s natural heritage for future generations.',
+    autor: 'AidSync Team',
+    fecha: '2025-05-25',
+    destacado: true,
+    video: '',
+    comentarios: []
+  },
+  {
+    id: 12,
+    titulo: 'Fundación Cero Basura Panamá: A Cleaner Future',
+    imagen: '/public/assets/img/volunter/Reforestacion.jpeg',
+    extracto: 'Combatting waste and visual pollution through community action and education.',
+    contenido: 'Fundación Cero Basura Panamá was created on October 21, 2021, with the purpose of improving our country\'s environment while eliminating visual pollution caused by the high level of waste we see daily in our communities. You can contribute financially or in-kind to support their recycling and environmental education programs. Together, we can create cleaner, more sustainable communities across Panama.',
+    autor: 'AidSync Team',
+    fecha: '2025-05-20',
+    destacado: false,
+    video: '',
+    comentarios: []
+  },
+  
+  // Social Welfare Organizations
+  {
+    id: 13,
+    titulo: 'Fundación Pro Integración: Supporting People with Disabilities',
+    imagen: '/public/assets/img/support_organization/red_solidaria.jpg',
+    extracto: 'Providing essential mobility and hearing devices to improve quality of life.',
+    contenido: 'Fundación Pro Integración (FUNPROI) provides vital support including:\n\n• Specialized devices to improve mobility for people with physical disabilities, such as wheelchairs, postural chairs, canes, and crutches.\n• Hearing aids and cochlear implants for people with hearing disabilities.\n• Transportation support to facilitate access to health services.\n\nYou can support their mission through bank transfers or Yappy donations.',
+    autor: 'AidSync Team',
+    fecha: '2025-05-15',
+    destacado: false,
+    video: '',
+    comentarios: []
+  },
+  {
+    id: 14,
+    titulo: 'Fundación HTN: Comprehensive Support for Social Causes',
+    imagen: '/public/assets/img/Carrusel_1/Social_welfare.png',
+    extracto: 'Supporting various social organizations through multiple donation channels.',
+    contenido: 'Fundación HTN offers multiple ways to support social causes:\n\n• Financial donations\n• Products and services needed by social organizations\n• You may even consider donating an inheritance through their platform\n\nThrough their intelligent system, you can provide financial donations, products, services, and even inheritances to support those in need across Panama.',
+    autor: 'AidSync Team',
+    fecha: '2025-05-05',
+    destacado: false,
+    video: '',
+    comentarios: []
+  },
   {
     id: 1,
     titulo: 'Volunteering in Darién',
-    imagen: '../../public/assets/images/hero/connection.png',
+    imagen: '/public/assets/img/donation/BRIGADA-MEDICA.jpg',
     extracto: 'A life-changing experience helping rural communities in Darién... Read the full story!',
     contenido: 'Full story of the experience in Darién. Lots of learning, teamwork, and gratitude. I participated in building a school and in health workshops for children and adults. I recommend everyone to live such an experience.',
     autor: 'John Perez',
@@ -19,7 +122,7 @@ const BLOG_POSTS = [
   {
     id: 2,
     titulo: 'Health Day in Chiriquí',
-    imagen: '../../public/assets/images/hero/comedor.jpg',
+    imagen: '/public/assets/img/volunter/Pro-comedores.jpg',
     extracto: 'Doctors and volunteers provided care to over 200 people in rural areas of Chiriquí.',
     contenido: 'Chronicle of the health day: doctors, nurses, and AidSync volunteers provided consultations, medicines, and prevention talks to families in remote communities. Thanks to everyone who supported!',
     autor: 'Anna Torres',
@@ -31,7 +134,7 @@ const BLOG_POSTS = [
   {
     id: 3,
     titulo: 'Urban Reforestation',
-    imagen: '../../public/assets/images/hero/environment.png',
+    imagen: '/public/assets/img/volunter/Reforestacion.jpeg',
     extracto: 'Over 500 trees planted in the city thanks to volunteers and partner companies.',
     contenido: 'Campaign details: native species were planted in parks and main avenues. Students, companies, and families participated. Together for cleaner air!',
     autor: 'Charles Ruiz',
@@ -43,7 +146,7 @@ const BLOG_POSTS = [
   {
     id: 4,
     titulo: 'Stories of Hope',
-    imagen: '../../public/assets/images/hero/education.webp',
+    imagen: '/public/assets/img/volunter/banco.jpg',
     extracto: 'Testimonies of people benefited by AidSync and its social programs.',
     contenido: 'Real stories of social impact: interviews with families who received support in health, education, and housing. AidSync continues to transform lives with your help.',
     autor: 'Sophie Martinez',
@@ -55,7 +158,7 @@ const BLOG_POSTS = [
   {
     id: 5,
     titulo: 'Youth Entrepreneurship Workshop',
-    imagen: '../../public/assets/images/hero/connection.png',
+    imagen: '/public/assets/img/donation/BRIGADA-MEDICA.jpg',
     extracto: 'Young people from different provinces participated in a workshop to create their own businesses.',
     contenido: 'The workshop included mentoring, talks by entrepreneurs, and business simulations. Several projects received seed capital. The future belongs to the youth!',
     autor: 'Laura Gomez',
@@ -67,7 +170,7 @@ const BLOG_POSTS = [
   {
     id: 6,
     titulo: 'Alliance with Smiles Foundation',
-    imagen: '../../public/assets/images/hero/comedor.jpg',
+    imagen: '/public/assets/img/volunter/Pro-comedores.jpg',
     extracto: 'New partnership to provide free dental care to vulnerable communities.',
     contenido: 'AidSync and Smiles Foundation join forces to carry out oral health days in rural schools. Hygiene kits were delivered and more than 300 children were treated.',
     autor: 'AidSync Team',
