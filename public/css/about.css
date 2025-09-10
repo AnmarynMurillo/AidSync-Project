@@ -184,26 +184,30 @@ a {
     position: relative;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem 0;
+    padding: 2rem 1rem;
+    overflow: hidden;
+    width: 100%;
 }
 
 .team-carousel {
-  display: flex;
-  gap: 2rem;
-  overflow: hidden;
-  scroll-behavior: smooth;
-  padding: 2rem 0;
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    padding: 1rem 0;
+    width: 100%;
+    margin: 0 -1rem;
 }
 
 .team-member {
-    flex: 0 0 calc(100% - 2rem);
-    max-width: calc(100% - 2rem);
+    flex: 0 0 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
     background: #f9f9f9;
     border-radius: 1rem;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    margin: 0 1rem;
+    scroll-snap-align: start;
+    min-height: 100%;
 }
 
 .team-member:hover {
@@ -1232,6 +1236,18 @@ main {
 }
 
 /* Responsive Design */
+@media (min-width: 768px) {
+    .team-member {
+        flex: 0 0 50%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .team-member {
+        flex: 0 0 33.333%;
+    }
+}
+
 @media (min-width: 768px) {
   .mission-vision-grid {
     grid-template-columns: repeat(2, 1fr);

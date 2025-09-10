@@ -1,4 +1,4 @@
-// donate.js: Lógica para galería de donaciones y modal
+// donate.js: Logic for donation gallery and modal
 
 const CAUSES = [
     {
@@ -10,8 +10,8 @@ const CAUSES = [
       img: '../assets/img/donation/socialwelfare.png',
       desc: 'Improving the quality of life for vulnerable children and families in Panama.',
       descLarga: 'A non-profit organization established as an NGO since 1992, aiming to provide development opportunities to children and adolescents living in poverty, especially those who generate income and their families.',
-      ubicacion: 'Panama',
-      contacto: 'info@casaesperanza.org',
+      location: 'Panama',
+      contact: 'info@casaesperanza.org',
       web: 'https://casaesperanza.org'
     },
     {
@@ -23,8 +23,8 @@ const CAUSES = [
       img: '../assets/img/donation/BRIGADA-MEDICA.jpg',
       desc: 'Health campaigns and prevention in rural communities.',
       descLarga: 'Health for All brings medical brigades, prevention workshops, and basic care to remote rural communities.',
-      ubicacion: 'Chiriquí',
-      contacto: 'contacto@saludparatodos.org',
+      location: 'Chiriqui',
+      contact: 'contact@saludparatodos.org',
       web: 'https://saludparatodos.org'
     },
     {
@@ -36,8 +36,8 @@ const CAUSES = [
       img: '../assets/img/donation/education.webp',
       desc: 'Scholarships and tutoring for underprivileged youth.',
       descLarga: 'Educating Futures provides scholarships, mentoring, and academic support to talented low-income youth so they can continue their studies.',
-      ubicacion: 'West Panama',
-      contacto: 'info@educandofuturos.org',
+      location: 'West Panama',
+      contact: 'info@educandofuturos.org',
       web: 'https://educandofuturos.org'
     },
     {
@@ -49,8 +49,8 @@ const CAUSES = [
       img: '../assets/img/donation/environment.png',
       desc: 'Reforestation and environmental education in cities.',
       descLarga: 'Urban Green promotes tree planting, workshops, and environmental awareness campaigns in urban areas.',
-      ubicacion: 'Panama City',
-      contacto: 'info@verdeurbano.org',
+      location: 'Panama City',
+      contact: 'info@verdeurbano.org',
       web: 'https://verdeurbano.org'
     }
   ];
@@ -77,42 +77,151 @@ const CAUSES = [
             <button class="donate-btn">Donate now</button>
           </div>
         `;
-        card.querySelector('.donate-btn').addEventListener('click', e => {
+        
+        // Make the entire card clickable
+        card.addEventListener('click', (e) => {
+          // Prevent click from propagating to parent elements
           e.stopPropagation();
-          openModal(c);
+          // Check if click was not on a button or other interactive element
+          if (!e.target.closest('button, a, input, select, textarea')) {
+            openModal(c);
+          }
         });
+        
+        // Keep button event for compatibility
+        const donateBtn = card.querySelector('.donate-btn');
+        if (donateBtn) {
+          donateBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openModal(c);
+          });
+        }
+        
         gallery.appendChild(card);
       });
   }
   
   function openModal(cause) {
-    modalBody.innerHTML = `
-      <img src="${cause.img}" alt="${cause.nombre}" class="modal-img">
-      <h2>${cause.nombre}</h2>
-      <div class="modal-desc">${cause.descLarga}</div>
-      <div class="modal-details">
-        <div><strong>Location:</strong> ${cause.ubicacion || '-'}</div>
-        <div><strong>Contact:</strong> <a href="mailto:${cause.contacto}">${cause.contacto}</a></div>
-        <div><strong>Website:</strong> <a href="${cause.web}" target="_blank">${cause.web.replace('https://','')}</a></div>
+    // Set the image as a CSS variable for the modal
+    document.documentElement.style.setProperty('--donation-image', `url('${cause.img}')`);
+    
+    // Create modal HTML
+    const modalHTML = `
+      <div class="donation-modal show" id="donation-modal">
+        <div class="modal-container">
+          <button class="modal-close" aria-label="Cerrar">&times;</button>
+          
+          <!-- Image Section -->
+          <div class="image-section">
+            <div>
+              <div class="logo">${cause.nombre}</div>
+              <div class="tagline">${cause.desc}</div>
+            </div>
+          </div>
+          
+          <!-- Content Section -->
+          <div class="content-section">
+            <h1 class="modal-title">${cause.nombre}</h1>
+            <p class="modal-description">${cause.descLarga}</p>
+            
+            <div class="contact-info">
+              <div class="contact-item">
+                <span class="contact-icon">📍</span>
+                <span>${cause.location || 'No location specified'}</span>
+              </div>
+              <div class="contact-item">
+                <span class="contact-icon">✉️</span>
+                <a href="mailto:${cause.contact}" class="detail-link">${cause.contact}</a>
+              </div>
+              <div class="contact-item">
+                <span class="contact-icon">🌐</span>
+                <a href="${cause.web}" target="_blank" class="detail-link">${cause.web.replace('https://','')}</a>
+              </div>
+            </div>
+            
+            <div class="amount-section">
+              <h2 class="amount-title">Seleccione el monto de donación</h2>
+              <div class="amount-buttons">
+                <button class="amount-btn" data-amount="10">$10</button>
+                <button class="amount-btn" data-amount="25">$25</button>
+                <button class="amount-btn" data-amount="50">$50</button>
+                <button class="amount-btn" data-amount="100">$100</button>
+              </div>
+              
+              <div class="other-amount">
+                <div class="dollar-sign">$</div>
+                <input type="number" class="amount-input" placeholder="Otro monto" min="1">
+              </div>
+              
+              <button class="donate-btn">
+                <i class="fas fa-heart"></i> Donar ahora
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="modal-donate-options">
-        <button class="donate-amount-btn" data-amount="5">$5</button>
-        <button class="donate-amount-btn" data-amount="10">$10</button>
-        <button class="donate-amount-btn" data-amount="25">$25</button>
-        <input type="number" min="1" placeholder="Otro" class="donate-custom" aria-label="Otro monto">
-      </div>
-      <div class="modal-payment-methods">
-        <button class="payment-method-btn selected" data-method="tarjeta">Tarjeta</button>
-        <button class="payment-method-btn" data-method="transferencia">Transferencia</button>
-        <div class="payment-fields" id="payment-fields"></div>
-      </div>
-      <button class="donate-confirm">Confirmar donación</button>
-      <div class="donate-success" style="display:none;"></div>
     `;
+    
+    // Insert modal into the page
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Get modal elements
+    const modal = document.getElementById('donation-modal');
+    const closeBtn = modal.querySelector('.modal-close');
+    const amountBtns = modal.querySelectorAll('.amount-btn');
+    const amountInput = modal.querySelector('.amount-input');
+    const donateBtn = modal.querySelector('.donate-btn');
+    
+    // Close modal when clicking the close button or outside the modal
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+    
+    // Handle amount button selection
+    amountBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        amountBtns.forEach(b => b.classList.remove('selected'));
+        this.classList.add('selected');
+        amountInput.value = this.dataset.amount;
+      });
+    });
+    
+    // Clear button selection when typing a custom amount
+    amountInput.addEventListener('focus', function() {
+      amountBtns.forEach(btn => btn.classList.remove('selected'));
+    });
+    
+    // Handle donation button click
+    donateBtn.addEventListener('click', function() {
+      const selectedBtn = modal.querySelector('.amount-btn.selected');
+      const amount = amountInput.value || (selectedBtn ? selectedBtn.dataset.amount : '0');
+      
+      if (parseInt(amount) > 0) {
+        alert(`¡Gracias por tu donación de $${amount}!`);
+        closeModal();
+      } else {
+        alert('Por favor selecciona o ingresa un monto válido');
+      }
+    });
+    
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'hidden';
+    
+    // Focus the modal for accessibility
     modal.setAttribute('aria-hidden', 'false');
     modal.focus();
-    setupModalEvents();
-    setupPaymentMethods();
+  }
+  
+  function closeModal() {
+    const modal = document.getElementById('donation-modal');
+    if (modal) {
+      modal.style.opacity = '0';
+      setTimeout(() => {
+        modal.remove();
+        document.body.style.overflow = '';
+      }, 300);
+    }
   }
   
   function setupPaymentMethods() {
@@ -153,7 +262,7 @@ const CAUSES = [
   }
   
   function setupModalEvents() {
-    // Selección de monto
+    // Amount selection
     const amountBtns = modalBody.querySelectorAll('.donate-amount-btn');
     const customInput = modalBody.querySelector('.donate-custom');
     let selectedAmount = null;
@@ -169,7 +278,7 @@ const CAUSES = [
       amountBtns.forEach(b => b.classList.remove('selected'));
       selectedAmount = customInput.value;
     });
-    // Confirmar donación
+    // Confirm donation
     const confirmBtn = modalBody.querySelector('.donate-confirm');
     const successMsg = modalBody.querySelector('.donate-success');
     confirmBtn.addEventListener('click', () => {
@@ -178,29 +287,21 @@ const CAUSES = [
       const amount = selectedAmount || customInput.value;
       if (!amount || isNaN(amount) || Number(amount) <= 0) {
         successMsg.style.display = 'block';
-        successMsg.textContent = 'Por favor, ingresa un monto válido.';
+        successMsg.textContent = 'Please enter a valid amount.';
         successMsg.style.color = '#dc2626';
         return;
       }
       confirmBtn.disabled = true;
       successMsg.style.display = 'block';
       successMsg.style.color = '#16a34a';
-      successMsg.textContent = `¡Gracias por tu donación de $${amount} por ${method}!`;
+      successMsg.textContent = 'Thank you for your donation of $' + amount + '!';
       setTimeout(() => {
         closeModal();
       }, 2000);
     });
   }
   
-  function closeModal() {
-    modal.setAttribute('aria-hidden', 'true');
-    modalBody.innerHTML = '';
-  }
-  
-  closeBtn.addEventListener('click', closeModal);
-  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-  
+  // Initialize filter buttons
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => b.classList.remove('active'));
@@ -209,9 +310,10 @@ const CAUSES = [
     });
   });
   
-  // Inicialización
+  // Initialize the page
   document.addEventListener('DOMContentLoaded', () => {
     renderCards();
-    filterBtns[0].classList.add('active');
+    if (filterBtns.length > 0) {
+      filterBtns[0].classList.add('active');
+    }
   });
-  
