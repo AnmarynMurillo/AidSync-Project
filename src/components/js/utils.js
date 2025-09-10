@@ -11,10 +11,18 @@ function loadComponents() {
                     window.location.pathname.includes('profile');
   
   const headerFile = isAuthPage ? 'auth-header.html' : 'header.html';
-  const headerSelector = isAuthPage ? '#authHeader' : 'header.as-header';
+  const targetHeaderId = isAuthPage ? 'authHeader' : 'guestHeader';
+  const otherHeaderId = isAuthPage ? 'guestHeader' : 'authHeader';
   
-  // Only load if not already loaded
-  if (!document.querySelector(headerSelector)) {
+  // Remove the other header if it exists
+  const otherHeader = document.getElementById(otherHeaderId);
+  if (otherHeader) {
+    otherHeader.remove();
+    console.log(`Removed ${otherHeaderId} header`);
+  }
+  
+  // Only load if target header is not already loaded
+  if (!document.getElementById(targetHeaderId)) {
     fetch(`/src/components/html/${headerFile}`)
       .then(r => r.text())
       .then(html => {
@@ -29,6 +37,8 @@ function loadComponents() {
         }
       })
       .catch(error => console.error(`Error loading ${isAuthPage ? 'authenticated ' : ''}header:`, error));
+  } else {
+    console.log(`${targetHeaderId} header already loaded`);
   }
 
   // Load footer if container exists

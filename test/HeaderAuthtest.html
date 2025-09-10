@@ -8,16 +8,12 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Base CSS that should be included in all pages -->
-    <link rel="stylesheet" href="../public/css/base.css">
-    <link rel="stylesheet" href="../public/css/theme.css">
+    <!-- Main styles -->
+    <link rel="stylesheet" href="../public/css/styles.css">
     
     <!-- Header styles (both guest and auth) -->
-    <link rel="stylesheet" href="../public/css/header.css">
-    <link rel="stylesheet" href="../public/css/auth-header.css">
-    
-    <!-- Test page styles -->
-    <link rel="stylesheet" href="../public/css/test.css">
+    <link rel="stylesheet" href="../src/components/css/header.css">
+    <link rel="stylesheet" href="../src/components/css/auth-header.css">
     
     <style>
         /* Test page specific styles */
@@ -180,9 +176,9 @@
     </style>
 </head>
 <body>
-    <!-- Header container - will be replaced with either guest or auth header -->
-    <div id="headerContainer">
-        <!-- Header will be loaded here -->
+    <!-- Header container - the loader system expects this ID -->
+    <div id="header-container">
+        <!-- Header will be loaded here by the loader system -->
     </div>
     
     <!-- Test content -->
@@ -232,8 +228,11 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <!-- Use the loader system - this will load utils.js and handle everything -->
+    <script src="/src/components/js/loader.js" type="module"></script>
     
-    <!-- Load the auth header component -->
+    <!-- Test controls script -->
     <script>
         // Initialize Firebase
         const firebaseConfig = {
@@ -414,26 +413,29 @@
         
         // Initialize test page
         document.addEventListener('DOMContentLoaded', () => {
-            // Load guest header by default
-            loadHeader('guest');
-            
-            // Set up test buttons
+            // Set up test buttons to switch between header types
             document.getElementById('loadGuestHeader')?.addEventListener('click', () => {
-                updateState('Loading guest header...');
-                loadHeader('guest');
+                // Remove auth-page class to load guest header
+                document.body.classList.remove('auth-page');
+                // Reload components using utils
+                if (window.loadComponents) {
+                    window.loadComponents();
+                }
+                updateState('Switched to guest header');
             });
             
             document.getElementById('loadAuthHeader')?.addEventListener('click', () => {
-                updateState('Loading authenticated header...');
-                loadHeader('auth');
+                // Add auth-page class to load auth header
+                document.body.classList.add('auth-page');
+                // Reload components using utils
+                if (window.loadComponents) {
+                    window.loadComponents();
+                }
+                updateState('Switched to authenticated header');
             });
             
-            // Handle back/forward navigation
-            window.addEventListener('pageshow', (event) => {
-                if (event.persisted) {
-                    loadHeader('guest');
-                }
-            });
+            // Initialize status
+            updateState('Ready - Use buttons to switch headers');
         });
     </script>
 </body>
