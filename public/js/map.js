@@ -800,7 +800,7 @@ class FoundationMap {
             foundation: foundation
         });
         
-        // Initial popup content (will be updated with distance when user location is available)
+        // Initial popup content (will be updated with distance when user location is available) y lista de las fundaciones
         marker.bindPopup(`<b>${foundation.name}</b><br>${foundation.address}`);
         
         marker.on('click', () => this.showFoundationDetails(foundation));
