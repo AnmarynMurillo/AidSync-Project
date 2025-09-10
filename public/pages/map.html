@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/public/assets/logos/logito.ico" type="imagen/x-icon">
     <title>Find Foundations - AidSync</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css" />
@@ -20,22 +21,23 @@
                     <label class="category-filter" data-category="all">
                         <input type="checkbox" checked> All Categories
                     </label>
+                    <label class="category-filter" data-category="red">
+                        <input type="checkbox" checked> <i class="fas fa-heartbeat" style="color: #e74c3c;"></i> Health
+                    </label>
                     <label class="category-filter" data-category="blue">
-                        <input type="checkbox" checked> <i class="fas fa-hands-helping" style="color: #3498db;"></i> Community Support
+                        <input type="checkbox" checked> <i class="fas fa-graduation-cap" style="color: #3498db;"></i> Education
                     </label>
                     <label class="category-filter" data-category="green">
                         <input type="checkbox" checked> <i class="fas fa-leaf" style="color: #2ecc71;"></i> Environment
                     </label>
-                    <label class="category-filter" data-category="red">
-                        <input type="checkbox" checked> <i class="fas fa-heart" style="color: #e74c3c;"></i> Health
-                    </label>
                     <label class="category-filter" data-category="yellow">
-                        <input type="checkbox" checked> <i class="fas fa-graduation-cap" style="color: #f1c40f;"></i> Education
+                        <input type="checkbox" checked> <i class="fas fa-hands-helping" style="color: #f1c40f;"></i> Social Welfare
                     </label>
                 </div>
                 <div class="distance-filter">
-                    <h3>Distance</h3>
+                    <h3>Distance (km)</h3>
                     <select id="distance-range">
+                        <option value="1">1 km</option>
                         <option value="5">5 km</option>
                         <option value="10" selected>10 km</option>
                         <option value="25">25 km</option>
@@ -52,10 +54,10 @@
         <div id="map"></div>
         <div class="map-legend">
             <h4>Legend</h4>
-            <div class="legend-item"><span class="legend-color blue"></span> Community</div>
-            <div class="legend-item"><span class="legend-color green"></span> Environment</div>
             <div class="legend-item"><span class="legend-color red"></span> Health</div>
-            <div class="legend-item"><span class="legend-color yellow"></span> Education</div>
+            <div class="legend-item"><span class="legend-color blue"></span> Education</div>
+            <div class="legend-item"><span class="legend-color green"></span> Environment</div>
+            <div class="legend-item"><span class="legend-color yellow"></span> Social Welfare</div>
             <div class="legend-item"><span class="legend-color user-location"></span> Your Location</div>
         </div>
     </main>
