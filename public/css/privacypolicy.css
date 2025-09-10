@@ -1,0 +1,118 @@
+/* Privacy Policy page styles - uses globals from styles.css where available */
+:root {
+  --pp-max: 1200px;
+  --pp-toc-w: 270px;
+  --pp-gap: 20px;
+}
+
+/* Header & Footer integration (uses your BEM-like classes from styles.css) */
+.as-header { background: var(--color-support2); box-shadow: 0 2px 8px rgba(0,61,102,0.06); position: sticky; top: 0; z-index: 40; }
+.as-header__inner { max-width: var(--pp-max); margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.as-header__brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--color-primary); font-weight: 800; }
+.as-header__logo { width: 34px; height: 34px; object-fit: contain; }
+.as-header__title { font-size: 1.05rem; color: var(--color-primary); }
+.as-header__nav { display: flex; gap: 14px; align-items: center; }
+.as-header__link { color: var(--color-primary); text-decoration: none; font-weight: 600; opacity: .9; }
+.as-header__link:hover, .as-header__link.is-active { color: var(--color-accent); }
+.as-header__actions { display: flex; gap: 10px; align-items: center; }
+.as-header__btn { padding: .45rem .9rem; border-radius: 20px; font-weight: 700; text-decoration: none; }
+.as-header__btn--login { color: var(--color-primary); border: 2px solid var(--color-primary); }
+.as-header__btn--register { background: var(--color-accent); color: #fff; }
+
+/* Hero */
+.pp-hero { position: relative; background: linear-gradient(120deg, var(--color-support2) 60%, var(--color-support1) 100%); box-shadow: 0 8px 32px rgba(0,61,102,0.06); }
+.pp-hero .pp-container { position: relative; }
+.pp-hero-box {
+  position: relative;
+  background: rgba(0,61,102,0.10);
+  padding: 2rem 2.4rem;
+  border-radius: 0.75rem;
+  max-width: 560px;
+  box-shadow: 0 4px 24px rgba(0,61,102,0.10);
+}
+.pp-hero-label {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--color-accent);
+  letter-spacing: 0.12em;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  display: inline-block;
+}
+.pp-hero-actions { display: flex; gap: 0.8rem; margin-top: 0.9rem; }
+.foundation-btn.foundation-btn--outline { background: transparent; color: var(--color-primary); border: 2px solid var(--color-accent); }
+.foundation-btn.foundation-btn--outline:hover { background: var(--color-accent); color: #fff; }
+.pp-container { max-width: var(--pp-max); margin: 0 auto; padding: 36px 16px; }
+.pp-hero h1 { font-size: 2.2rem; font-weight: 900; color: var(--color-primary); margin: 0 0 8px 0; }
+.pp-updated { color: var(--color-primary); opacity: .8; margin: 0 0 16px 0; }
+.pp-summary { background: #fff; border: 1px solid var(--color-border); border-radius: 14px; padding: 14px 16px; }
+.pp-summary ul { margin: 0; padding-left: 18px; }
+.pp-summary a { color: var(--color-accent); font-weight: 700; }
+
+/* Layout */
+.pp-layout { max-width: var(--pp-max); margin: 24px auto; padding: 0 16px 36px; display: grid; grid-template-columns: 1fr; gap: var(--pp-gap); }
+.pp-toc { position: sticky; top: 72px; align-self: start; }
+.pp-toc nav { background: #fff; border: 1px solid var(--color-border); border-radius: 14px; padding: 14px; box-shadow: 0 2px 10px rgba(0,61,102,0.06); }
+.pp-toc ol { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.pp-toc a { color: var(--color-primary); text-decoration: none; }
+.pp-toc a:hover, .pp-toc a.is-active { color: var(--color-accent); text-decoration: underline; }
+
+/* Content */
+.pp-content { background: #fff; border: 1px solid var(--color-border); border-radius: 20px; box-shadow: 0 10px 24px rgba(0,61,102,0.10); padding: 20px 18px; }
+.pp-section { padding: 8px 0 10px; border-bottom: 1px solid var(--color-border); scroll-margin-top: 90px; }
+.pp-section:last-child { border-bottom: 0; }
+.pp-section h2 { color: var(--color-primary); font-weight: 900; margin: 0 0 8px; font-size: 1.4rem; }
+.pp-section p, .pp-section li { color: var(--color-primary); line-height: 1.65; }
+.pp-plain { margin: 0; padding-left: 18px; }
+
+/* Accordion */
+.pp-accordion { background: var(--color-support2); border: 1px solid var(--color-border); border-radius: 12px; padding: 10px 12px; margin: 8px 0; }
+.pp-accordion > summary { cursor: pointer; list-style: none; }
+.pp-accordion > summary::-webkit-details-marker { display: none; }
+.pp-accordion[open] { box-shadow: 0 6px 18px rgba(22,160,133,.12); }
+
+/* Footer */
+.as-footer { background: var(--color-support2); margin-top: 36px; border-top: 1px solid var(--color-border); }
+.as-footer__inner { max-width: var(--pp-max); margin: 0 auto; padding: 18px 16px; display: grid; grid-template-columns: 1fr; gap: 10px; }
+.as-footer__brand { display: flex; align-items: center; gap: 10px; }
+.as-footer__logo { width: 34px; height: 34px; object-fit: contain; }
+.as-footer__nav { display: flex; gap: 14px; }
+.as-footer__link { color: var(--color-primary); text-decoration: none; }
+.as-footer__link:hover { color: var(--color-accent); text-decoration: underline; }
+.as-footer__legal { color: var(--color-primary); opacity: .8; }
+
+/* Skip link */
+.skip-link { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+.skip-link:focus { left: 16px; top: 10px; width: auto; height: auto; padding: .5rem .8rem; background: var(--color-accent); color: #fff; border-radius: .5rem; z-index: 100; }
+
+/* Focus styles (fixed) */
+:where(a, button, [role="button"]):focus-visible,
+:where(input, select, textarea):focus-visible,
+:where(details > summary):focus-visible,
+:where([tabindex]):focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Responsive */
+@media (min-width: 980px) {
+  .pp-layout { grid-template-columns: var(--pp-toc-w) 1fr; }
+}
+@media (min-width: 680px) {
+  .pp-content { padding: 26px 26px; }
+  .pp-section h2 { font-size: 1.35rem; }
+}
+
+/* Small utilities */
+.pp-mail { font-weight: 700; }
+
+/* Dark theme tweaks */
+[data-theme="dark"] .pp-summary,
+[data-theme="dark"] .pp-toc nav,
+[data-theme="dark"] .pp-content { background: #0f2032; border-color: #22425e; }
+[data-theme="dark"] .pp-section h2,
+[data-theme="dark"] .pp-section p,
+[data-theme="dark"] .pp-section li,
+[data-theme="dark"] .pp-toc a, 
+[data-theme="dark"] .pp-updated { color: #e6f2ff !important; }
+[data-theme="dark"] .as-header, [data-theme="dark"] .as-footer { background: #0b1a29; }
