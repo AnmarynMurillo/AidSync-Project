@@ -13,24 +13,14 @@ Al enviar, los datos se envían al backend por JS. Si falla, intenta con Firebas
     <link rel="stylesheet" href="../css/register.css">
 </head>
 <body>
-    <a href="/index.html" id="logo-link">
-      <img src="/public/assets/logos/logito.ico" alt="AidSync Logo">
-    </a>
+    <button class="back-btn" aria-label="Back to home" onclick="window.location.href='/index.html'">←</button>
     <div class="register-main">
       <div class="register-section">
         <h1>Register</h1>
         <form id="registerForm" class="register-form">
-          <!-- Name -->
-          <input type="text" id="name" name="name" placeholder="Name" required>
-          <!-- Age -->
-          <input type="number" id="age" name="age" placeholder="Age" required>
-          <!-- Email (moved up) -->
-          <input type="email" id="email" name="email" placeholder="Email" required>
-          <!-- Username (NEW) -->
+          <!-- Username first -->
           <input type="text" id="username" name="username" placeholder="Username" required>
-          <!-- Password -->
-          <input type="password" id="password" name="password" placeholder="Password" required>
-          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
+
           <!-- Volunteering Area -->
           <label for="area">Volunteering Area</label>
           <select id="area" name="area" required>
@@ -40,7 +30,7 @@ Al enviar, los datos se envían al backend por JS. Si falla, intenta con Firebas
             <option value="Social Welfare">Social Welfare</option>
           </select>
 
-          <!-- Account Type -->
+          <!-- Account Type (Select type) -->
           <label for="accountType">Account Type</label>
           <select id="accountType" name="accountType" required>
             <option value="" disabled selected>Select type</option>
@@ -48,14 +38,28 @@ Al enviar, los datos se envían al backend por JS. Si falla, intenta con Firebas
             <option value="foundation">Foundation</option>
           </select>
 
-          <button type="submit" class="register-btn">Register</button>
+          <!-- Name and Age side by side -->
+          <input type="text" id="name" name="name" placeholder="Name" required>
+          <input type="number" id="age" name="age" placeholder="Age" required>
+
+          <!-- Email below -->
+          <input type="email" id="email" name="email" placeholder="Email" required>
+
+          <!-- Password fields stacked -->
+          <input type="password" id="password" name="password" placeholder="Password" required>
+          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
+
           <div id="registerMessage" role="status" aria-live="polite"></div>
         </form>
-        <div class="register-links">
-          Already have an account? <a href="login.html">Log in</a>
-        </div>
       </div>
     </div>
+    <div class="register-actions">
+      <button type="submit" class="register-btn" form="registerForm">Register</button>
+      <div class="register-links">
+        Already have an account? <a href="login.html">Log in</a>
+      </div>
+    </div>
+    <div class="register-separator" aria-hidden="true"></div>
     <div id="footer-container"></div>
     <script>
       window.BACKEND_URL = window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:5000' : 'http://localhost:5000';
