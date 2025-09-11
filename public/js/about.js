@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
         let wordIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
-        const typeSpeed = 100;
-        const deleteSpeed = 30;
+        const typeSpeed = 200;  // Increased from 100 to 200ms per character
+        const deleteSpeed = 50;  // Increased from 30 to 50ms per character
 
         /**
          * Type effect function
