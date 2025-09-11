@@ -145,12 +145,13 @@
     max-width: 90%;
     width: 600px;
     max-height: 90vh;
-    overflow-y:auto; /* Scroll vertical si el contenido es más alto que 200px */
     border: 1px solid #ccc;
     padding: 2rem;
     position: relative;
     box-shadow: 0 8px 32px #0003;
     animation: modalIn 0.2s;
+    overflow-y: scroll; /* permite scroll */
+  scrollbar-width: none; /* Firefox: oculta */
   }
   @keyframes modalIn {
     from { transform: translateY(40px) scale(0.98); opacity: 0; }
@@ -295,4 +296,74 @@
 .modal-close:hover img {
   transform: scale(1.1);
   filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
+.hero-carousel {
+  width: 100vw;
+  min-height: 580px;
+  background: linear-gradient(90deg, var(--color-support2) 60%, var(--color-support1) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-container {
+  position: relative;
+  width: 100vw;
+  height: 580px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.carousel-slide {
+  width: 100%;
+  height: 580px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 580px;
+  object-fit: cover;
+  filter: brightness(0.7);
+}
+
+.carousel-overlay-content {
+  position:absolute;
+  left: 30vw;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  background:  rgba(0, 0, 0, 0.5);
+  padding: 2rem;
+  color: white;
+}
+
+.carousel-title { font-size: 2.5rem; font-weight: bold; }
+.carousel-title-accent { color: white; }
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+}
+.carousel-arrow.left { left: 20px; }
+.carousel-arrow.right { right: 20px; }
+.carousel-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.7rem;
+  text-transform: uppercase;
 }
