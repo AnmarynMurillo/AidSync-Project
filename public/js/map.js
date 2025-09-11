@@ -837,19 +837,37 @@ class FoundationMap {
         const modal = document.getElementById('foundation-modal');
         const details = document.getElementById('foundation-details');
         
+        // Get category info for styling
+        const categoryInfo = {
+            red: { name: 'Health', icon: 'fa-heartbeat', color: '#e74c3c' },
+            blue: { name: 'Education', icon: 'fa-graduation-cap', color: '#3498db' },
+            green: { name: 'Environment', icon: 'fa-leaf', color: '#2ecc71' },
+            yellow: { name: 'Social Welfare', icon: 'fa-hands-helping', color: '#f1c40f' }
+        };
+        
+        const category = categoryInfo[foundation.category] || categoryInfo.blue;
+        
         details.innerHTML = `
-            <h2>${foundation.name}</h2>
-            <p><i class="fas fa-map-marker-alt"></i> ${foundation.address}</p>
-            <p><i class="fas fa-phone"></i> ${foundation.phone}</p>
-            <p><i class="fas fa-envelope"></i> ${foundation.email}</p>
-            <p><i class="fas fa-globe"></i> <a href="${foundation.website}" target="_blank">${foundation.website}</a></p>
-            <div class="foundation-description">
-                <h3>About</h3>
-                <p>${foundation.description}</p>
+            <div class="modal-header" style="--category-color: ${category.color}">
+                <i class="fas ${category.icon} modal-header-icon"></i>
+                <div class="modal-header-text">
+                    <h2>${foundation.name}</h2>
+                    <span class="modal-category">${category.name}</span>
+                </div>
             </div>
-            <div class="foundation-actions">
-                <button class="btn-primary"><i class="fas fa-heart"></i> Donate</button>
-                <button class="btn-secondary"><i class="fas fa-hands-helping"></i> Volunteer</button>
+            
+            <div class="modal-body">
+                <div class="contact-info-grid">
+                    <p><i class="fas fa-map-marker-alt"></i> ${foundation.address}</p>
+                    <p><i class="fas fa-phone"></i> ${foundation.phone}</p>
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:${foundation.email}">${foundation.email}</a></p>
+                    <p><i class="fas fa-globe"></i> <a href="${foundation.website}" target="_blank">Visit Website</a></p>
+                </div>
+                
+                <div class="foundation-description">
+                    <h3><i class="fas fa-info-circle"></i>About this Foundation</h3>
+                    <p>${foundation.description}</p>
+                </div>
             </div>
         `;
         

@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="/public/css/styles.css">
     <link rel="stylesheet" href="/public/css/map.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <!-- Header will be injected here by loader.js -->
     <main class="map-container">
         <div class="map-controls">
             <div class="filters">
@@ -49,6 +49,28 @@
                 <button id="locate-me" class="btn-locate">
                     <i class="fas fa-location-arrow"></i> Use My Location
                 </button>
+
+                <div class="navigation-section">
+                    <h3>Discover More</h3>
+                    <div class="nav-cards">
+                        <a href="/public/pages/blog.html" class="nav-card">
+                            <i class="fas fa-newspaper"></i>
+                            <span>Our Blog</span>
+                        </a>
+                        <a href="/public/pages/volunteer.html" class="nav-card">
+                            <i class="fas fa-hands-helping"></i>
+                            <span>Volunteer</span>
+                        </a>
+                        <a href="/public/pages/donate.html" class="nav-card">
+                            <i class="fas fa-heart"></i>
+                            <span>Donate</span>
+                        </a>
+                        <a href="/public/pages/contact.html" class="nav-card">
+                            <i class="fas fa-envelope"></i>
+                            <span>Contact</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="map"></div>
@@ -75,5 +97,6 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
     <script src="/public/js/map.js" type="module"></script>
+
 </body>
 </html>
