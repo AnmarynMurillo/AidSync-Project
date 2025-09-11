@@ -1,3 +1,96 @@
+// Hero Carousel Data
+const carouselSlides = [
+  {
+    img: '../assets/img/volunter/volunteer/volunter2.webp',
+    text: 'Environment'
+  },
+  {
+    img: '../assets/img/volunter/volunteer/volunter3.jpg',
+    text: 'Education'
+  },
+  {
+    img: '../assets/img/volunter/volunteer/volunter4.jpg',
+    text: 'Health'
+  },
+  {
+    img: '../assets/img/volunter/volunteer/volunter7.jpg',
+    text: 'Social-Welfare'
+  },
+  {
+    img: '../assets/img/volunter/volunteer/volunter6.jpg',
+    text: 'Environment'
+  },
+  {
+    img: '../assets/img/volunter/volunteer/volunter5.webp',
+    text: 'Health'
+  },
+  {
+    img: '../assets/img/volunter/volunteer/volunter8.webp',
+    text: 'Education'
+  },
+  {
+    img: '../assets/img/volunter/volunteer/volunter9.jpeg',
+    text: 'Social-Welfare'
+  },
+  {
+    img: '../assets/img/volunter/volunteer/volunter10.jpg',
+    text: 'Environment'
+  },
+  {
+    img: '../assets/img/volunter/volunteer/volunter1.jpeg',
+    text: 'Education'
+  }
+];
+let currentSlide = 0;
+let carouselTimer;
+
+function showCarouselSlide(idx) {
+  const slideDiv = document.querySelector('.carousel-slide');
+  slideDiv.innerHTML = '';
+  const slide = carouselSlides[idx];
+
+  const img = document.createElement('img');
+  img.src = slide.img;
+  img.alt = slide.text;
+  img.className = 'carousel-image';
+
+  slideDiv.appendChild(img);
+
+  // Cambia el texto superpuesto
+  const overlayText = document.querySelector('.carousel-overlay-content .carousel-title');
+  if (overlayText) overlayText.textContent = slide.text;
+}
+
+function nextCarouselSlide() {
+  currentSlide = (currentSlide + 1) % carouselSlides.length;
+  showCarouselSlide(currentSlide);
+}
+
+function prevCarouselSlide() {
+  currentSlide = (currentSlide - 1 + carouselSlides.length) % carouselSlides.length;
+  showCarouselSlide(currentSlide);
+}
+
+function startCarouselAuto() {
+  clearInterval(carouselTimer);
+  carouselTimer = setInterval(nextCarouselSlide, 4000);
+}
+
+function stopCarouselAuto() {
+  clearInterval(carouselTimer);
+}
+
+// Inicializar al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+  showCarouselSlide(currentSlide);
+  startCarouselAuto();
+
+  document.querySelector('.carousel-arrow.left').onclick = () => { prevCarouselSlide(); startCarouselAuto(); };
+  document.querySelector('.carousel-arrow.right').onclick = () => { nextCarouselSlide(); startCarouselAuto(); };
+  document.querySelector('.carousel-slide').onmouseenter = stopCarouselAuto;
+  document.querySelector('.carousel-slide').onmouseleave = startCarouselAuto;
+});
+
 // volunteer.js: Lógica para galería de voluntariados y modal
 
 // Datos de ejemplo (puedes reemplazar por fetch a backend/Firebase)
@@ -251,4 +344,3 @@ const VOLUNTEERS = [
     };
     return translations[req] || req;
   }
- 
