@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AidSync - About Us</title>
-    <link rel="stylesheet" href="about.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Incluir estilos del header y footer -->
-    <link rel="stylesheet" href="../src/components/css/header.css">
-    <link rel="stylesheet" href="../src/components/css/footer.css">
+    <link rel="stylesheet" href="/public/css/about.css">
+    <link rel="stylesheet" href="/src/components/css/header.css">
+    <link rel="stylesheet" href="/src/components/css/footer.css">
 </head>
 <body>
-    <!-- Incluir header -->
-    <div id="header-placeholder"></div>
+    <!-- Header Container -->
+    <div id="header-container" class="as-header"></div>
 
     <main>
         <!-- Hero Section with Dynamic Text -->
@@ -22,7 +21,6 @@
                     <h1 class="hero-title">A team of</h1>
                     <div id="dynamic-text" class="dynamic-word">thinkers</div>
                 </div>
-                <p class="hero-subtitle">Creating innovative solutions for a better tomorrow</p>
             </div>
         </section>
         
@@ -33,29 +31,29 @@
                     <div class="slide" style="background-image: url('../../public/assets/aidsync_moments/momento 1.jpeg');">
                         <div class="banner-overlay"></div>
                         <div class="banner-content">
-                            <h2>Nuestro Equipo</h2>
-                            <p>Conoce a las mentes detrás de AidSync</p>
+                            <h2>Our Team</h2>
+                            <p>Meet the minds behind AidSync</p>
                         </div>
                     </div>
                     <div class="slide" style="background-image: url('../../public/assets/aidsync_moments/momento 2.jpeg');">
                         <div class="banner-overlay"></div>
                         <div class="banner-content">
-                            <h2>Nuestra Misión</h2>
-                            <p>Conectando voluntarios con propósito</p>
+                            <h2>Our Mission</h2>
+                            <p>Connecting volunteers with purpose</p>
                         </div>
                     </div>
                     <div class="slide" style="background-image: url('../../public/assets/aidsync_moments/momento 3.jpeg');">
                         <div class="banner-overlay"></div>
                         <div class="banner-content">
-                            <h2>Nuestros Valores</h2>
-                            <p>Compromiso, innovación y comunidad</p>
+                            <h2>Our Values</h2>
+                            <p>Commitment, innovation and community</p>
                         </div>
                     </div>
                     <div class="slide" style="background-image: url('../../public/assets/aidsync_moments/momento 4.jpg');">
                         <div class="banner-overlay"></div>
                         <div class="banner-content">
-                            <h2>Únete a Nosotros</h2>
-                            <p>Sé parte del cambio que quieres ver</p>
+                            <h2>Join Us</h2>
+                            <p>Be part of the change you want to see</p>
                         </div>
                     </div>
                 </div>
@@ -68,7 +66,7 @@
                 <div class="carousel-dots">
                     <!-- Dots will be added by JavaScript -->
                 </div>
-            </div>
+            </div>       
         </section>
 
         <!-- Team Section -->
@@ -80,15 +78,16 @@
                 </div>
                 
                 <div class="team-carousel-container">
-                    <button class="carousel-control prev" aria-label="Previous slide">
+                    
+                   <button class="carousel-control prev" aria-label="Previous slide">
                         <i class="fas fa-chevron-left"></i>
                     </button>
                     
                     <div class="team-carousel" aria-live="polite">
                         <!-- Team members will be dynamically inserted here by JavaScript -->
-                    </div>
+                     </div>
                     
-                    <button class="carousel-control next" aria-label="Next slide">
+                   <button class="carousel-control next" aria-label="Next slide">
                         <i class="fas fa-chevron-right"></i>
                     </button>
                     
@@ -199,37 +198,39 @@
         </section>
     </main>
 
-    <!-- Incluir footer -->
-    <div id="footer-placeholder"></div>
+    <!-- Footer Container -->
+    <div id="footer-container" class="as-footer"></div>
 
-    <!-- Incluir scripts necesarios -->
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/src/components/js/loader.js"></script>
+    <script src="/public/js/about.js"></script>
+    
+    <!-- Load header and footer -->
     <script>
-        // Cargar header y footer
-        $(document).ready(function(){
-            // Cargar header
-            $("#header-placeholder").load("../src/components/html/header.html", function() {
-                // Asegurar que los enlaces del header sean relativos
-                $(".as-header__nav-link").each(function() {
-                    let href = $(this).attr('href');
-                    if (href && !href.startsWith('http') && !href.startsWith('/')) {
-                        $(this).attr('href', '../../public/pages/' + href.split('/').pop());
-                    }
-                });
-            });
+        // Load header
+        fetch('/src/components/html/header.html')
+            .then(r => r.text())
+            .then(html => {
+                const headerContainer = document.getElementById('header-container');
+                if (headerContainer) {
+                    headerContainer.innerHTML = html;
+                    console.log('Header loaded successfully');
+                }
+            })
+            .catch(error => console.error('Error loading header:', error));
             
-            // Cargar footer
-            $("#footer-placeholder").load("../src/components/html/footer.html", function() {
-                // Asegurar que los enlaces del footer sean relativos
-                $("footer a").each(function() {
-                    let href = $(this).attr('href');
-                    if (href && !href.startsWith('http') && !href.startsWith('#')) {
-                        $(this).attr('href', '../../public/pages/' + href.split('/').pop());
-                    }
-                });
-            });
-        });
+        // Load footer
+        fetch('/src/components/html/footer.html')
+            .then(r => r.text())
+            .then(html => {
+                const footerContainer = document.getElementById('footer-container');
+                if (footerContainer) {
+                    footerContainer.innerHTML = html;
+                    console.log('Footer loaded successfully');
+                }
+            })
+            .catch(error => console.error('Error loading footer:', error));
     </script>
-    <script src="about.js"></script>
 </body>
 </html>

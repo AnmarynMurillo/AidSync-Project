@@ -76,13 +76,13 @@ def get_config():
     """Endpoint para servir configuraciones al frontend de forma segura"""
     return jsonify({
         "firebase": {
-            "apiKey": os.environ.get('FIREBASE_API_KEY'),
-            "authDomain": os.environ.get('FIREBASE_AUTH_DOMAIN'),
-            "projectId": os.environ.get('FIREBASE_PROJECT_ID'),
-            "storageBucket": os.environ.get('FIREBASE_STORAGE_BUCKET'),
-            "messagingSenderId": os.environ.get('FIREBASE_MESSAGING_SENDER_ID'),
-            "appId": os.environ.get('FIREBASE_APP_ID'),
-            "databaseURL": os.environ.get('FIREBASE_DATABASE_URL')
+            "apiKey": os.environ.get('AIzaSyAJ395j9EL5Nv81Q70Csc4zRKNp5e1Xrjo'),
+            "authDomain": os.environ.get('expo-project-1040e.firebaseapp.com'),
+            "projectId": os.environ.get('expo-project-1040e'),
+            "storageBucket": os.environ.get('expo-project-1040e.appspot.com'),
+            "messagingSenderId": os.environ.get('123456789012'),
+            "appId": os.environ.get('1:123456789012:web:abcdef123456'),
+            "databaseURL": os.environ.get('https://expo-project-1040e-default-rtdb.firebaseio.com')
         },
         "backend": {
             "url": os.environ.get('BACKEND_URL', 'http://localhost:5000')

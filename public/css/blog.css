@@ -91,7 +91,7 @@ body[data-theme="dark"] {
 .read-more {
   align-self: flex-start;
   background: var(--primary);
-  color: #16a085;
+  color: white;
   border: none;
   border-radius: 0.7rem;
   padding: 0.4rem 1.1rem;
@@ -167,15 +167,18 @@ body[data-theme="dark"] {
   justify-content: center;
   margin: 2rem 0 0 0;
 }
-.blog-pagination button {
-  background: var(--card);
-  color: var(--primary);
-  border: 1px solid #d1d5db;
-  border-radius: 0.6rem;
-  padding: 0.4rem 1rem;
-  font-size: 1rem;
+.blog-pagination button, .btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 0.7rem;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  font-size: 1rem;
+  transition: all 0.2s;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 .blog-pagination button.active, .blog-pagination button:hover {
   background: var(--primary);
