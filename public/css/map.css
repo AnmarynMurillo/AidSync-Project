@@ -252,59 +252,11 @@
     }
 }
 
-/* User location marker with pulse effect */
+/* User location marker */
 .user-location-marker {
-    color: #ff0000;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    color: #9b59b6;
     font-size: 24px;
-    animation: pulse 2s infinite;
-    transform-origin: center;
-    z-index: 1000 !important;
-}
-
-/* Pulse animation */
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    50% {
-        transform: scale(1.2);
-        opacity: 0.8;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-/* Range circle */
-.leaflet-overlay-pane .leaflet-interactive {
-    stroke-width: 2px;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-/* Popup styles */
-.leaflet-popup-content-wrapper {
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-.leaflet-popup-content {
-    margin: 12px;
-    line-height: 1.4;
-}
-
-.leaflet-popup-content h4 {
-    margin: 0 0 8px 0;
-    color: #2c3e50;
-    font-size: 16px;
-}
-
-.leaflet-popup-content p {
-    margin: 0 0 12px 0;
-    color: #34495e;
+    text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white;
 }
 
 /* Responsive styles */

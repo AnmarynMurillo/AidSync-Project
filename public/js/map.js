@@ -466,8 +466,9 @@ class FoundationMap {
         this.userMarker = null;
         this.userLocation = null;
         this.markerCluster = null;
+        this.rangeCircle = null; // For showing search radius
         this.selectedCategories = new Set(['all']);
-        this.distanceFilter = 0; // 0 means show all foundations by default
+        this.distanceFilter = 5; // Default to 5km radius
         this.foundations = []; // Store all foundations
         
         this.init();
@@ -540,7 +541,20 @@ class FoundationMap {
         
         // Distance filter
         document.getElementById('distance-range').addEventListener('change', (e) => {
-            this.updateDistanceFilter(e.target.value);
+            this.distanceFilter = parseInt(e.target.value);
+            this.updateVisibleMarkers();
+            
+            // If we have user location, show updated count
+            if (this.userLocation) {
+                const nearbyCount = this.foundations.filter(f => this.isFoundationInRange(f)).length;
+                const totalCount = this.foundations.length;
+                const distanceText = this.distanceFilter === 0 ? 'any distance' : `${this.distanceFilter}km`;
+                
+                L.popup()
+                    .setLatLng(this.userLocation)
+                    .setContent(`Showing ${nearbyCount} of ${totalCount} foundations within ${distanceText}`)
+                    .openOn(this.map);
+            }
         });
         
         // Locate me button
@@ -620,33 +634,6 @@ class FoundationMap {
         return R * c; // Distance in km
     }
     
-    calculateZoomForDistance(distanceKm) {
-        // These values can be adjusted based on your needs
-        const zoomLevels = {
-            1: 15,   // 1km
-            5: 13,   // 5km
-            10: 12,  // 10km
-            25: 11,  // 25km
-            50: 10,  // 50km
-            100: 9,  // 100km
-            0: 8     // Show all (0 means show all)
-        };
-        
-        // Find the closest distance in our zoom levels
-        const distances = Object.keys(zoomLevels).map(Number).sort((a, b) => a - b);
-        let zoomDistance = distances[0];
-        
-        for (const dist of distances) {
-            if (distanceKm >= dist) {
-                zoomDistance = dist;
-            } else {
-                break;
-            }
-        }
-        
-        return zoomLevels[zoomDistance];
-    }
-    
     deg2rad(deg) {
         return deg * (Math.PI/180);
     }
@@ -682,6 +669,9 @@ class FoundationMap {
             );
         } else {
             alert('Geolocation is not supported by your browser');
+            // Use default location if geolocation is not supported
+            this.userLocation = CONFIG.defaultLocation;
+            this.map.setView(this.userLocation, CONFIG.defaultZoom);
         }
     }
     
@@ -689,14 +679,29 @@ class FoundationMap {
         const { latitude, longitude } = position.coords;
         this.userLocation = [latitude, longitude];
         
-        // Update or create user location marker with pulse effect
+        // Remove existing range circle if it exists
+        if (this.rangeCircle) {
+            this.map.removeLayer(this.rangeCircle);
+        }
+        
+        // Add range circle to show search radius
+        if (this.distanceFilter > 0) {
+            this.rangeCircle = L.circle(this.userLocation, {
+                color: '#3498db',
+                fillColor: '#3498db',
+                fillOpacity: 0.2,
+                radius: this.distanceFilter * 1000 // Convert km to meters
+            }).addTo(this.map);
+        }
+        
+        // Update or create user location marker
         if (this.userMarker) {
             this.userMarker.setLatLng(this.userLocation);
         } else {
             this.userMarker = L.marker(this.userLocation, {
                 icon: L.divIcon({
                     className: 'user-location-marker',
-                    html: '<div class="pulse"><i class="fas fa-crosshairs"></i></div>',
+                    html: '<i class="fas fa-location-dot"></i>',
                     iconSize: [40, 40],
                     iconAnchor: [20, 40],
                     popupAnchor: [0, -40]
@@ -704,59 +709,38 @@ class FoundationMap {
                 zIndexOffset: 1000
             }).addTo(this.map);
             
-            // Add circle to show the selected distance range
-            if (!this.rangeCircle) {
-                this.rangeCircle = L.circle(this.userLocation, {
-                    color: '#3498db',
-                    fillColor: '#3498db',
-                    fillOpacity: 0.1,
-                    radius: this.distanceFilter * 1000 // Convert km to meters
-                }).addTo(this.map);
-            } else {
-                // Update existing circle
-                this.rangeCircle.setLatLng(this.userLocation);
-                this.rangeCircle.setRadius(this.distanceFilter * 1000);
-            }
+            // Add popup to user location
+            this.userMarker.bindPopup("<b>Your Location</b>").openPopup();
         }
         
-        // Zoom to show the selected distance range with some padding
-        const zoomLevel = this.calculateZoomForDistance(this.distanceFilter);
-        this.map.setView(this.userLocation, zoomLevel);
+        // Calculate bounds to include all visible markers and user location
+        const bounds = L.latLngBounds([this.userLocation]);
+        
+        // Add all visible markers to bounds
+        Object.values(this.markers).forEach(marker => {
+            if (this.markerCluster.hasLayer(marker)) {
+                bounds.extend(marker.getLatLng());
+            }
+        });
         
         // Update visible markers based on distance filter
         this.updateVisibleMarkers();
         
-        // Show nearby foundations count in a more visible way
+        // Show nearby foundations count
         const nearbyCount = this.foundations.filter(f => this.isFoundationInRange(f)).length;
         const totalCount = this.foundations.length;
         
-        // Create a custom popup with better styling
-        const popup = L.popup({
-            className: 'user-location-popup',
-            closeButton: false,
-            autoClose: false,
-            closeOnClick: false
-        })
-        .setLatLng([this.userLocation[0] + 0.01, this.userLocation[1]]) // Position above the marker
-        .setContent(`
-            <div class="location-popup">
-                <h4>Your Location</h4>
-                <p>Found <strong>${nearbyCount}</strong> of ${totalCount} foundations within <strong>${this.distanceFilter}km</strong></p>
-                <div class="location-actions">
-                    <button class="btn-locate" onclick="map.locateUser()">
-                        <i class="fas fa-sync-alt"></i> Update
-                    </button>
-                </div>
-            </div>
-        `)
-        .openOn(this.map);
+        // Fit map to show user location and visible markers with padding
+        this.map.fitBounds(bounds, { 
+            padding: [50, 50],
+            maxZoom: 15
+        });
         
-        // Auto-close the popup after 5 seconds
-        setTimeout(() => {
-            if (this.map && popup) {
-                this.map.closePopup(popup);
-            }
-        }, 5000);
+        // Show popup with nearby count
+        L.popup({ closeButton: false, autoClose: 5000 })
+            .setLatLng(this.userLocation)
+            .setContent(`<b>Found ${nearbyCount} of ${totalCount} foundations within ${this.distanceFilter}km</b>`)
+            .openOn(this.map);
     }
     
     handleLocationError(error) {
@@ -800,7 +784,7 @@ class FoundationMap {
             foundation: foundation
         });
         
-        // Initial popup content (will be updated with distance when user location is available) y lista de las fundaciones
+        // Initial popup content (will be updated with distance when user location is available)
         marker.bindPopup(`<b>${foundation.name}</b><br>${foundation.address}`);
         
         marker.on('click', () => this.showFoundationDetails(foundation));
