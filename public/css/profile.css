@@ -1,6 +1,5 @@
 /*
-Estilos básicos para la página de perfil de usuario.
-Puedes personalizar colores y fuentes según tu diseño.
+Estilos para la página de perfil de usuario
 */
 :root {
     --primary-color: #2563eb;
@@ -16,400 +15,190 @@ Puedes personalizar colores y fuentes según tu diseño.
     --border-radius: 12px;
     --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --transition: all 0.3s ease;
+    --border-color: #e2e8f0;
 }
 
 /* Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background-color: var(--background);
     color: var(--text-primary);
-    line-height: 1.6;
-    padding: 20px;
+    line-height: 1.5;
+    margin: 0;
+    padding: 1rem;
 }
 
 /* Profile Container */
-.profile-container {
-    max-width: 1200px;
-    margin: 0 auto;
+#profileContainer {
+    max-width: 800px;
+    margin: 2rem auto;
     background: var(--card-bg);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    overflow: hidden;
-    animation: fadeIn 0.5s ease-out;
-}
-
-/* Profile Header */
-.profile-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: white;
+    padding: 2.5rem;
     text-align: center;
-    position: relative;
 }
 
-.profile-pic-container {
-    position: relative;
-    margin-bottom: 1.5rem;
-}
-
-.profile-pic {
+/* Profile Picture */
+#profilePic {
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    border: 4px solid white;
     object-fit: cover;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    border: 4px solid var(--accent-color);
+    margin-bottom: 1.5rem;
     transition: var(--transition);
 }
 
-.profile-pic:hover {
+#profilePic:hover {
     transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
-.edit-photo-btn {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background: var(--accent-color);
-    color: white;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+/* Photo Upload Form */
+#photoForm {
+    margin: 1.5rem 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border: none;
-    transition: var(--transition);
+    gap: 1rem;
 }
 
-.edit-photo-btn:hover {
-    background: var(--secondary-color);
-    transform: rotate(15deg);
-}
-
-.profile-info h1 {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.tag {
-    display: inline-block;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 0.3rem 1rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    margin-bottom: 1.5rem;
-}
-
-/* Stats */
-.stats {
-    display: flex;
-    justify-content: space-around;
+#photoInput {
     width: 100%;
-    max-width: 400px;
-    margin: 1.5rem auto 0;
-}
-
-.stat-item {
-    text-align: center;
-    padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.1);
+    max-width: 300px;
+    padding: 0.75rem;
+    border: 2px dashed var(--border-color);
     border-radius: var(--border-radius);
-    min-width: 90px;
+    background: var(--background);
+    cursor: pointer;
     transition: var(--transition);
 }
 
-.stat-item:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.2);
+#photoInput:hover {
+    border-color: var(--accent-color);
+    background: rgba(59, 130, 246, 0.05);
 }
 
-.stat-number {
-    display: block;
-    font-size: 1.5rem;
-    font-weight: 700;
+#photoForm button {
+    background-color: var(--primary-color);
     color: white;
-}
-
-.stat-label {
-    font-size: 0.8rem;
-    opacity: 0.9;
-}
-
-/* Navigation */
-.profile-nav {
-    display: flex;
-    background: white;
-    border-bottom: 1px solid #e2e8f0;
-    overflow-x: auto;
-}
-
-.nav-item {
-    flex: 1;
-    padding: 1rem;
     border: none;
-    background: none;
-    font-size: 1rem;
-    color: var(--text-secondary);
-    cursor: pointer;
-    position: relative;
-    transition: var(--transition);
-    white-space: nowrap;
-    min-width: 150px;
-}
-
-.nav-item:hover {
-    color: var(--primary-color);
-}
-
-.nav-item.active {
-    color: var(--primary-color);
-    font-weight: 600;
-}
-
-.nav-item.active::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: var(--primary-color);
-    animation: slideIn 0.3s ease-out;
-}
-
-/* Tab Content */
-.tab-content {
-    padding: 2rem;
-}
-
-.tab-pane {
-    display: none;
-    animation: fadeIn 0.5s ease-out;
-}
-
-.tab-pane.active {
-    display: block;
-}
-
-.tab-content h2 {
-    color: var(--text-primary);
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.tab-content h2 i {
-    color: var(--primary-color);
-}
-
-/* Projects Grid */
-.projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1rem;
-}
-
-.project-card {
-    background: white;
+    padding: 0.75rem 1.5rem;
     border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: var(--box-shadow);
+    font-weight: 500;
+    cursor: pointer;
     transition: var(--transition);
-    border: 1px solid #e2e8f0;
-}
-
-.project-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-.project-image {
     width: 100%;
-    height: 160px;
-    object-fit: cover;
+    max-width: 200px;
 }
 
-.project-content {
-    padding: 1.25rem;
+#photoForm button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-1px);
 }
 
-.project-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--text-primary);
+/* Profile Data */
+#profileData {
+    margin-top: 2rem;
+    text-align: left;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.project-description {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
+#profileData p {
+    background: var(--background);
+    padding: 1rem 1.25rem;
+    border-radius: var(--border-radius);
     margin-bottom: 1rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.project-meta {
+    border: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-}
-
-.project-category {
-    background: #e0f2fe;
-    color: #0369a1;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 500;
-}
-
-/* Donations Grid */
-.donations-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
-}
-
-.donation-option {
-    background: white;
-    border-radius: var(--border-radius);
-    padding: 1.5rem;
-    text-align: center;
-    box-shadow: var(--box-shadow);
     transition: var(--transition);
-    border: 1px solid #e2e8f0;
 }
 
-.donation-option:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-}
-
-.donation-icon {
-    font-size: 2.5rem;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-}
-
-.donation-amount {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 0.5rem 0;
-}
-
-.donation-description {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-bottom: 1.5rem;
-}
-
-.btn {
-    display: inline-block;
-    background: var(--primary-color);
-    color: white;
-    padding: 0.6rem 1.5rem;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: var(--transition);
-    border: none;
-    cursor: pointer;
-}
-
-.btn:hover {
-    background: var(--secondary-color);
+#profileData p:hover {
     transform: translateY(-2px);
+    box-shadow: var(--box-shadow);
 }
 
-.btn-outline {
-    background: transparent;
-    border: 2px solid var(--primary-color);
+#profileData strong {
     color: var(--primary-color);
+    font-weight: 600;
 }
 
-.btn-outline:hover {
-    background: var(--primary-color);
-    color: white;
+/* Messages */
+#profileMessage {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: var(--transition);
 }
 
-/* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.success-message {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+    border-left: 4px solid var(--success);
 }
 
-@keyframes slideIn {
-    from { transform: scaleX(0); }
-    to { transform: scaleX(1); }
+.error-message {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border-left: 4px solid var(--danger);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .profile-header {
-        flex-direction: column;
-        text-align: center;
+    #profileContainer {
+        padding: 1.5rem;
+        margin: 1rem;
     }
     
-    .stats {
-        flex-direction: column;
-        gap: 1rem;
-        max-width: 200px;
+    #profilePic {
+        width: 120px;
+        height: 120px;
     }
     
-    .stat-item {
+    #profileData p {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+    
+    #photoForm {
         width: 100%;
     }
     
-    .profile-nav {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    .nav-item {
-        min-width: 120px;
-        font-size: 0.9rem;
-        padding: 0.75rem 0.5rem;
-    }
-    
-    .projects-grid,
-    .donations-grid {
-        grid-template-columns: 1fr;
+    #photoForm button {
+        max-width: 100%;
     }
 }
 
-/* Loading Animation */
-@keyframes shimmer {
-    0% { background-position: -1000px 0; }
-    100% { background-position: 1000px 0; }
-}
-
+/* Loading State */
 .loading {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 1000px 100%;
-    animation: shimmer 2s infinite linear;
-    border-radius: 4px;
-    color: transparent;
     position: relative;
-    overflow: hidden;
+    color: transparent;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin: -8px 0 0 -8px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    border-right-color: transparent;
+    animation: rotate 0.8s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }

@@ -1,6 +1,6 @@
 :root {
   /* Paleta de colores pastel moderna */
-  --color-primary: #003d66;
+  --color-primary: #2563eb;
   --color-accent: #16a085;
   --color-support1: #82dfcd;
   --color-support2: #eaf4f5;
@@ -39,6 +39,7 @@ body {
   color: var(--color-text);
   background-color: var(--color-bg);
   line-height: 1.6;
+  transition: background-color 0.3s ease;
 }
 
 .donate-main {
@@ -47,6 +48,7 @@ body {
   padding: 3rem 1.5rem;
   font-family: 'Poppins', 'Inter', 'Nunito', sans-serif;
 }
+
 .donate-main h1, .donate-main h2 {
   width: 100%;
   text-align: center;
@@ -59,6 +61,7 @@ body {
   line-height: 1.2;
   font-family: 'Poppins', sans-serif;
 }
+
 @media (max-width: 600px) {
   .donate-main h1, .donate-main h2 {
     font-size: 1.3rem;
@@ -68,6 +71,7 @@ body {
     padding: 1.5rem 0.5rem 1rem 0.5rem;
   }
 }
+
 .donate-filters {
   display: flex;
   gap: 1rem;
@@ -91,6 +95,7 @@ body {
   box-shadow: var(--shadow-sm);
   text-transform: capitalize;
   letter-spacing: 0.3px;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Estilos específicos por categoría */
@@ -121,7 +126,6 @@ body {
   box-shadow: var(--shadow-md);
 }
 
-
 .donate-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -146,6 +150,7 @@ body {
   margin: 0 auto; /* Center cards in their grid cells */
   width: 100%; /* Ensure full width of grid cell */
   max-width: 350px; /* Maximum width for better appearance */
+  transition: background-color 0.3s ease;
 }
 
 /* Asegurar que todos los elementos dentro de la tarjeta activen el modal */
@@ -298,6 +303,56 @@ body {
 .donate-card[data-category="health"] .category-badge { color: #a94442; background-color: #f2dede; }
 .donate-card[data-category="education"] .category-badge { color: #31708f; background-color: #d9edf7; }
 .donate-card[data-category="environment"] .category-badge { color: #3c763d; background-color: #dff0d8; }
+
+/* Dark mode variables */
+[data-theme="dark"] {
+  --color-bg: #1a1a2e;
+  --color-text: #e6e6e6;
+  --color-card: #16213e;
+  --color-border: #2a3a5e;
+  --color-support2: #1f2b4a;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode specific styles */
+[data-theme="dark"] .donate-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .donate-filters .filter-btn {
+  background: var(--color-card);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .donate-filters .filter-btn.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+[data-theme="dark"] .donate-card .card-content {
+  background: linear-gradient(0deg, var(--color-card) 0%, rgba(22, 33, 62, 0.8) 100%);
+}
+
+[data-theme="dark"] .donate-card h3,
+[data-theme="dark"] .donate-card .card-description,
+[data-theme="dark"] .donate-card .card-location,
+[data-theme="dark"] .donate-card .card-progress-text {
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .donate-card .progress-bar {
+  background: var(--color-border);
+}
+
+[data-theme="dark"] .donate-card .progress-fill {
+  background: var(--color-primary);
+}
+
 /* Modal armonizado */
 .donate-modal {
   position: fixed;
@@ -308,9 +363,11 @@ body {
   justify-content: center;
   z-index: 1000;
 }
+
 .donate-modal[aria-hidden="false"] {
   display: flex;
 }
+
 .modal-content {
   background: var(--color-card);
   border-radius: 1.2rem;
@@ -328,10 +385,12 @@ body {
   gap: 2rem;
   align-items: start;
 }
+
 @keyframes modalIn {
   from { transform: translateY(40px) scale(0.98); opacity: 0; }
   to { transform: none; opacity: 1; }
 }
+
 .modal-close {
   position: absolute;
   top: 1rem;
@@ -343,9 +402,11 @@ body {
   cursor: pointer;
   transition: color 0.2s;
 }
+
 .modal-close:hover {
   color: #222;
 }
+
 .modal-body {
   display: flex;
   flex-direction: column;
@@ -353,6 +414,7 @@ body {
   max-height: 80vh;
   overflow: hidden;
 }
+
 .modal-image-container {
   flex: 0 0 50%;
   max-height: 50vh;
@@ -491,6 +553,7 @@ body {
   border-radius: 0.8rem;
   overflow: hidden;
 }
+
 /* Banner Donaciones */
 .donate-banner {
   width: 100%;
@@ -503,10 +566,12 @@ body {
   align-items: center;
   justify-content: center;
 }
+
 .donate-banner-content {
   max-width: 700px;
   text-align: center;
 }
+
 .donate-banner-title {
   font-size: 2.3rem;
   font-weight: 800;
@@ -514,15 +579,17 @@ body {
   margin-bottom: 1rem;
   letter-spacing: 1px;
 }
+
 .donate-banner-desc {
   font-size: 1.25rem;
   color: #444;
   font-weight: 500;
   line-height: 1.5;
 }
+
 @media (max-width: 700px) {
   .donate-banner {
-    padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+    padding: 1.2rem 0.5rem;
   }
   .donate-banner-title {
     font-size: 1.3rem;
@@ -531,9 +598,11 @@ body {
     font-size: 1rem;
   }
 }
+
 @media (max-width: 900px) {
   .donate-gallery { grid-template-columns: 1fr 1fr; }
 }
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .donate-gallery {
@@ -593,6 +662,7 @@ body {
     font-size: 0.95rem;
   }
 }
+
 @media (max-width: 1024px) {
   .modal-content {
     width: 98vw;
@@ -642,6 +712,7 @@ body {
     font-size: 0.9rem;
   }
 }
+
 /* Detalles adicionales en el modal */
 .modal-details {
   margin: 1.2rem 0 1.5rem 0;
@@ -652,11 +723,13 @@ body {
   font-size: 1rem;
   box-shadow: 0 1px 6px #0001;
 }
+
 .modal-details a {
   color: #2563eb;
   text-decoration: underline;
   word-break: break-all;
 }
+
 .modal-details div {
   margin-bottom: 0.3rem;
 }
@@ -668,6 +741,7 @@ body {
   margin: 1.2rem 0 1.5rem 0;
   align-items: center;
 }
+
 .payment-method-btn {
   background: #eaf4f5;
   color: #234;
@@ -680,20 +754,24 @@ body {
   box-shadow: 0 2px 8px #0001;
   transition: background 0.2s, color 0.2s;
 }
+
 .payment-method-btn.selected {
   background: #2563eb;
   color: #fff;
 }
+
 .payment-fields {
   margin-top: 1rem;
   width: 100%;
 }
+
 .field-group {
   display: flex;
   gap: 0.7rem;
   flex-wrap: wrap;
   align-items: center;
 }
+
 .input-card-number, .input-card-expiry, .input-card-cvv {
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
@@ -702,11 +780,13 @@ body {
   outline: none;
   margin-bottom: 0.5rem;
 }
+
 .input-card-number { flex: 1; min-width: 160px; }
 .input-card-expiry { width: 80px; }
 .input-card-cvv { width: 60px; }
- /* Center the modal */
- #difference-modal.donate-modal[aria-hidden="false"] {
+
+/* Center the modal */
+#difference-modal.donate-modal[aria-hidden="false"] {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -715,6 +795,7 @@ body {
   background: rgba(0,0,0,0.3);
   z-index: 1000;
 }
+
 #difference-modal .modal-content {
   margin: 0;
   top: auto;
@@ -726,6 +807,50 @@ body {
   max-width: 90vw;
   text-align: center;
 }
+
 @media (max-width: 500px) {
   #difference-modal .modal-content { min-width: 0; width: 95vw; }
+}
+
+/* Theme Toggle Button */
+.theme-toggle-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-card);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 2rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.theme-toggle:hover {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.theme-toggle i {
+  font-size: 1rem;
+}
+
+[data-theme="dark"] .theme-toggle {
+  background: var(--color-card);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
 }
