@@ -76,13 +76,13 @@ def get_config():
     """Endpoint para servir configuraciones al frontend de forma segura"""
     return jsonify({
         "firebase": {
-            "apiKey": os.environ.get('FIREBASE_API_KEY'),
-            "authDomain": os.environ.get('FIREBASE_AUTH_DOMAIN'),
-            "projectId": os.environ.get('FIREBASE_PROJECT_ID'),
-            "storageBucket": os.environ.get('FIREBASE_STORAGE_BUCKET'),
-            "messagingSenderId": os.environ.get('FIREBASE_MESSAGING_SENDER_ID'),
-            "appId": os.environ.get('FIREBASE_APP_ID'),
-            "databaseURL": os.environ.get('FIREBASE_DATABASE_URL')
+            "apiKey": os.environ.get('AIzaSyAJ395j9EL5Nv81Q70Csc4zRKNp5e1Xrjo'),
+            "authDomain": os.environ.get('expo-project-1040e.firebaseapp.com'),
+            "projectId": os.environ.get('expo-project-1040e'),
+            "storageBucket": os.environ.get('expo-project-1040e.appspot.com'),
+            "messagingSenderId": os.environ.get('123456789012'),
+            "appId": os.environ.get('1:123456789012:web:abcdef123456'),
+            "databaseURL": os.environ.get('https://expo-project-1040e-default-rtdb.firebaseio.com')
         },
         "backend": {
             "url": os.environ.get('BACKEND_URL', 'http://localhost:5000')
@@ -101,15 +101,23 @@ def register():
         password = data.get("password")
         name = data.get("name")
         age = data.get("age")
+        username = (data.get("username") or "").strip()            # NEW
         area = data.get("area")
+        account_type = (data.get("accountType") or "").strip().lower()
 
         # Validaciones básicas
-        if not email or not password or not name or not age or not area:
+        if not email or not password or not name or not age or not username or not area or not account_type:
             return jsonify({"success": False, "message": "All fields are required."}), 400
         if not is_valid_email(email):
             return jsonify({"success": False, "message": "Invalid email format."}), 400
         if not is_strong_password(password):
             return jsonify({"success": False, "message": "Password too weak."}), 400
+        # Username simple check (3-20, alfanumérico y _ . -)
+        if not re.match(r"^[A-Za-z0-9_.-]{3,20}$", username):
+            return jsonify({"success": False, "message": "Invalid username format."}), 400
+        allowed_types = {"volunteer", "foundation", "fundation"}
+        if account_type not in allowed_types:
+            return jsonify({"success": False, "message": "Invalid account type."}), 400
 
         # Verifica si el correo ya existe en Firebase Auth
         try:
@@ -118,10 +126,10 @@ def register():
         except firebase_auth.UserNotFoundError:
             pass
 
-        # 1) Ejecutar el registro real
+        # Ejecutar el registro real (register_user lee todo desde request.get_json())
         reg_resp = register_user()
 
-        # 2) Si el registro fue exitoso, iniciar sesión automáticamente reutilizando /login
+        # Auto-login + redirect (sin cambios)
         try:
             status_code = getattr(reg_resp, "status_code", 200)
             reg_json = None

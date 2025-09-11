@@ -39,18 +39,33 @@
   loadScript('/src/components/js/utils.js', () => {
     console.log('Utils loaded, initializing components');
     
-    // List of modules to load
-    const modules = [
+    // Determine which header script to load based on page type
+    const isAuthPage = document.body.classList.contains('auth-page') || 
+                      window.location.pathname.includes('dashboard') ||
+                      window.location.pathname.includes('profile');
+    
+    // List of modules to load - only load the appropriate one
+    const modules = isAuthPage ? [
+      {
+        name: 'auth-header',
+        path: '/src/components/js/auth-header.js',
+        selector: '#authHeader',
+        loaded: false,
+        type: 'script'
+      }
+    ] : [
       {
         name: 'header',
         path: '/src/components/js/header.js',
-        selector: '.as-header',
+        selector: '#guestHeader',
         loaded: false,
         type: 'script'
       }
     ];
     
-    // Load all modules
+    console.log(`Loading ${isAuthPage ? 'authenticated' : 'guest'} header module`);
+    
+    // Load the appropriate module
     modules.forEach(module => loadModule(module));
   });
 })();

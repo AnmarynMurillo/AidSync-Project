@@ -5,15 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voluntariado | AidSync</title>
-    <link rel="icon" href="/public/assets/logos/logito.ico" type="imagen/x-icon">
+    <link rel="icon" href="/public/assets/logos/Logo_logo.png" type="imagen/x-icon">
     <link rel="stylesheet" href="/public/css/styles.css">
     <link rel="stylesheet" href="/src/components/css/header.css">
     <link rel="stylesheet" href="/public/css/volunteer.css">
     <script defer src="/public/js/volunteer.js"></script>
 </head>
 <body>
-    <!-- Header -->
-    <div id="header-container"></div>
+  <!-- Header Container -->
+<div id="header-container" class="as-header"></div>
+  <!-- Hero Section: Carrusel Principal -->
+  <section class="hero-carousel">
+    <div class="carousel-container">
+      <div class="carousel-slide">
+        <!-- Slides se inyectan con JS -->
+      </div>
+      <div class="carousel-overlay-content">
+        <div class="carousel-label">Areas to be volunteer</div>
+        <h1 class="carousel-title">HELP THAT<br><span class="carousel-title-accent">SYNCHRONIZES</span></h1>
+      </div> 
+    </div>
+  </section>
     <main class="volunteer-main">
         <h1>Volunteer Opportunities</h1>
         <div class="volunteer-filters">
@@ -50,15 +62,18 @@
    
 
     <div id="volunteer-modal" class="volunteer-modal" aria-hidden="true" tabindex="-1">
-        <div class="modal-content" role="dialog" aria-modal="true">
-            <button class="modal-close" aria-label="Close">&times;</button>
-            <div class="modal-body">
-        <!-- Contenido se inyecta aquí -->
-      </div>
-    </div>
-                <!-- Dynamic content -->
-            </div>
+      <div class="modal-content" role="dialog" aria-modal="true">
+        <!-- Botón cerrar -->
+        <button class="modal-close" aria-label="Close">
+          <img src="/public/assets/img/volunter/flecha.png" alt="Cerrar">
+        </button>
+        
+        <!-- Cuerpo del modal -->
+        <div class="modal-body">
+          <!-- Contenido se inyecta aquí -->
         </div>
+        
+      </div>
     </div>
     <!-- Footer -->
     <div id="footer-container"></div>
@@ -69,7 +84,7 @@
     <!-- Carga dinámica del header y footer -->
     <script>
       // Cargar header
-      fetch('/src/components/html/header.html')
+      fetch('/src/components/html/header.html') 
         .then(r => r.text())
         .then(html => {
           const headerContainer = document.getElementById('header-container');

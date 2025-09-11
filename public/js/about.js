@@ -1,273 +1,534 @@
-// about.js - Functionality for the About Us page
-
-// Team data with corrected paths and validation
-const TEAM = [
-    {
-      nombre: 'Juan Morales',
-      foto: '/public/assets/members/Juan.png',
-      rol: 'Development'
-    },
-    {
-      nombre: 'Isaura Ríos',
-      foto: '/public/assets/members/Isaura.png',
-      rol: 'UX/UI Design'
-    },
-    {
-      nombre: 'Patricia Fernández',
-      foto: '/public/assets/members/Patricia.png',
-      rol: 'Content'
-    },
-    {
-      nombre: 'Anmaryn Murrillo',
-      foto: '/public/assets/members/Anmaryn.png',
-      rol: 'Project Management'
-    },
-    {
-      nombre: 'Dushka Jimenez',
-      foto: '/public/assets/members/Dushka.png',
-      rol: 'Marketing'
-    },
-    {
-      nombre: 'Emily Bulgin',
-      foto: '/public/assets/members/Emily.png',
-      rol: 'QA & Testing'
-    },
-    {
-      nombre: 'Luis Camargo',
-      foto: '/public/assets/members/Luis.png',
-      rol: 'Technical Support'
-    },
-    {
-      nombre: 'Gilberto Rodriguez',
-      foto: '/public/assets/members/Gilberto.png',
-      rol: 'DevOps'
-    },
-    {
-      nombre: 'Stephany Dominguez',
-      foto: '/public/assets/members/Stephany.png',
-      rol: 'Legal'
-    },
-    {
-      nombre: 'Elina Pérez',
-      foto: '/public/assets/members/Elina.png',
-
-      rol: 'JS Developer',
-      desc: 'In charge of JavaScript functionality and dynamic interactions.'
-    },
-
-      rol: 'JS Developer'
-    }
-
-  ];
-  
-  // Carousel with corrected paths
-  const CAROUSEL_IMAGES = [
-    '/public/assets/aidsync_moments/momento 1.jpeg',
-    '/public/assets/aidsync_moments/momento 2.jpeg',
-    '/public/assets/aidsync_moments/momento 3.jpeg',
-    '/public/assets/aidsync_moments/momento 4.jpg',
-  ];
-  
-  // Function to render team with error handling  
-  function renderTeam() {
-    const gallery = document.getElementById('team-gallery');
+// Dynamic Text Rotation
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Carousels
+    initBannerCarousel();
+    initTeamCarousel();
     
-    if (!gallery) {
-      console.error('Error: Element with ID "team-gallery" not found');
-      return;
+    // Dynamic Text Configuration
+    const dynamicText = document.getElementById('dynamic-text');
+    if (dynamicText) {
+        const words = ['thinkers', 'innovators', 'creators', 'problem solvers', 'visionaries'];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typeSpeed = 100;
+        const deleteSpeed = 30;
+
+        /**
+         * Type effect function
+         * Handles the typing and deleting of characters
+         */
+        function typeEffect() {
+            const currentWord = words[wordIndex];
+            
+            if (isDeleting) {
+                // Delete characters
+                dynamicText.textContent = currentWord.substring(0, charIndex - 1).toLowerCase();
+                charIndex--;
+            } else {
+                // Type characters
+                dynamicText.textContent = currentWord.substring(0, charIndex + 1).toLowerCase();
+                charIndex++;
+            }
+
+            // Check if we've finished typing the word
+            if (!isDeleting && charIndex === currentWord.length) {
+                isDeleting = true;
+            }
+
+            // Check if we've finished deleting the word
+            if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+            }
+
+            // Set typing speed
+            const speed = isDeleting ? deleteSpeed : typeSpeed;
+            setTimeout(typeEffect, speed);
+        }
+
+        // Start the typing effect
+        dynamicText.classList.add('typing-cursor');
+        setTimeout(typeEffect, 1000);
     }
 
-    // Define color variations using AidSync colors
-    const colorVariations = [
-      { bg: '#82dfcd', accent: '#16a085' }, // Support1 + Accent
-      { bg: '#003d66', accent: '#82dfcd' }, // Primary + Support1
-      { bg: '#16a085', accent: '#eaf4f5' }, // Accent + Support2
-      { bg: '#eaf4f5', accent: '#003d66' }, // Support2 + Primary
-      { bg: '#4a9b8e', accent: '#fff' },    // Blend + White
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80, // Account for fixed header
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Add animation on scroll
+    const animateOnScroll = () => {
+        const elements = document.querySelectorAll('.animate-on-scroll');
+        
+        elements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+            
+            if (elementTop < windowHeight - 100) {
+                element.classList.add('animated');
+            }
+        });
+    };
+
+    // Add scroll event listener
+    window.addEventListener('scroll', animateOnScroll);
+    
+    // Initial check in case elements are already in view
+    animateOnScroll();
+});
+
+// Banner Carousel Functionality
+function initBannerCarousel() {
+    const carouselSlide = document.querySelector('.carousel-slide');
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.querySelector('.carousel-control.prev');
+    const nextBtn = document.querySelector('.carousel-control.next');
+    const dotsContainer = document.querySelector('.carousel-dots');
+    
+    if (!carouselSlide) return; // Exit if no carousel found
+    
+    let currentIndex = 0;
+
+    // Create dots
+    slides.forEach((_, index) => {
+        const dot = document.createElement('button');
+        dot.classList.add('dot');
+        dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+        if (index === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => goToSlide(index));
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    // Set up the slider
+    function updateCarousel() {
+        carouselSlide.style.transform = `translateX(-${currentIndex * 100}%)`;
+        
+        // Update dots
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentIndex);
+        });
+    }
+
+    // Next slide
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % slides.length;
+        updateCarousel();
+    }
+
+    // Previous slide
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        updateCarousel();
+    }
+
+    // Go to specific slide
+    function goToSlide(index) {
+        currentIndex = index;
+        updateCarousel();
+    }
+
+    // Event listeners
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') prevSlide();
+        if (e.key === 'ArrowRight') nextSlide();
+    });
+
+    // Touch events for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    carouselSlide.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    carouselSlide.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const swipeDiff = touchStartX - touchEndX;
+        
+        if (Math.abs(swipeDiff) > swipeThreshold) {
+            if (swipeDiff > 0) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        }
+    }
+
+    // Pause on hover
+    const carousel = document.querySelector('.banner-carousel');
+    if (carousel) {
+        carousel.addEventListener('mouseenter', () => {});
+        carousel.addEventListener('mouseleave', () => {});
+    }
+}
+
+// Team Carousel Functionality
+function initTeamCarousel() {
+    // Ensure the team carousel container exists
+    const carousel = document.querySelector('.team-carousel');
+    if (!carousel) return; // Exit if no team carousel found
+    
+    // Add dots container if it doesn't exist
+    const carouselContainer = document.querySelector('.team-carousel-container');
+    if (carouselContainer && !document.querySelector('.team-carousel-dots')) {
+        const dotsContainer = document.createElement('div');
+        dotsContainer.className = 'team-carousel-dots';
+        carouselContainer.appendChild(dotsContainer);
+    }
+    
+    const teamMembers = [
+        {
+            name: 'Anmaryn Murillo',
+            role: 'Project Lead',
+            image: '../../public/assets/members/Anmaryn.png',
+            bio: 'Passionate about creating impactful solutions through technology.',
+            social: {
+                twitter: '#',
+                linkedin: '#',
+                github: '#'
+            }
+        },
+        {
+            name: 'Dushka Jimenez',
+            role: 'UI/UX Designer',
+            image: '../../public/assets/members/Dushka.png',
+            bio: 'Transforming ideas into beautiful and intuitive user experiences.',
+            social: {
+                twitter: '#',
+                linkedin: '#',
+                github: '#'
+            }
+        },
+        {
+            name: 'Elina Perez',
+            role: 'Frontend Developer',
+            image: '../../public/assets/members/Elina.png',
+            bio: 'Building responsive and accessible web applications.',
+            social: {
+                twitter: '#',
+                linkedin: '#',
+                github: '#'
+            }
+        },
+        {
+            name: 'Emily Bulgin',
+            role: 'Backend Developer',
+            image: '../../public/assets/members/Emily.png',
+            bio: 'Creating robust and scalable server-side solutions.',
+            social: {
+                twitter: '#',
+                linkedin: '#',
+                github: '#'
+            }
+        },
+        {
+            name: 'Isaura Ríos',
+            role: 'Full Stack Developer',
+            image: '../../public/assets/members/Isaura.png',
+            bio: 'Bridging the gap between frontend and backend development.',
+            social: {
+                twitter: '#',
+                linkedin: '#',
+                github: '#'
+            }
+        },
+        {
+            name: 'Jhostan Jimenez',
+            role: 'Mobile Developer',
+            image: '../../public/assets/members/Jhostan.png',
+            bio: 'Building cross-platform mobile experiences.',
+            social: {
+                twitter: '#',
+                linkedin: '#',
+                github: '#'
+            }
+        },
+        {
+            name: 'Josue Rodriguez',
+            role: 'DevOps Engineer',
+            image: '../../public/assets/members/Josue.png',
+            bio: 'Automating deployments and ensuring system reliability.',
+            social: {
+                twitter: '#',
+                linkedin: '#',
+                github: '#'
+            }
+        },
+        {
+            name: 'Juan Morales',
+            role: 'QA Engineer',
+            image: '../../public/assets/members/Juan.png',
+            bio: 'Ensuring the highest quality in every release.',
+            social: {
+                twitter: '#',
+                linkedin: '#',
+                github: '#'
+            }
+        },
+        {
+            name: 'Luis Camargo',
+            role: 'Data Scientist',
+            image: '../../public/assets/members/Luis.png',
+            bio: 'Extracting insights from complex data sets.',
+            social: {
+                twitter: '#',
+                linkedin: '#',
+                github: '#'
+            }
+        },
+        {
+            name: 'Patricia Fernandez',
+            role: 'Product Manager',
+            image: '../../public/assets/members/Patricia.png',
+            bio: 'Defining product vision and strategy.',
+            social: {
+                twitter: '#',
+                linkedin: '#',
+                github: '#'
+            }
+        },
+        {
+            name: 'Stephany Dominguez',
+            role: 'UX Researcher',
+            image: '../../public/assets/members/Stephany.png',
+            bio: 'Understanding user needs and behaviors.',
+            social: {
+                twitter: '#',
+                linkedin: '#',
+                github: '#'
+            }
+        }
     ];
 
-    gallery.innerHTML = TEAM.map((member, index) => {
-      // Member data validation
-      if (!member.foto || !member.rol) {
-        console.warn(`Incomplete data for: ${member.nombre}`);
-        return '';
-      }
-      
-      const colorScheme = colorVariations[index % colorVariations.length];
-      const isLightBg = ['#82dfcd', '#eaf4f5'].includes(colorScheme.bg);
-      const textColor = isLightBg ? '#003d66' : '#fff';
-      
-      return `
-        <div class="team-member">
-          <img src="${member.foto}" 
-               alt="Photo of ${member.nombre}" 
-               class="member-photo"
-               loading="lazy"
-               onerror="this.onerror=null;this.src='../images/default-avatar.png'">
-          <div class="member-info">
-            <h3 class="member-name">${member.nombre.toUpperCase()}</h3>
-            <p class="member-role">${member.rol}</p>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-  
-  // Enhanced carousel with autoplay and controls
-  let carouselIndex = 0;
-  let carouselInterval = null;
-  
-  function renderCarousel() {
-    const track = document.getElementById('carousel-track');
-    if (!track) return;
-  
-    track.innerHTML = CAROUSEL_IMAGES.map((src, index) => 
-      `<img src="${src}" 
-            class="carousel-img" 
-            alt="Team moment ${index + 1}"
-            draggable="false"
-            loading="lazy">`
-    ).join('');
-  
-    updateCarousel();
-    startCarouselAuto();
+    const dotsContainer = document.querySelector('.team-carousel-dots');
+    const prevBtn = carousel.closest('.team-carousel-container').querySelector('.carousel-control.prev');
+    const nextBtn = carousel.closest('.team-carousel-container').querySelector('.carousel-control.next');
     
-    // Add event listeners
-    document.getElementById('carousel-prev')?.addEventListener('click', prevCarousel);
-    document.getElementById('carousel-next')?.addEventListener('click', nextCarousel);
+    let currentIndex = 0;
+    let itemsPerView = calculateItemsPerView();
     
-    // Pause on hover
-    track.addEventListener('mouseenter', pauseCarousel);
-    track.addEventListener('mouseleave', startCarouselAuto);
-  }
-  
-  function updateCarousel() {
-    const track = document.getElementById('carousel-track');
-    if (track) {
-      track.style.transform = `translateX(-${carouselIndex * 100}%)`;
+    // Calculate number of items to show based on viewport width
+    function calculateItemsPerView() {
+        const width = window.innerWidth;
+        if (width < 768) return 1;
+        if (width < 1200) return 2;
+        return 3;
     }
-  }
-  
-  function nextCarousel() {
-    carouselIndex = (carouselIndex + 1) % CAROUSEL_IMAGES.length;
-    updateCarousel();
-    restartCarouselAuto();
-  }
-  
-  function prevCarousel() {
-    carouselIndex = (carouselIndex - 1 + CAROUSEL_IMAGES.length) % CAROUSEL_IMAGES.length;
-    updateCarousel();
-    restartCarouselAuto();
-  }
-  
-  function startCarouselAuto() {
-    if (carouselInterval) clearInterval(carouselInterval);
-    carouselInterval = setInterval(nextCarousel, 5000);
-  }
-  
-  function pauseCarousel() {
-    if (carouselInterval) clearInterval(carouselInterval);
-  }
-  
-  function restartCarouselAuto() {
-    pauseCarousel();
-    startCarouselAuto();
-  }
-  
-  // Intersection observer for animations
-  function setupIntersectionObserver() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('show');
-        }
-      });
-    }, { threshold: 0.1 });
-  
-    document.querySelectorAll('.mission, .vision, .value-card').forEach(el => {
-      observer.observe(el);
-    });
-  }
-  
-  // Function for dynamic text effect
-  function setupDynamicText() {
-    const dynamicTextElement = document.getElementById('dynamic-text');
-    if (!dynamicTextElement) return;
-
-    const phrases = ["Changemakers.", "Kind Souls.", "Community Builders."];
-    let currentIndex = 0;
-
-    function updateText() {
-      // Fade out
-      dynamicTextElement.classList.remove('visible');
-
-      setTimeout(() => {
-        // Change text
-        currentIndex = (currentIndex + 1) % phrases.length;
-        dynamicTextElement.textContent = phrases[currentIndex];
-        // Fade in
-        dynamicTextElement.classList.add('visible');
-      }, 400); // Corresponds to the CSS transition duration
+    
+    // Debounce function
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
     }
-
-    // Initial text
-    dynamicTextElement.textContent = phrases[0];
-    dynamicTextElement.classList.add('visible');
-
-    setInterval(updateText, 3000); // Change text every 3 seconds
-  }
-
-  // Function to set up the team carousel
-  function setupTeamCarousel() {
-    const track = document.getElementById('team-gallery');
-    const prevButton = document.getElementById('team-carousel-prev');
-    const nextButton = document.getElementById('team-carousel-next');
-
-    if (!track || !prevButton || !nextButton) {
-      console.warn('Team carousel elements not found.');
-      return;
+    
+    // Handle window resize with debounce
+    function handleResize() {
+        itemsPerView = calculateItemsPerView();
+        currentIndex = 0; // Reset to first item on resize
+        updateCarousel();
     }
-
-    let currentIndex = 0;
-
+    
+    window.addEventListener('resize', debounce(handleResize, 150));
+    
+    // Generate team member cards
+    function renderTeam() {
+        carousel.innerHTML = teamMembers.map((member, index) => `
+            <div class="team-member" data-index="${index}">
+                <div class="member-image-container">
+                    <div class="image-wrapper">
+                        <img src="${member.image}" alt="${member.name}" class="member-image" 
+                             onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=003d66&color=fff&size=300'">
+                    </div>
+                    <div class="social-links">
+                        <a href="${member.social.twitter}" target="_blank" rel="noopener noreferrer" aria-label="${member.name}'s Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="${member.social.linkedin}" target="_blank" rel="noopener noreferrer" aria-label="${member.name}'s LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="${member.social.github}" target="_blank" rel="noopener noreferrer" aria-label="${member.name}'s GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="member-info">
+                    <h3>${member.name}</h3>
+                    <p class="member-role">${member.role}</p>
+                    <p class="member-bio">${member.bio}</p>
+                </div>
+            </div>
+        `).join('');
+        
+        // Generate dots
+        const totalDots = Math.max(1, Math.ceil(teamMembers.length / itemsPerView));
+        dotsContainer.innerHTML = Array.from({ length: totalDots })
+            .map((_, i) => `<button class="dot ${i === 0 ? 'active' : ''}" data-index="${i}" aria-label="Go to slide ${i + 1}"></button>`)
+            .join('');
+    }
+    
+    // Update carousel position
     function updateCarousel() {
-      const members = track.children;
-      if (members.length === 0) return;
-
-      const memberWidth = members[0].offsetWidth;
-      const gap = parseInt(window.getComputedStyle(track).gap) || 0;
-      const slideWidth = memberWidth + gap;
-
-      track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+        const items = document.querySelectorAll('.team-member');
+        if (!items.length) return;
+        
+        // Get the first team member to calculate dimensions
+        const firstItem = items[0];
+        if (!firstItem) return;
+        
+        // Get the width of the carousel container
+        const container = carousel.parentElement;
+        const containerWidth = container.offsetWidth;
+        
+        // Get the width of a single item including its margin
+        const itemStyle = window.getComputedStyle(firstItem);
+        const itemWidth = firstItem.offsetWidth + 
+                         parseFloat(itemStyle.marginLeft) + 
+                         parseFloat(itemStyle.marginRight);
+        
+        // Calculate how many items fit in the viewport
+        const itemsPerView = Math.max(1, Math.floor(containerWidth / itemWidth));
+        
+        // Calculate the maximum index we can go to
+        const maxIndex = Math.max(0, teamMembers.length - itemsPerView);
+        
+        // Ensure currentIndex is within bounds
+        currentIndex = Math.max(0, Math.min(currentIndex, maxIndex));
+        
+        // Calculate the new position
+        const newPosition = -currentIndex * itemWidth;
+        
+        // Apply the transform with smooth transition
+        carousel.style.transition = 'transform 0.5s ease-in-out';
+        carousel.style.transform = `translateX(${newPosition}px)`;
+        
+        // Update active dot
+        const activeDotIndex = Math.min(
+            Math.floor(currentIndex / itemsPerView),
+            document.querySelectorAll('.dot').length - 1
+        );
+        
+        document.querySelectorAll('.dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === activeDotIndex);
+        });
+        
+        // Update button states
+        prevBtn.disabled = currentIndex <= 0;
+        nextBtn.disabled = currentIndex >= maxIndex;
+        
+        // Add/remove disabled state for better UX
+        prevBtn.classList.toggle('disabled', prevBtn.disabled);
+        nextBtn.classList.toggle('disabled', nextBtn.disabled);
     }
-
-    nextButton.addEventListener('click', () => {
-      const members = track.children;
-      const containerWidth = track.parentElement.offsetWidth;
-      const itemsInView = Math.floor(containerWidth / (members[0].offsetWidth + parseInt(window.getComputedStyle(track).gap)));
-      
-      if (currentIndex < members.length - itemsInView) {
-        currentIndex++;
-        updateCarousel();
-      }
-    });
-
-    prevButton.addEventListener('click', () => {
-      if (currentIndex > 0) {
-        currentIndex--;
-        updateCarousel();
-      }
-    });
-  }
-
-  // Initialization when DOM is ready
-  document.addEventListener('DOMContentLoaded', () => {
-    renderTeam();
-    renderCarousel();
-    setupIntersectionObserver();
-    setupDynamicText(); // Initialize dynamic text
-    setupTeamCarousel(); // Initialize team carousel
     
-    // Console verification
-    console.log('About Us page loaded successfully');
-  });
+    // Event listeners
+    prevBtn.addEventListener('click', () => {
+        const maxIndex = Math.max(0, teamMembers.length - itemsPerView);
+        if (currentIndex > 0) {
+            currentIndex--;
+        } else {
+            // If at the start, loop to the end
+            currentIndex = maxIndex;
+        }
+        updateCarousel();
+    });
+    
+    nextBtn.addEventListener('click', () => {
+        const maxIndex = Math.max(0, teamMembers.length - itemsPerView);
+        if (currentIndex < maxIndex) {
+            currentIndex++;
+        } else {
+            // If at the end, loop back to start
+            currentIndex = 0;
+        }
+        updateCarousel();
+    });
+    
+    // Dot navigation
+    dotsContainer.addEventListener('click', (e) => {
+        const dot = e.target.closest('.dot');
+        if (dot) {
+            currentIndex = parseInt(dot.dataset.index) * itemsPerView;
+            updateCarousel();
+        }
+    });
+    
+    // Touch support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    carousel.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    carousel.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+    
+    function handleSwipe() {
+        const swipeThreshold = 50; // Minimum distance for a swipe
+        const swipeDistance = touchEndX - touchStartX;
+        
+        if (Math.abs(swipeDistance) < swipeThreshold) return;
+        
+        if (swipeDistance > 0 && currentIndex > 0) {
+            // Swipe right
+            currentIndex--;
+        } else if (swipeDistance < 0 && currentIndex < teamMembers.length - itemsPerView) {
+            // Swipe left
+            currentIndex++;
+        }
+        
+        updateCarousel();
+    }
+    
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            updateCarousel();
+        }, 250);
+    });
+    
+    // Initialize
+    renderTeam();
+    updateCarousel();
+    
+    // Recalculate on window resize
+    window.addEventListener('resize', () => {
+        itemsPerView = calculateItemsPerView();
+        updateCarousel();
+    });
+}

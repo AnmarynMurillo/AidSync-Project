@@ -2,17 +2,17 @@
 
 // backend por defecto (asegúrate que Flask corre en este host:port)
 let firebaseConfig = null;
-let backendUrl = 'http://localhost:5000';
+let backendUrl = null;
 let imgbbKey = null; // si no estaba ya definido
 
 async function loadConfig() {
     try {
         // Pedimos la configuración directamente al backend (evita solicitar /api/config
         // al servidor estático que sirve los archivos en otro origen)
-        const res = await fetch('http://localhost:5000/api/config', { credentials: 'include' });
+        const res = await fetch('/api/config', { credentials: 'include' });
         const cfg = await res.json();
         firebaseConfig = cfg.firebase;
-        backendUrl = cfg.backend && cfg.backend.url ? cfg.backend.url : backendUrl;
+        backendUrl = (cfg.backend && cfg.backend.url) || 'http://localhost:5000';
         imgbbKey = (cfg.imgbb && cfg.imgbb.apiKey) || null;
         initializeFirebase();
     } catch (e) {
@@ -72,10 +72,12 @@ async function fetchProfileRealtimeREST(idToken, uid) {
     if (!val) throw new Error('no-data');
     return {
         uid,
+        username: val.username || '',
         nombre: val.nombre || val.name || '',
         edad: val.edad || val.age || '',
         area: val.area || '',
         email: val.email || '',
+        accountType: val.accountType || '',
         foto_url: val.foto_url || val.photoURL || '' // <-- incluye foto_url
     };
 }
@@ -86,23 +88,28 @@ async function fetchProfileFirebaseSDK(uid) {
     const user = firebase.auth().currentUser;
     return {
         uid,
+        username: val.username || '',
         nombre: val.nombre || val.name || (user && user.displayName) || '',
         edad: val.edad || val.age || '',
         area: val.area || '',
         email: val.email || (user && user.email) || '',
+        accountType: val.accountType || '',
         foto_url: val.foto_url || (user && user.photoURL) || '' // <-- incluye foto_url
     };
 }
 
 function renderProfile(data) {
     const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v || ''; };
-    set('nombre', data.nombre);
-    set('edad', data.edad);
-    set('area', data.area);
-    set('email', data.email);
+    set('pf-username', data.username || '');
+    set('pf-name', data.nombre || '');
+    set('pf-age', data.edad || '');
+    set('pf-area', data.area || '');
+    set('pf-email', data.email || '');
+    set('pf-accountType', data.accountType || '');
     const pic = document.getElementById('profilePic');
     if (pic) {
-        pic.src = data.foto_url || (firebase && firebase.auth && firebase.auth().currentUser && firebase.auth().currentUser.photoURL) || '../assets/img/default-profile.png';
+        const fallback = (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser && firebase.auth().currentUser.photoURL) || '../assets/img/default-profile.png';
+        pic.src = data.foto_url || fallback;
     }
 }
 
@@ -133,7 +140,7 @@ function setupPhotoUpload() {
     form.addEventListener('submit', async (ev) => {
         ev.preventDefault();
         const input = document.getElementById('photoInput');
-        const msg = document.getElementById('profileMessage');
+        const msg = document.getElementById('profile-status');
         if (!input || !input.files || !input.files[0]) { if (msg) { msg.textContent='Select a file'; msg.style.color='red'; } return; }
         const file = input.files[0];
         const token = await getStoredIdToken();
@@ -247,7 +254,7 @@ async function mainLoadProfile() {
     // carga config e inicializa firebase (ya implementadas)
     await loadConfig();
     initializeFirebase();
-    const msgEl = document.getElementById('profileMessage');
+    const msgEl = document.getElementById('profile-status');
     if (msgEl) { msgEl.textContent = 'Loading profile...'; msgEl.style.color = ''; }
 
     // Espera breve a que firebase auth se inicialice si aplica
@@ -319,6 +326,36 @@ async function mainLoadProfile() {
 // Asegúrate de usar mainLoadProfile() en DOMContentLoaded
 document.addEventListener('DOMContentLoaded', async () => {
     await mainLoadProfile();
+    // Suscripción en tiempo real a cambios de perfil mientras la sesión esté activa
+    try {
+        if (typeof firebase !== 'undefined' && firebase.auth) {
+            firebase.auth().onAuthStateChanged(async (user) => {
+                const msgEl = document.getElementById('profile-status');
+                if (user && firebase.database) {
+                    const ref = firebase.database().ref('users/' + user.uid);
+                    ref.off();
+                    ref.on('value', (snap) => {
+                        const val = snap.val();
+                        if (val) {
+                            renderProfile({
+                                uid: user.uid,
+                                username: val.username || '',
+                                nombre: val.nombre || val.name || (user.displayName || ''),
+                                edad: val.edad || val.age || '',
+                                area: val.area || '',
+                                email: val.email || (user.email || ''),
+                                accountType: val.accountType || '',
+                                foto_url: val.foto_url || user.photoURL || ''
+                            });
+                            if (msgEl) { msgEl.textContent = ''; }
+                        }
+                    });
+                } else {
+                    if (msgEl) { msgEl.textContent = 'You must log in to view your profile.'; msgEl.style.color = 'red'; }
+                }
+            });
+        }
+    } catch (e) { /* ignore */ }
     setupPhotoUpload(); // función existente que maneja backend/imgbb/firebase
 });
 

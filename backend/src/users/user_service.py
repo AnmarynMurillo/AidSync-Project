@@ -43,10 +43,12 @@ def register_user():
 
         # Acepta claves en español e inglés desde el frontend
         nombre = (data.get("nombre") or data.get("name") or "").strip()
+        username = (data.get("username") or "").strip()
         edad = data.get("edad") if "edad" in data else data.get("age")
         area = (data.get("area") or "").strip()
         email = (data.get("email") or "").strip().lower()
         password = data.get("password", "")
+        account_type = (data.get("accountType") or data.get("account_type") or "").strip()
 
         # Validaciones estrictas
         if not all([nombre, edad, area, email, password]):
@@ -85,9 +87,11 @@ def register_user():
         try:
             db.reference(f'users/{user.uid}').set({
                 'nombre': nombre,
+                'username': username,
                 'edad': edad_int,
                 'area': area,
-                'email': email
+                'email': email,
+                'accountType': account_type
             })
         except Exception as db_err:
             logging.warning(f"No se pudo guardar en Realtime Database: {db_err}")
@@ -165,6 +169,11 @@ def get_profile():
             extra.get("nombre") or
             (user.display_name or "")
         )
+        username = (
+            rt_data.get("username") or
+            extra.get("username") or
+            ""
+        )
         edad = (
             rt_data.get("age") or
             rt_data.get("edad") or
@@ -180,13 +189,20 @@ def get_profile():
             rt_data.get("email") or
             user.email
         )
+        account_type = (
+            rt_data.get("accountType") or
+            extra.get("accountType") or
+            ""
+        )
 
         user_data = {
             "uid": uid,
+            "username": username,
             "nombre": nombre,
             "edad": edad,
             "area": area,
             "email": email,
+            "accountType": account_type,
             "foto_url": user.photo_url or None
         }
         return jsonify({"success": True, "user": user_data}), 200

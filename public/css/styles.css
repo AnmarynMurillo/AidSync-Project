@@ -40,8 +40,8 @@
   --color-bg: #001f33;
   --color-card: #003d66;
   --color-border: #005580;
-  --color-text: #ffffff;
-  --color-text-secondary: #eaf4f5;
+  --color-text: #ffffff;  /* Pure white for main text */
+  --color-text-secondary: #ffffff;  /* Pure white for secondary text */
   --color-primary: #4db8ff;
   --color-accent: #16a085;
   --color-support1: #82dfcd;
@@ -49,6 +49,20 @@
   --color-placeholder: #82dfcd;
   --color-shadow: 0 2px 16px #00000040;
   color: var(--color-text);
+  
+  /* Ensure all text is white in dark mode for better readability */
+  body, p, h1, h2, h3, h4, h5, h6, a, li, td, th, label, input, textarea, select, button {
+    color: #ffffff !important;
+  }
+  
+  /* Specific selector for text that might be inside cards or other containers */
+  .what-we-do-right p, 
+  .area-card-content p, 
+  .faq-answer,
+  .contact-desc,
+  .carousel-desc {
+    color: #f0f8ff !important;
+  }
 }
 
 /* Global Styles */
@@ -163,7 +177,7 @@ h2, h3 {
 .carousel-btn {
   display: inline-block;
   padding: 0.7rem 1.7rem;
-  font-size: 1rem;
+  font-size: 23px;
   font-weight: 700;
   border-radius: 24px;
   border: none;
@@ -251,6 +265,7 @@ h2, h3 {
   flex: 2;
   color: var(--color-primary);
   font-size: 1.13rem;
+  line-height: 1.7;
   font-weight: 500;
   line-height: 1.7;
   max-width: 600px;
@@ -882,31 +897,77 @@ h2, h3 {
   .faq-img-bg { width: 90px; height: 60px; }
   .faq-title { font-size: 1.2rem; }
 }
-[data-theme="dark"] body,
+/* Base text color for dark mode */
+[data-theme="dark"] {
+  color: #f0f4f8;
+}
+
+/* Specific text colors for dark mode */
 [data-theme="dark"] h1,
 [data-theme="dark"] h2,
 [data-theme="dark"] h3,
 [data-theme="dark"] h4,
 [data-theme="dark"] h5,
-[data-theme="dark"] h6,
+[data-theme="dark"] h6 {
+  color: #ffffff !important;
+}
+
 [data-theme="dark"] p,
 [data-theme="dark"] span,
-[data-theme="dark"] a,
 [data-theme="dark"] li,
-[data-theme="dark"] label,
-[data-theme="dark"] input,
-[data-theme="dark"] textarea,
-[data-theme="dark"] button,
-[data-theme="dark"] .faq-answer,
-[data-theme="dark"] .faq-q,
+[data-theme="dark"] .faq-answer {
+  color: #f0f4f8 !important;
+  opacity: 0.9;
+}
+
+/* Header specific styles */
+[data-theme="dark"] .header-nav a,
+[data-theme="dark"] .header-actions a {
+  color: #ffffff !important;
+}
+
+/* Carousel elements in dark mode */
+[data-theme="dark"] .carousel-container {
+  color: #e6f2ff;  /* Light blue for better visibility */
+}
+
 [data-theme="dark"] .carousel-title,
-[data-theme="dark"] .carousel-desc,
 [data-theme="dark"] .carousel-label,
-[data-theme="dark"] .what-we-do-label,
-[data-theme="dark"] .what-we-do-title,
-[data-theme="dark"] .contact-label,
+[data-theme="dark"] .carousel-desc,
+[data-theme="dark"] .carousel-btn {
+  color: #e6f2ff !important;  /* Light blue for better visibility */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Special elements */
+[data-theme="dark"] .what-we-do-label {
+  color: #82c0ff !important;  /* Lighter blue for better contrast */
+}
+[data-theme="dark"] .what-we-do-title {
+  color: #ffffff !important;
+}
+[data-theme="dark"] .what-we-do-right,
+[data-theme="dark"] .what-we-do-right p {
+  color: #f0f4f8 !important;  /* Slightly off-white for better readability */
+  font-weight: 400;  /* Slightly lighter font weight */
+}
+
+/* Contact Section in Dark Mode */
+[data-theme="dark"] .contact-label {
+  color: #82c0ff !important;  /* Lighter blue for labels */
+}
 [data-theme="dark"] .contact-title,
-[data-theme="dark"] .contact-desc,
+[data-theme="dark"] .contact-desc {
+  color: #e6f2ff !important;  /* Light blue for text */
+}
+
+[data-theme="dark"] .contact-info {
+  color: #e6f2ff;  /* Light blue for contact info text */
+}
+
+[data-theme="dark"] .contact-section {
+  background: #1a2230;  /* Darker background for better contrast */
+}
 [data-theme="dark"] .area-card-description,
 [data-theme="dark"] .foundation-name,
 [data-theme="dark"] .submit-btn,
@@ -930,7 +991,21 @@ h2, h3 {
   background: #232a3a;
 }
 [data-theme="dark"] .contact-form {
+  background: #1a2230;
+  color: #e6f2ff;
+}
+
+[data-theme="dark"] .contact-form input,
+[data-theme="dark"] .contact-form textarea {
   background: #232a3a;
+  color: #e6f2ff;
+  border: 1px solid #2a3444;
+}
+
+[data-theme="dark"] .contact-form input::placeholder,
+[data-theme="dark"] .contact-form textarea::placeholder {
+  color: #8a9bb8;
+  opacity: 1;
 }
 [data-theme="dark"] .as-header__btn--register {
   background: #232a3a;

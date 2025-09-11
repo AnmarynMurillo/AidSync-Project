@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="/public/css/login.css">
 </head>
 <body style="position:relative;min-height:100vh;">
-  <a href="/index.html" id="logo-link" style="display:block;width:fit-content;margin:1rem auto 0 auto;">
+  <a href="/public/index.html" id="logo-link" style="display:block;width:fit-content;margin:1rem auto 0 auto;">
     <img src="/public/assets/logos/logito.ico" alt="AidSync Logo" style="width:120px;height:120px;display:block;margin:0 auto;cursor:pointer;filter:drop-shadow(0 2px 8px #003d6610);">
   </a>
   <main class="login-main">
@@ -30,6 +30,10 @@
             </button>
           </div>
         </div>
+        <!-- Forgot password (NEW) -->
+        <div style="text-align:right;margin:6px 0 8px;">
+          <a href="#" id="forgot-password-link" style="font-size:0.92rem;color:#16a085;text-decoration:underline;">Forgot your password?</a>
+        </div>
         <button class="login-btn" type="submit">Log in</button>
         <div id="login-status" class="login-status"></div>
       </form>
@@ -44,7 +48,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
   <script src="../js/login.js"></script>
   <script>
-    // Mostrar/ocultar contraseña
+    // Mostrar/ocultar contraseña y ocultar contraseña
     document.getElementById('togglePassword').addEventListener('click', function() {
       const pwd = document.getElementById('login-pass');
       const eye = document.getElementById('eyeIcon');
