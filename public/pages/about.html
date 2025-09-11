@@ -57,12 +57,6 @@
                         </div>
                     </div>
                 </div>
-                <button class="carousel-control prev" aria-label="Previous slide">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="carousel-control next" aria-label="Next slide">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
                 <div class="carousel-dots">
                     <!-- Dots will be added by JavaScript -->
                 </div>
@@ -79,17 +73,9 @@
                 
                 <div class="team-carousel-container">
                     
-                   <button class="carousel-control prev" aria-label="Previous slide">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    
                     <div class="team-carousel" aria-live="polite">
                         <!-- Team members will be dynamically inserted here by JavaScript -->
-                     </div>
-                    
-                   <button class="carousel-control next" aria-label="Next slide">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
+                    </div>
                     
                     <div class="team-carousel-dots" role="tablist">
                         <!-- Dots will be dynamically inserted here by JavaScript -->
@@ -198,39 +184,38 @@
         </section>
     </main>
 
-    <!-- Footer Container -->
-    <div id="footer-container" class="as-footer"></div>
-
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/src/components/js/loader.js"></script>
-    <script src="/public/js/about.js"></script>
+ <!-- Footer -->
+ <div id="footer-container"></div>
     
-    <!-- Load header and footer -->
-    <script>
-        // Load header
-        fetch('/src/components/html/header.html')
-            .then(r => r.text())
-            .then(html => {
-                const headerContainer = document.getElementById('header-container');
-                if (headerContainer) {
-                    headerContainer.innerHTML = html;
-                    console.log('Header loaded successfully');
-                }
-            })
-            .catch(error => console.error('Error loading header:', error));
-            
-        // Load footer
-        fetch('/src/components/html/footer.html')
-            .then(r => r.text())
-            .then(html => {
-                const footerContainer = document.getElementById('footer-container');
-                if (footerContainer) {
-                    footerContainer.innerHTML = html;
-                    console.log('Footer loaded successfully');
-                }
-            })
-            .catch(error => console.error('Error loading footer:', error));
-    </script>
+ <!-- Cargador de módulos -->
+ <script src="/src/components/js/loader.js" type="module"></script>
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <script src="/public/js/about.js"></script>
+ <!-- Carga dinámica del header y footer -->
+ <script>
+   // Cargar header
+   fetch('/src/components/html/header.html') 
+     .then(r => r.text())
+     .then(html => {
+       const headerContainer = document.getElementById('header-container');
+       if (headerContainer) {
+         headerContainer.innerHTML = html;
+         console.log('Header cargado correctamente');
+       }
+     })
+     .catch(error => console.error('Error al cargar el header:', error));
+
+   // Cargar footer
+   fetch('/src/components/html/footer.html')
+     .then(r => r.text())
+     .then(html => {
+       const footerContainer = document.getElementById('footer-container');
+       if (footerContainer) {
+         footerContainer.innerHTML = html;
+         console.log('Footer cargado correctamente');
+       }
+     })
+     .catch(error => console.error('Error al cargar el footer:', error));
+ </script>
 </body>
 </html>
