@@ -3,7 +3,23 @@
  * Handles user menu, mobile navigation, and authentication state
  */
 class AuthHeader {
+  // Static properties
+  static authStateChangedCallback = null;
+  static currentUser = null;
+  static DEFAULT_AVATAR = '/public/assets/img/default-avatar.png';
+
   constructor() {
+    // Initialize DOM elements
+    this.initializeElements();
+    
+    // Set up event listeners and auth state
+    this.initialize();
+  }
+
+  /**
+   * Initialize DOM element references
+   */
+  initializeElements() {
     // Main elements
     this.authHeader = document.getElementById('authHeader');
     this.userMenu = document.querySelector('.as-header__user-menu');
@@ -31,154 +47,244 @@ class AuthHeader {
     
     // Dark mode toggle
     this.darkModeToggle = document.querySelector('.as-header__darkmode-btn');
-    
-    this.init();
   }
 
-  async init() {
+  /**
+   * Initialize the component
+   */
+  async initialize() {
     try {
-      await this.checkAuthState();
+      this.setupAuthStateListener();
       this.setupEventListeners();
       this.setupMobileMenu();
       this.setupDarkModeToggle();
       this.setupClickOutsideHandlers();
+      await this.checkAuthState();
     } catch (error) {
       console.error('Error initializing auth header:', error);
     }
   }
 
-  setupEventListeners() {
-    try {
-      // Toggle user dropdown menu
-      if (this.userMenuButton) {
-        this.userMenuButton.addEventListener('click', (e) => {
-          e.stopPropagation();
-          this.toggleUserDropdown();
-        });
-      }
+  /**
+   * Set up Firebase auth state listener
+   */
+  setupAuthStateListener() {
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          this.currentUser = user;
+          this.updateAuthUI(user);
+        } else {
+          this.resetUserProfile();
+          this.toggleAuthUI(false);
+        }
+        
+        if (this.authStateChangedCallback) {
+          this.authStateChangedCallback(user);
+        }
+      });
+    }
+  }
 
-      // Logout buttons
-      [this.logoutBtn, this.mobileLogoutBtn].forEach(btn => {
-        if (btn) {
-          btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            this.handleLogout();
-          });
-        }
-      });
-      
-      // Close dropdown when pressing Escape
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          this.closeUserDropdown();
-          this.closeMobileMenu();
-        }
-      });
-    } catch (error) {
-      console.error('Error setting up event listeners:', error);
+  /**
+   * Update UI based on authentication state
+   * @param {Object} user - Firebase user object
+   */
+  updateAuthUI(user) {
+    if (!user) {
+      this.toggleAuthUI(false);
+      return;
     }
+
+    this.toggleAuthUI(true);
+    this.updateUserProfile(user);
   }
-  
+
+  /**
+   * Update user profile in the UI
+   * @param {Object} user - Firebase user object
+   */
+  updateUserProfile(user) {
+    const displayName = user.displayName || 'User';
+    const email = user.email || '';
+    const photoURL = user.photoURL || this.constructor.DEFAULT_AVATAR;
+
+    // Update desktop view
+    if (this.userName) this.userName.textContent = displayName;
+    if (this.userDisplayName) this.userDisplayName.textContent = displayName;
+    if (this.userEmail) this.userEmail.textContent = email;
+    if (this.userAvatar) this.userAvatar.src = photoURL;
+    if (this.dropdownAvatar) this.dropdownAvatar.src = photoURL;
+
+    // Update mobile view
+    if (this.mobileUserName) this.mobileUserName.textContent = displayName;
+    if (this.mobileUserEmail) this.mobileUserEmail.textContent = email;
+    if (this.mobileUserAvatar) this.mobileUserAvatar.src = photoURL;
+  }
+
+  /**
+   * Reset user profile to default state
+   */
+  resetUserProfile() {
+    // Reset desktop view
+    if (this.userName) this.userName.textContent = 'Guest';
+    if (this.userDisplayName) this.userDisplayName.textContent = 'Guest';
+    if (this.userEmail) this.userEmail.textContent = '';
+    if (this.userAvatar) this.userAvatar.src = this.constructor.DEFAULT_AVATAR;
+    if (this.dropdownAvatar) this.dropdownAvatar.src = this.constructor.DEFAULT_AVATAR;
+
+    // Reset mobile view
+    if (this.mobileUserName) this.mobileUserName.textContent = 'Guest';
+    if (this.mobileUserEmail) this.mobileUserEmail.textContent = '';
+    if (this.mobileUserAvatar) this.mobileUserAvatar.src = this.constructor.DEFAULT_AVATAR;
+  }
+
+  /**
+   * Toggle UI elements based on authentication state
+   * @param {boolean} isAuthenticated - Whether the user is authenticated
+   */
+  toggleAuthUI(isAuthenticated) {
+    // Toggle user menu and login button visibility
+    if (this.userMenu) {
+      this.userMenu.style.display = isAuthenticated ? 'flex' : 'none';
+    }
+
+    // Toggle mobile menu items
+    const authElements = document.querySelectorAll('[data-auth]');
+    authElements.forEach(el => {
+      if (el.dataset.auth === 'authenticated') {
+        el.style.display = isAuthenticated ? 'block' : 'none';
+      } else if (el.dataset.auth === 'guest') {
+        el.style.display = isAuthenticated ? 'none' : 'block';
+      }
+    });
+  }
+
+  /**
+   * Set up event listeners
+   */
+  setupEventListeners() {
+    // User menu toggle
+    if (this.userMenuButton) {
+      this.userMenuButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.toggleUserDropdown();
+      });
+    }
+
+    // Logout button
+    [this.logoutBtn, this.mobileLogoutBtn].forEach(btn => {
+      if (btn) {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.handleLogout();
+        });
+      }
+    });
+  }
+
+  /**
+   * Set up mobile menu functionality
+   */
   setupMobileMenu() {
-    try {
-      // Toggle mobile menu
-      if (this.burgerButton) {
-        this.burgerButton.addEventListener('click', () => {
-          const isExpanded = this.burgerButton.getAttribute('aria-expanded') === 'true';
-          this.burgerButton.setAttribute('aria-expanded', !isExpanded);
-          if (this.mobileMenu) {
-            this.mobileMenu.style.display = isExpanded ? 'none' : 'block';
-          }
-          
-          // Toggle body scroll
-          document.body.style.overflow = isExpanded ? '' : 'hidden';
-        });
-      }
-      
-      // Close mobile menu
-      if (this.mobileCloseButton) {
-        this.mobileCloseButton.addEventListener('click', () => {
-          this.closeMobileMenu();
-        });
-      }
-      
-      // Close mobile menu when clicking on a link
-      if (this.mobileMenu) {
-        const mobileLinks = this.mobileMenu.querySelectorAll('a');
-        mobileLinks.forEach(link => {
-          link.addEventListener('click', () => {
-            this.closeMobileMenu();
-          });
-        });
-      }
-    } catch (error) {
-      console.error('Error setting up mobile menu:', error);
+    if (this.burgerButton) {
+      this.burgerButton.addEventListener('click', () => {
+        const isExpanded = this.burgerButton.getAttribute('aria-expanded') === 'true';
+        this.burgerButton.setAttribute('aria-expanded', !isExpanded);
+        if (this.mobileMenu) {
+          this.mobileMenu.classList.toggle('show', !isExpanded);
+          document.body.style.overflow = !isExpanded ? 'hidden' : '';
+        }
+      });
+    }
+
+    if (this.mobileCloseButton) {
+      this.mobileCloseButton.addEventListener('click', () => {
+        this.closeMobileMenu();
+      });
     }
   }
-  
+
+  /**
+   * Set up dark mode toggle
+   */
   setupDarkModeToggle() {
-    try {
-      if (!this.darkModeToggle) return;
-      
-      // Check for saved theme preference
-      const savedTheme = localStorage.getItem('theme') || 'light';
-      if (savedTheme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
+    if (!this.darkModeToggle) return;
+
+    // Check for saved user preference or system preference
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme');
+    const isDark = savedTheme ? savedTheme === 'dark' : prefersDark;
+
+    // Apply theme
+    this.applyTheme(isDark);
+
+    // Toggle theme on button click
+    this.darkModeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      this.applyTheme(!isDark);
+      localStorage.setItem('theme', !isDark ? 'dark' : 'light');
+    });
+  }
+
+  /**
+   * Apply theme to the document
+   * @param {boolean} isDark - Whether to apply dark theme
+   */
+  applyTheme(isDark) {
+    if (isDark) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  }
+
+  /**
+   * Set up click outside handlers for dropdowns
+   */
+  setupClickOutsideHandlers() {
+    document.addEventListener('click', (e) => {
+      // Close user dropdown when clicking outside
+      if (this.userMenuButton && !this.userMenuButton.contains(e.target) && 
+          this.userDropdown && !this.userDropdown.contains(e.target)) {
+        this.closeUserDropdown();
       }
       
-      // Toggle dark mode
-      this.darkModeToggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-      });
-    } catch (error) {
-      console.error('Error setting up dark mode toggle:', error);
-    }
+      // Close mobile menu when clicking outside
+      if (this.mobileMenu && this.mobileMenu.classList.contains('show') && 
+          !this.mobileMenu.contains(e.target) && 
+          this.burgerButton && !this.burgerButton.contains(e.target)) {
+        this.closeMobileMenu();
+      }
+    });
   }
-  
-  setupClickOutsideHandlers() {
-    try {
-      // Close dropdown when clicking outside
-      document.addEventListener('click', (e) => {
-        if (this.userMenu && !this.userMenu.contains(e.target)) {
-          this.closeUserDropdown();
-        }
-        
-        // Close mobile menu when clicking outside
-        if (this.mobileMenu && this.mobileMenu.style.display === 'block' && 
-            !this.mobileMenu.contains(e.target) && 
-            this.burgerButton && !this.burgerButton.contains(e.target)) {
-          this.closeMobileMenu();
-        }
-      });
-    } catch (error) {
-      console.error('Error setting up click outside handlers:', error);
-    }
-  }
-  
+
+  /**
+   * Toggle user dropdown menu
+   */
   toggleUserDropdown() {
     try {
-      if (!this.userMenu) return;
+      if (!this.userMenuButton) return;
       
-      const isExpanded = this.userMenu.getAttribute('aria-expanded') === 'true';
-      this.userMenu.setAttribute('aria-expanded', !isExpanded);
+      const isExpanded = this.userMenuButton.getAttribute('aria-expanded') === 'true';
+      this.userMenuButton.setAttribute('aria-expanded', !isExpanded);
       if (this.userDropdown) {
-        this.userDropdown.setAttribute('data-visible', !isExpanded);
+        this.userDropdown.classList.toggle('show', !isExpanded);
       }
     } catch (error) {
       console.error('Error toggling user dropdown:', error);
     }
   }
   
+  /**
+   * Close user dropdown menu
+   */
   closeUserDropdown() {
     try {
-      if (this.userMenu) {
-        this.userMenu.setAttribute('aria-expanded', 'false');
+      if (this.userMenuButton) {
+        this.userMenuButton.setAttribute('aria-expanded', 'false');
         if (this.userDropdown) {
-          this.userDropdown.setAttribute('data-visible', 'false');
+          this.userDropdown.classList.remove('show');
         }
       }
     } catch (error) {
@@ -186,12 +292,15 @@ class AuthHeader {
     }
   }
   
+  /**
+   * Close mobile menu
+   */
   closeMobileMenu() {
     try {
       if (this.burgerButton) {
         this.burgerButton.setAttribute('aria-expanded', 'false');
         if (this.mobileMenu) {
-          this.mobileMenu.style.display = 'none';
+          this.mobileMenu.classList.remove('show');
         }
         document.body.style.overflow = '';
       }
@@ -200,114 +309,35 @@ class AuthHeader {
     }
   }
 
+  /**
+   * Check authentication state
+   */
   async checkAuthState() {
     try {
-      // Check if user is logged in (this would be replaced with your actual auth check)
-      const isLoggedIn = await this.checkIfUserIsLoggedIn();
+      if (typeof firebase === 'undefined' || !firebase.auth) {
+        console.warn('Firebase Auth not available');
+        return false;
+      }
       
-      if (isLoggedIn) {
-        this.showAuthHeader();
-        await this.loadUserData();
+      const user = firebase.auth().currentUser;
+      if (user) {
+        this.currentUser = user;
+        this.updateAuthUI(user);
+        return true;
       } else {
-        this.redirectToLogin();
+        this.resetUserProfile();
+        this.toggleAuthUI(false);
+        return false;
       }
     } catch (error) {
       console.error('Error checking auth state:', error);
-      this.redirectToLogin();
-    }
-  }
-
-  async checkIfUserIsLoggedIn() {
-    try {
-      // Check for Firebase auth state or your preferred auth method
-      // Example for Firebase:
-      // const user = firebase.auth().currentUser;
-      // return !!user;
-      
-      // For demo purposes, check localStorage
-      return localStorage.getItem('isLoggedIn') === 'true';
-    } catch (error) {
-      console.error('Error checking if user is logged in:', error);
       return false;
     }
   }
 
-  async loadUserData() {
-    try {
-      // Get user data from your authentication service
-      const userData = await this.fetchUserData();
-      
-      if (userData) {
-        this.updateUserUI(userData);
-      }
-    } catch (error) {
-      console.error('Error loading user data:', error);
-    }
-  }
-
-  async fetchUserData() {
-    try {
-      // Replace with your actual user data fetching logic
-      // Example for Firebase:
-      // const user = firebase.auth().currentUser;
-      // if (user) {
-      //   const token = await user.getIdToken();
-      //   const response = await fetch('/api/user/profile', {
-      //     headers: { 'Authorization': `Bearer ${token}` }
-      //   });
-      //   if (!response.ok) throw new Error('Failed to fetch user data');
-      //   return await response.json();
-      // }
-      
-      // For demo purposes, return mock data
-      return {
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        avatar: '/public/assets/img/default-avatar.png',
-        role: 'volunteer' // or 'admin', 'donor', etc.
-      };
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-      throw error; // Re-throw to be handled by the caller
-    }
-  }
-
-  updateUserUI(userData) {
-    try {
-      if (!userData) return;
-      
-      // Update desktop UI
-      if (this.userName) this.userName.textContent = userData.name.split(' ')[0]; // First name only
-      if (this.userDisplayName) this.userDisplayName.textContent = userData.name;
-      if (this.userEmail) this.userEmail.textContent = userData.email;
-      
-      // Update mobile UI
-      if (this.mobileUserName) this.mobileUserName.textContent = userData.name;
-      if (this.mobileUserEmail) this.mobileUserEmail.textContent = userData.email;
-      
-      // Update avatars
-      const avatarUrl = userData.avatar || '/public/assets/img/default-avatar.png';
-      [this.userAvatar, this.dropdownAvatar, this.mobileUserAvatar].forEach(el => {
-        if (el) el.src = avatarUrl;
-      });
-      
-      // Update UI based on user role if needed
-      this.updateUIBasedOnRole(userData.role);
-    } catch (error) {
-      console.error('Error updating user UI:', error);
-    }
-  }
-
-  updateUIBasedOnRole(role) {
-    try {
-      // Example: Add role-specific UI updates here
-      // if (role === 'admin') { ... }
-      // This is a placeholder for role-based UI updates
-    } catch (error) {
-      console.error('Error updating UI based on role:', error);
-    }
-  }
-
+  /**
+   * Handle user logout
+   */
   async handleLogout() {
     try {
       // Show loading state
@@ -315,116 +345,51 @@ class AuthHeader {
         if (btn) {
           const originalText = btn.textContent;
           btn.disabled = true;
-          btn.innerHTML = '<span class="spinner">Logging out...</span>';
+          btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Logging out...';
           
-          // Reset button state after 2 seconds if logout fails
+          // Reset button state after 3 seconds if logout fails
           setTimeout(() => {
-            if (btn && btn.disabled) {
+            if (btn) {
               btn.disabled = false;
               btn.textContent = originalText;
             }
-          }, 2000);
+          }, 3000);
         }
       });
+
+      // Sign out from Firebase
+      if (typeof firebase !== 'undefined' && firebase.auth) {
+        await firebase.auth().signOut();
+      }
       
-      // Perform logout
-      await this.performLogout();
+      // Clear any stored user data
+      localStorage.removeItem('user');
+      sessionStorage.removeItem('user');
       
-      // Clear any stored auth data
-      localStorage.removeItem('isLoggedIn');
+      // Redirect to home page after logout
+      window.location.href = '/';
       
-      // Redirect to login page
-      window.location.href = '/public/pages/login.html';
     } catch (error) {
       console.error('Error during logout:', error);
-      alert('Failed to log out. Please try again.');
       
-      // Reset buttons
+      // Reset button state
       [this.logoutBtn, this.mobileLogoutBtn].forEach(btn => {
         if (btn) {
           btn.disabled = false;
           btn.textContent = 'Logout';
         }
       });
+      
+      // Show error message to user
+      alert('Failed to log out. Please try again.');
     }
   }
+}
 
-  async performLogout() {
-    try {
-      // Example for Firebase:
-      // await firebase.auth().signOut();
-      
-      // Clear auth state
-      localStorage.removeItem('isLoggedIn');
-      // Add any other cleanup needed
-      
-      return new Promise((resolve) => {
-        // Simulate network delay
-        setTimeout(resolve, 500);
-      });
-    } catch (error) {
-      console.error('Error performing logout:', error);
-      throw error;
-    }
-  }
-
-  redirectToLogin() {
-    try {
-      // Don't redirect if we're already on the login page
-      if (!window.location.pathname.includes('login.html')) {
-        window.location.href = '/public/pages/login.html';
-      }
-    } catch (error) {
-      console.error('Error during login redirect:', error);
-      // Fallback to default login page if there's an error
-      window.location.href = '/public/pages/login.html';
-    }
-  }
-
-  showAuthHeader() {
-    try {
-      if (!this.authHeader) return;
-      
-      this.authHeader.style.display = 'block';
-      
-      // Add animation class
-      this.authHeader.classList.add('as-header--visible');
-      
-      // Trigger reflow
-      void this.authHeader.offsetWidth;
-      
-      // Add active class for animation
-      this.authHeader.classList.add('as-header--active');
-    } catch (error) {
-      console.error('Error showing auth header:', error);
-    }
-  }
-
-  hideAuthHeader() {
-    try {
-      if (!this.authHeader) return;
-      
-      this.authHeader.classList.remove('as-header--active');
-      
-      // Wait for animation to complete before hiding
-      setTimeout(() => {
-        if (this.authHeader) {
-          this.authHeader.style.display = 'none';
-        }
-      }, 300); // Match this with your CSS transition duration
-    } catch (error) {
-      console.error('Error hiding auth header:', error);
-    }
-  }
-
-// Initialize when DOM is loaded
+// Initialize the auth header when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
-  try {
-    // Only initialize if the auth header exists on the page
-    if (document.getElementById('authHeader')) {
-      new AuthHeader();
-    }
-  } catch (error) {
-    console.error('Failed to initialize auth header:', error);
+  // Only initialize if the auth header exists on the page
+  if (document.getElementById('authHeader')) {
+    window.authHeader = new AuthHeader();
   }
 });
