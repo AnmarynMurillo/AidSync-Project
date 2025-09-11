@@ -1,12 +1,11 @@
 <!-- Header principal de AidSync -->
-<header class="as-header" role="banner">
+<header id="guestHeader" class="as-header" role="banner">
   <div class="as-header__container">
     <!-- Logo y eslogan -->
     <div class="as-header__logo-area">
       <a href="/index.html" class="as-header__logo-link">
         <img src="/public/assets/logos/White_name.png" alt="AidSync Logo" class="as-header__logo" />
       </a>
-      <span class="as-header__slogan"></span>
     </div>
 
     <!-- Navegación principal (desktop) -->
@@ -19,17 +18,13 @@
       </ul>
     </nav>
 
-    <!-- Botones usuario (desktop) -->
+    <!-- User actions and theme toggle -->
     <div class="as-header__user-actions">
-      <a href="/public/pages/register.html" class="as-header__btn as-header__btn--register">Register</a>
-      <a href="/public/pages/login.html" class="as-header__btn as-header__btn--login">Login</a>
-    </div>
-
-    <!-- Botones globales (solo modo oscuro) -->
-    <div class="as-header__global-actions">
       <button class="as-header__icon-btn as-header__darkmode-btn" aria-label="Toggle dark mode">
         <span class="as-header__icon as-header__icon--moon"></span>
       </button>
+      <a href="/public/pages/login.html" class="as-header__btn as-header__btn--login">Login</a>
+      <a href="/public/pages/register.html" class="as-header__btn as-header__btn--register">Register</a>
     </div>
 
     <!-- Menú hamburguesa (solo móvil/tablet) -->

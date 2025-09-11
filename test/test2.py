@@ -1,1 +1,2 @@
 #owo
+#hola, necesito comentarte algo, quiero hacer cierta nueva funcion que quiero implementar, será un nuevo componente de header para cuando el usuario esté logeado, de esta forma nueva pagina será mucho mas dinamica,si tuvieras que hacer esto, como lo harias?, dame una secuencia de pasos que harias si tuvieras que hacerlo, que usarias y como lo harias
