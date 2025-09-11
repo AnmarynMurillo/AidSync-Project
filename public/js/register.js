@@ -121,16 +121,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (firebase.database) {
                     await firebase.database().ref('users/' + userCredential.user.uid).set({
                         nombre: name,
-                        username,               // NEW: persist username
+                        username,
                         email,
                         edad: age,
                         area,
-                        accountType             // already added
+                        accountType
                     });
                 }
+                // Obtener token/uid tras registrar (para que Profile cargue de inmediato)
+                try {
+                    const token = await userCredential.user.getIdToken();
+                    localStorage.setItem('idToken', token);
+                    const uid = (function(t){ try{const p=JSON.parse(atob(t.split('.')[1])); return p.user_id||p.uid||null;}catch(_){return null;} })(token);
+                    if (uid) localStorage.setItem('uid', uid);
+                } catch(_){}
                 msg.textContent = 'Successful register. Redirecting...';
                 msg.classList.remove('error'); msg.classList.add('success');
-                setTimeout(() => window.location.assign('/public/pages/blog.html'), 1000);
+                setTimeout(() => window.location.assign('/public/pages/profile.html'), 1000);
             } catch (firebaseErr) {
                 msg.textContent = 'Error: ' + firebaseErr.message;
                 msg.classList.remove('success'); msg.classList.add('error');

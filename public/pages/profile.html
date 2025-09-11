@@ -12,38 +12,41 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 </head>
 <body>
-    <h2>My Profile</h2>
-    <div id="profileContainer">
-        <!-- Foto de perfil -->
-        <img id="profilePic" src="../assets/img/default-profile.png" alt="Foto de perfil" width="120" height="120">
-        <form id="photoForm" enctype="multipart/form-data">
-            <input type="file" id="photoInput" accept="image/*">
-            <button type="submit">Change Profile Picture</button>
-        </form>
-        <!-- Datos del usuario en modo solo lectura -->
-        <div id="profileData">
-            <p><strong>Full name:</strong> <span id="nombre"></span></p>
-            <p><strong>Age:</strong> <span id="edad"></span></p>
-            <p><strong>Volunteering Area:</strong> <span id="area"></span></p>
-            <p><strong>Email:</strong> <span id="email"></span></p>
-        </div>
-        <div id="profileMessage"></div>
-    </div>
+    <button class="back-btn" aria-label="Back to home" onclick="window.location.href='../index.html'">←</button>
     <main class="profile-main">
       <section class="profile-section">
         <h1>Profile</h1>
-        <dl class="profile-dl">
-          <dt>Name</dt><dd id="pf-name">-</dd>
-          <dt>Username</dt><dd id="pf-username">-</dd>
-          <dt>Email</dt><dd id="pf-email">-</dd>
-          <dt>Age</dt><dd id="pf-age">-</dd>
-          <dt>Volunteering Area</dt><dd id="pf-area">-</dd>
-          <dt>Account Type</dt><dd id="pf-accountType">-</dd>
-        </dl>
-        <div id="profile-status" class="profile-status"></div>
+        <div id="profileContainer">
+          <div class="profile-avatar">
+            <img id="profilePic" class="profile-pic" src="../assets/img/default-profile.png" alt="Foto de perfil" width="150" height="150">
+            <form id="photoForm" enctype="multipart/form-data" class="photo-form">
+              <input type="file" id="photoInput" accept="image/*" style="display:none">
+              <button type="button" class="change-photo-btn" id="changePhotoBtn">Change image</button>
+            </form>
+          </div>
+          <dl class="profile-dl">
+            <dt>Username</dt><dd id="pf-username">-</dd>
+            <dt>Full name</dt><dd id="pf-name">-</dd>
+            <dt>Age</dt><dd id="pf-age">-</dd>
+            <dt>Volunteering Area</dt><dd id="pf-area">-</dd>
+            <dt>Email</dt><dd id="pf-email">-</dd>
+            <dt>Account Type</dt><dd id="pf-accountType">-</dd>
+          </dl>
+          <div id="profile-status" class="profile-status"></div>
+        </div>
       </section>
     </main>
     <script src="../js/profile.js"></script>
+    <script>
+      // Trigger file input from custom button
+      const changeBtn = document.getElementById('changePhotoBtn');
+      const inputEl = document.getElementById('photoInput');
+      const formEl = document.getElementById('photoForm');
+      if(changeBtn && inputEl && formEl){
+        changeBtn.addEventListener('click', function(){ inputEl.click(); });
+        inputEl.addEventListener('change', function(){ if(this.files && this.files[0]){ formEl.requestSubmit(); } });
+      }
+    </script>
 </body>
 </html>
 
