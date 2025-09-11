@@ -41,7 +41,7 @@ body {
     top: 14px; left: 14px;
     display: inline-flex; align-items:center; justify-content:center;
     width: 42px; height: 42px;
-    border-radius: 12px;
+    border-radius: 50%;
     border: 1.5px solid var(--border);
     background: #ffffffcc;
     color: var(--primary);

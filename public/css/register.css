@@ -23,13 +23,32 @@ body{
   font-family: 'Poppins','Nunito',Arial,sans-serif;
 }
 
-/* Logo */
-#logo-link{ display:block; width:fit-content; margin: 16px auto 0; }
-#logo-link img{ width:84px; height:84px; display:block; margin:0 auto 8px; object-fit:contain; filter:drop-shadow(0 3px 8px rgba(0,61,102,.15)); }
+/* Back button (top-left) */
+.back-btn{
+  position: fixed;
+  top: 14px; left: 14px;
+  right: auto;
+  display: inline-flex; align-items:center; justify-content:center;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: #ffffffcc;
+  color: var(--primary);
+  font-size: 20px; font-weight: 800; line-height:1;
+  cursor:pointer;
+  box-shadow: 0 6px 16px rgba(0,61,102,.12);
+  transition: background .2s ease, color .2s ease, border-color .2s ease, transform .15s ease;
+  z-index: 1000;
+}
+.back-btn:hover{
+  background: var(--accent);
+  color:#fff; border-color: transparent;
+  transform: translateY(-1px);
+}
 
 /* Layout */
 .register-main{
-  padding-block: clamp(24px, 6vh, 64px); /* more breathing space */
+  padding-block: clamp(24px, 4vh, 48px); /* lift card a bit up */
   display: grid;
   place-content: center;
   place-items: center; /* center content horizontally and vertically */
