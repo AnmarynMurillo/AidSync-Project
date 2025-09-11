@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,69 +27,132 @@
         }
 
         body {
-            font-family: 'Inter', 'Poppins', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            margin: 0;
-            line-height: 1.6;
+          font-family: 'Poppins', sans-serif;
+          background-color: #fff;
+          color:#00113B;
         }
 
-        .container {
-            max-width: 1160px;
-            margin: 0 auto;
-            padding: 20px 24px;
+        header,
+        footer,
+        nav,
+        section,
+        main {
+          width: 100%;
+        }
+
+        .topbar {
+          background: rgb(237, 240, 245);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem 2rem;
+          border-bottom: 1px solid #02035a;
+        }
+
+        .topbar .left,
+        .topbar .right {
+          display: flex;
+          gap: 1rem;
+          align-items: center;
+        }
+
+        nav ul {
+          display: flex;
+          gap: 2rem;
+          list-style: none;
+          padding: 1rem 2rem;
+        }
+
+        nav ul a {
+          text-decoration: none;
+          color: #00113B;
+          font-weight: 500;
         }
 
         .hero {
-            text-align: center;
-            padding: 40px 0 20px;
+          text-align: center;
+          padding: 3rem 1rem;
         }
 
-        .page-title {
-            font-size: 48px;
-            color: var(--brand-primary);
-            margin: 0 0 16px;
-            font-weight: 800;
-            line-height: 1.2;
-            text-transform: uppercase;
-            letter-spacing: -0.5px;
+        .hero h1 {
+          font-size: 2.5rem;
         }
 
-        .subtitle {
-            font-size: 28px;
-            color: var(--muted);
-            margin: 0 0 40px;
-            font-weight: 600;
+        .breadcrumb {
+          color: #FF6A00;
+          margin-bottom: 1rem;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: 1.2fr 0.9fr;
-            gap: 28px;
-            margin: 28px 0 60px;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        @media (max-width: 940px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
+        .contact-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
         }
 
-        .card {
-            background: var(--surface);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-            animation: fadeIn 0.7s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        form {
+        .contact-form {
+            flex: 1;
+            background: white;
             padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .contact-info {
+            width: 350px;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .info-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--brand-primary);
+            box-shadow: 0 2px 8px rgb(251, 248, 248);
+        }
+
+        .info-box h3 {
+            color: var(--brand-primary);
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--brand-primary);
+            color: rgb(2, 4, 80);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--brand-accent);
+            transform: translateY(-3px);
         }
 
         .form-grid {
@@ -140,7 +204,7 @@
 
         .send-btn {
             background: var(--brand-primary);
-            color: white;
+            color: rgb(1, 25, 61);
             border: none;
             padding: 14px 28px;
             border-radius: 999px;
@@ -156,76 +220,6 @@
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
         }
-
-        .side-card {
-            background: linear-gradient(135deg, var(--brand-primary), #1a2b5a);
-            color: #E6EEF5;
-            padding: 30px;
-            height: 100%;
-            box-sizing: border-box;
-        }
-
-        .side-card h3 {
-            color: white;
-            font-size: 22px;
-            margin: 0 0 15px;
-        }
-
-        .side-card p {
-            opacity: 0.9;
-            margin: 0 0 25px;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        .contact-method {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 14px;
-            padding: 18px;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .contact-method:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .contact-method strong {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 15px;
-        }
-
-        .divider {
-            height: 1px;
-            background: rgba(255, 255, 255, 0.12);
-            margin: 25px 0;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 12px;
-            margin-top: 10px;
-        }
-
-        .social-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .social-link:hover {
-            background: var(--brand-accent);
-            transform: scale(1.1) rotate(5deg);
-        }
     </style>
 </head>
 <body>
@@ -236,11 +230,11 @@
         <section class="hero">
             <h1 class="page-title">Contact Us</h1>
             <p class="subtitle">We're here to help</p>
-            <p class="subtitle">Have questions, feedback, or need assistance? We'd love to hear from you.</p>
+            <p>Have questions, feedback, or need assistance? We'd love to hear from you.</p>
         </section>
 
-        <div class="grid">
-            <div class="card">
+        <div class="contact-container">
+            <div class="contact-form">
                 <form id="contactForm">
                     <div class="form-grid">
                         <div class="form-group">
@@ -253,20 +247,14 @@
                         </div>
                     </div>
                     
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="confirmEmail">Confirm Email</label>
-                            <input type="email" id="confirmEmail" name="confirmEmail" placeholder="Confirm your email" required>
-                        </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
                     </div>
 
                     <div class="form-group">
                         <label for="subject">Subject</label>
-                        <input type="text" id="subject" name="subject" placeholder="What's this about?" style="width: 100%;">
+                        <input type="text" id="subject" name="subject" placeholder="What's this about?" required>
                     </div>
 
                     <div class="form-group">
@@ -278,29 +266,20 @@
                 </form>
             </div>
 
-            <div class="card side-card">
-                <h3>Get in Touch</h3>
-                <p>Our team is here to help and answer any questions you might have. We look forward to hearing from you.</p>
-                
-                <div class="contact-method">
-                    <strong>Email Us</strong>
-                    <span>support@aidsync.org</span>
+            <div class="contact-info">
+                <div class="info-box">
+                    <h3>Email Us</h3>
+                    <p>support@aidsync.org</p>
                 </div>
                 
-                <div class="contact-method">
-                    <strong>Call Us</strong>
-                    <span>+1 (800) 123-4567</span>
+                <div class="info-box">
+                    <h3>Office Hours</h3>
+                    <p>Monday - Friday</p>
+                    <p>9:00 AM - 6:00 PM EST</p>
                 </div>
                 
-                <div class="contact-method">
-                    <strong>Office Hours</strong>
-                    <span>Monday - Friday: 9:00 AM - 6:00 PM EST</span>
-                </div>
-                
-                <div class="divider"></div>
-                
-                <div>
-                    <strong>Follow Us</strong>
+                <div class="info-box">
+                    <h3>Follow Us</h3>
                     <div class="social-links">
                         <a href="#" class="social-link" aria-label="Facebook">
                             <i class="fab fa-facebook-f"></i>
