@@ -5,18 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donations | AidSync</title>
-    <link rel="icon" href="/public/assets/logos/logito.ico" type="image/x-icon">
+    <link rel="icon" href="../assets/logos/logito.ico" type="image/x-icon">
     <!-- Preload fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/public/css/styles.css">
-    <link rel="stylesheet" href="/src/components/css/header.css">
-    <link rel="stylesheet" href="/src/components/css/footer.css">
-    <link rel="stylesheet" href="/public/css/donate.css">
-    <link rel="stylesheet" href="/public/css/donation-modal.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../../src/components/css/header.css">
+    <link rel="stylesheet" href="../../src/components/css/footer.css">
+    <link rel="stylesheet" href="../css/donate.css">
+    <link rel="stylesheet" href="../css/donation-modal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script defer src="/public/js/donate.js"></script>
+    <script defer src="../js/donate.js"></script>
 </head>
 <body>
   <!-- Header -->
@@ -49,38 +49,33 @@
   <!-- Footer -->
   <div id="footer-container"></div>
   
-  <!-- Module loader -->
-  <script src="/src/components/js/loader.js" type="module"></script>
-  
-  <!-- Dynamic loading of header and footer -->
+  <!-- Scripts -->
+  <script src="../../src/components/js/loader.js" type="module"></script>
   <script>
-    // Load header/footer
-    fetch('/src/components/html/header.html').then(r=>r.text()).then(h=>document.getElementById('header-container').innerHTML=h);
-    fetch('/src/components/html/footer.html').then(r=>r.text()).then(f=>document.getElementById('footer-container').innerHTML=f);
-
-    // Load header
-    fetch('/src/components/html/header.html')
+    // Load header and footer (matching index.html implementation)
+    fetch('../../src/components/html/header.html')
       .then(r => r.text())
-      .then(html => {
+      .then(h => {
         const headerContainer = document.getElementById('header-container');
         if (headerContainer) {
-          headerContainer.innerHTML = html;
-          console.log('Header loaded correctly');
+          headerContainer.innerHTML = h;
+          // Load header script
+          const headerScript = document.createElement('script');
+          headerScript.src = '../../src/components/js/header.js';
+          document.body.appendChild(headerScript);
         }
       })
-      .catch(error => console.error('Error loading the header:', error));
+      .catch(e => console.error('Error loading header:', e));
 
-    // Load footer
-    fetch('/src/components/html/footer.html')
+    fetch('../../src/components/html/footer.html')
       .then(r => r.text())
-      .then(html => {
+      .then(f => {
         const footerContainer = document.getElementById('footer-container');
         if (footerContainer) {
-          footerContainer.innerHTML = html;
-          console.log('Footer loaded correctly');
+          footerContainer.innerHTML = f;
         }
       })
-      .catch(error => console.error('Error loading the footer:', error));
+      .catch(e => console.error('Error loading footer:', e));
   </script>
   
   <script>
