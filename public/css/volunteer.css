@@ -318,6 +318,7 @@
   transform: scale(1.1);
   filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
 }
+/*volunter*/
 .hero-carousel {
   width: 100vw;
   min-height: 680px;
@@ -332,7 +333,7 @@
 .carousel-container {
   position: relative;
   width: 100vw;
-  height: 580px;
+  height: 680px;
   overflow: hidden;
   display: flex;
   align-items: center;
