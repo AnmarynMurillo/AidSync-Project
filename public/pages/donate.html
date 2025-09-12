@@ -5,22 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donations | AidSync</title>
-    <link rel="icon" href="../assets/logos/logito.ico" type="image/x-icon">
-    <!-- Preload fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="../assets/logos/Logo_logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../../src/components/css/header.css">
-    <link rel="stylesheet" href="../../src/components/css/footer.css">
+    <link rel="stylesheet" href="/src/components/css/header.css">
+    <link rel="stylesheet" href="/src/components/css/footer.css">
     <link rel="stylesheet" href="../css/donate.css">
     <link rel="stylesheet" href="../css/donation-modal.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script defer src="../js/donate.js"></script>
 </head>
 <body>
-  <!-- Header -->
-  <div id="header-container"></div>
+  <!-- Header Container -->
+  <div id="header-container" class="as-header"></div>
+
   <main class="donate-main">
    
     <h1>Make Your Donation Today</h1>
@@ -50,63 +48,64 @@
   <div id="footer-container"></div>
   
   <!-- Scripts -->
-  <script src="../../src/components/js/loader.js" type="module"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
-    // Load header and footer (matching index.html implementation)
-    fetch('../../src/components/html/header.html')
+    // Carga header y footer dinámicamente
+    fetch('/src/components/html/header.html')
       .then(r => r.text())
       .then(h => {
         const headerContainer = document.getElementById('header-container');
         if (headerContainer) {
           headerContainer.innerHTML = h;
-          // Load header script
-          const headerScript = document.createElement('script');
-          headerScript.src = '../../src/components/js/header.js';
-          document.body.appendChild(headerScript);
+          // Cargar header.js después de insertar el header
+          const script = document.createElement('script');
+          script.src = '/src/components/js/header.js';
+          document.body.appendChild(script);
+          console.log('Header loaded successfully');
         }
+        
+        // Cargar el footer después de que el header se haya cargado
+        return fetch('/src/components/html/footer.html');
       })
-      .catch(e => console.error('Error loading header:', e));
-
-    fetch('../../src/components/html/footer.html')
       .then(r => r.text())
       .then(f => {
         const footerContainer = document.getElementById('footer-container');
         if (footerContainer) {
           footerContainer.innerHTML = f;
+          console.log('Footer loaded successfully');
         }
       })
-      .catch(e => console.error('Error loading footer:', e));
-  </script>
-  
-  <script>
-    // Theme toggle functionality
-    const themeToggle = document.getElementById('theme-toggle');
-    const themeIcon = themeToggle.querySelector('i');
-    const themeText = themeToggle.querySelector('span');
-    
-    // Check for saved user preference, if any, on load
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    updateThemeButton(savedTheme);
+      .catch(error => console.error('Error loading header/footer:', error));
 
-    // Toggle theme on button click
-    themeToggle.addEventListener('click', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    // Apply saved theme on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
       
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-      updateThemeButton(newTheme);
+      // Update theme toggle button after header is loaded
+      const checkThemeToggle = setInterval(() => {
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+          updateThemeButton(savedTheme);
+          clearInterval(checkThemeToggle);
+        }
+      }, 100);
     });
 
-    // Update button icon and text based on theme
+    // Update theme button based on current theme
     function updateThemeButton(theme) {
+      const themeToggle = document.getElementById('theme-toggle');
+      if (!themeToggle) return;
+      
+      const themeIcon = themeToggle.querySelector('i');
+      const themeText = themeToggle.querySelector('span');
+      
       if (theme === 'dark') {
-        themeIcon.className = 'fas fa-sun';
-        themeText.textContent = 'Light Mode';
+        if (themeIcon) themeIcon.className = 'fas fa-sun';
+        if (themeText) themeText.textContent = 'Light Mode';
       } else {
-        themeIcon.className = 'fas fa-moon';
-        themeText.textContent = 'Dark Mode';
+        if (themeIcon) themeIcon.className = 'fas fa-moon';
+        if (themeText) themeText.textContent = 'Dark Mode';
       }
     }
   </script>

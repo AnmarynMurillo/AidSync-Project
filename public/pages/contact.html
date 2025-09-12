@@ -1,285 +1,104 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us | AidSync</title>
+    <meta name="description" content="Contact us for more information about AidSync and how we can help with your donations and social projects.">
     <link rel="icon" href="/public/assets/logos/logito.ico" type="image/x-icon">
+    
+    <!-- CSS -->
     <link rel="stylesheet" href="/public/css/styles.css">
     <link rel="stylesheet" href="/src/components/css/header.css">
     <link rel="stylesheet" href="/src/components/css/footer.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        :root {
-            --brand-primary: #00113B;
-            --brand-accent: #FF6A00;
-            --surface: #ffffff;
-            --bg: #F4F7FB;
-            --text: #00113B;
-            --muted: #6B7C93;
-            --ring: rgba(0, 17, 59, 0.1);
-            --radius: 16px;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,.06);
-            --shadow-md: 0 6px 20px rgba(0,17,59,.08);
-            --shadow-lg: 0 16px 40px rgba(0,17,59,.10);
-        }
-
-        body {
-          font-family: 'Poppins', sans-serif;
-          background-color: #fff;
-          color:#00113B;
-        }
-
-        header,
-        footer,
-        nav,
-        section,
-        main {
-          width: 100%;
-        }
-
-        .topbar {
-          background: rgb(237, 240, 245);
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 1rem 2rem;
-          border-bottom: 1px solid #02035a;
-        }
-
-        .topbar .left,
-        .topbar .right {
-          display: flex;
-          gap: 1rem;
-          align-items: center;
-        }
-
-        nav ul {
-          display: flex;
-          gap: 2rem;
-          list-style: none;
-          padding: 1rem 2rem;
-        }
-
-        nav ul a {
-          text-decoration: none;
-          color: #00113B;
-          font-weight: 500;
-        }
-
-        .hero {
-          text-align: center;
-          padding: 3rem 1rem;
-        }
-
-        .hero h1 {
-          font-size: 2.5rem;
-        }
-
-        .breadcrumb {
-          color: #FF6A00;
-          margin-bottom: 1rem;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .contact-container {
-            display: flex;
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .contact-form {
-            flex: 1;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .contact-info {
-            width: 350px;
-            background: #f8f9fa;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .info-box {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border-left: 4px solid var(--brand-primary);
-            box-shadow: 0 2px 8px rgb(251, 248, 248);
-        }
-
-        .info-box h3 {
-            color: var(--brand-primary);
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
-
-        .info-box p {
-            margin: 5px 0;
-            color: #555;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .social-link {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--brand-primary);
-            color: rgb(2, 4, 80);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .social-link:hover {
-            background: var(--brand-accent);
-            transform: translateY(-3px);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 10px;
-        }
-
-        @media (max-width: 700px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text);
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid rgba(0, 17, 59, 0.1);
-            border-radius: 12px;
-            background: #fff;
-            font-family: 'Inter', sans-serif;
-            font-size: 15px;
-            transition: all 0.2s ease;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            border-color: var(--brand-primary);
-            box-shadow: 0 0 0 3px var(--ring);
-            outline: none;
-        }
-
-        textarea {
-            min-height: 140px;
-            resize: vertical;
-        }
-
-        .send-btn {
-            background: var(--brand-primary);
-            color: rgb(1, 25, 61);
-            border: none;
-            padding: 14px 28px;
-            border-radius: 999px;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-md);
-        }
-
-        .send-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-    </style>
+    <link rel="stylesheet" href="/public/css/contact.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- Header -->
     <div id="header-container"></div>
 
-    <main class="container">
-        <section class="hero">
-            <h1 class="page-title">Contact Us</h1>
-            <p class="subtitle">We're here to help</p>
-            <p>Have questions, feedback, or need assistance? We'd love to hear from you.</p>
+    <!-- Main Content -->
+    <main class="contact-page">
+        <section class="contact-hero">
+            <div class="container">
+                <nav aria-label="breadcrumb" class="breadcrumb">
+                    <a href="/">Home</a> / <span>Contact</span>
+                </nav>
+                <h1>Contact Us</h1>
+                <p class="subtitle">Do you have any questions? We're here to help you.</p>
+            </div>
         </section>
 
-        <div class="contact-container">
-            <div class="contact-form">
-                <form id="contactForm">
-                    <div class="form-grid">
+        <div class="container">
+            <div class="contact-container">
+                <!-- Contact Form -->
+                <section class="contact-form-section">
+                    <h2>Send us a message</h2>
+                    <form id="contactForm" class="contact-form">
                         <div class="form-group">
-                            <label for="firstName">First Name</label>
-                            <input type="text" id="firstName" name="firstName" placeholder="Enter your first name" required>
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" name="name" required>
                         </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone">
+                            </div>
+                        </div>
+
                         <div class="form-group">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" required>
+                            <label for="subject">Subject *</label>
+                            <input type="text" id="subject" name="subject" required>
                         </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </section>
+
+                <!-- Contact Information -->
+                <aside class="contact-info">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h3>Location</h3>
+                        <p>123 Main Street, City, Country</p>
                     </div>
 
-                    <div class="form-group">
-                        <label for="subject">Subject</label>
-                        <input type="text" id="subject" name="subject" placeholder="What's this about?" required>
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <h3>Phone</h3>
+                        <p>+1 234 567 890</p>
+                        <p>Mon - Fri, 9:00 AM - 6:00 PM</p>
                     </div>
 
-                    <div class="form-group">
-                        <label for="message">Your Message</label>
-                        <textarea id="message" name="message" placeholder="How can we help you?" required></textarea>
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Email</h3>
+                        <p>info@aidsync.org</p>
+                        <p>support@aidsync.org</p>
                     </div>
 
-                    <button type="submit" class="send-btn">Send Message</button>
-                </form>
-            </div>
-
-            <div class="contact-info">
-                <div class="info-box">
-                    <h3>Email Us</h3>
-                    <p>support@aidsync.org</p>
-                </div>
-                
-                <div class="info-box">
-                    <h3>Office Hours</h3>
-                    <p>Monday - Friday</p>
-                    <p>9:00 AM - 6:00 PM EST</p>
-                </div>
-                
-                <div class="info-box">
-                    <h3>Follow Us</h3>
                     <div class="social-links">
                         <a href="#" class="social-link" aria-label="Facebook">
                             <i class="fab fa-facebook-f"></i>
@@ -294,11 +113,26 @@
                             <i class="fab fa-linkedin-in"></i>
                         </a>
                     </div>
-                </div>
+                </aside>
             </div>
         </div>
-    </main>
 
+        <!-- Map Section -->
+        <section class="map-section">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12345.6789!2d-99.1234567!3d19.4326077!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDI1JzU3LjMiTiA5OcKwMDcnMjQuMCJX!5e0!3m2!1sen!2smx!4v1234567890123!5m2!1sen!2smx" 
+                width="100%" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy"
+                aria-label="Location on the map">
+            </iframe>
+        </section>
+    </main>
+    <script src="/public/js/contact.js"></script>
+    <script src="/public/js/header.js"></script>
+    <script src="/public/js/footer.js"></script>
     <!-- Footer -->
     <div id="footer-container"></div>
 
