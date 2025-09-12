@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Profile</title>
   <link rel="stylesheet" href="../css/profile.css">
-  <link rel="stylesheet" href="/src/components/css/auth-header.css">
+  <link rel="icon" href="/public/assets/logos/logito.ico" type="image/x-icon">
   <!-- Firebase v8 en orden correcto -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -21,7 +21,7 @@
       <h1>Profile</h1>
       <div id="profileContainer">
         <div class="profile-avatar">
-          <img id="profilePic" class="profile-pic" src="../assets/img/default-profile.png" alt="Foto de perfil" width="150" height="150">
+          <img id="profilePic" class="profile-pic" src="/public/assets/img/default-avatar.png" alt="Foto de perfil" width="150" height="150">
           <form id="photoForm" enctype="multipart/form-data" class="photo-form">
             <input type="file" id="photoInput" accept="image/*" style="display:none">
             <button type="button" class="change-photo-btn" id="changePhotoBtn">Change image</button>
@@ -42,12 +42,25 @@
 
   <script src="../js/profile.js"></script>
   <script>
-    // Cargar auth-header (HTML + JS)
+    // Cargar auth-header SIN Shadow DOM para usar CSS normal
     (async function loadAuthHeader(){
       try {
         const hc = document.getElementById('header-container');
+        
+        // Cargar HTML directamente (NO Shadow DOM)
         const res = await fetch('/src/components/html/auth-header.html', { cache: 'no-cache' });
-        hc.innerHTML = await res.text();
+        const html = await res.text();
+        hc.innerHTML = html;
+
+        // Cargar CSS en head normal
+        if (!document.querySelector('link[href*="auth-header.css"]')) {
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = '/src/components/css/auth-header.css';
+          document.head.appendChild(link);
+        }
+
+        // Cargar JS
         if (!window.AuthHeader) {
           await new Promise((resolve, reject) => {
             const s = document.createElement('script');
@@ -55,8 +68,10 @@
             s.onload = resolve; s.onerror = reject; document.body.appendChild(s);
           });
         }
+        
+        // Instanciar con document normal (NO Shadow DOM)
         if (window.AuthHeader && !window.authHeader && document.getElementById('authHeader')) {
-          window.authHeader = new window.AuthHeader();
+          window.authHeader = new window.AuthHeader(document);
         }
       } catch (e) { console.error('Auth header load error:', e); }
     })();

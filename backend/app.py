@@ -1,6 +1,4 @@
 from flask import Flask, request, jsonify, session, make_response
-import src.auth.firebase_auth
-from src.users.user_service import register_user, login_user, get_profile, update_profile, update_photo
 from flask_cors import CORS
 from firebase_admin import auth as firebase_auth, storage
 from firebase_admin._auth_utils import EmailAlreadyExistsError
@@ -11,6 +9,7 @@ import logging
 from dotenv import load_dotenv
 import requests
 import base64
+import importlib
 
 # Cargar variables de entorno desde .env
 load_dotenv()
@@ -25,28 +24,51 @@ app.secret_key = os.environ.get('SECRET_KEY', 'supersecretkey')  # Necesario par
 # Configura logging para mejor trazabilidad
 logging.basicConfig(level=logging.INFO)
 
+# --- SAFE Firebase Admin init (no hardcoded file required) ---
+try:
+    import firebase_admin
+    from firebase_admin import credentials as _fa_credentials
+    if not firebase_admin._apps:
+        # Prefer explicit env var path if provided
+        sa_path = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS') or os.environ.get('FIREBASE_SERVICE_ACCOUNT')
+        if sa_path and os.path.exists(sa_path):
+            firebase_admin.initialize_app(_fa_credentials.Certificate(sa_path))
+            logging.info("Firebase Admin initialized with service account file.")
+        else:
+            # Try ADC (gcloud, workload identity, etc.)
+            try:
+                firebase_admin.initialize_app()
+                logging.info("Firebase Admin initialized via Application Default Credentials.")
+            except Exception as e:
+                logging.warning(f"Firebase Admin not initialized (no credentials found). Continuing without Admin. Reason: {e}")
+except Exception as e:
+    logging.warning(f"Firebase Admin import/init failed. Continuing without Admin. Reason: {e}")
+
+def get_user_service():
+    """Lazy import to avoid crashing if firestore_service requires missing credentials."""
+    try:
+        return importlib.import_module('src.users.user_service')
+    except Exception as e:
+        logging.error(f"user_service import failed: {e}")
+        return None
+
 # Limitar tamaño máximo de subida a 2 MB para fotos (evita uploads gigantes)
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024  # 2 MiB
 
 # Asegura que las respuestas incluyan los encabezados CORS requeridos (para preflight y Authorization)
 @app.after_request
 def add_cors_headers(response):
-    # Permitir el origen del frontend o eco del Origin si está en modo wildcard
     configured_origin = os.environ.get('FRONTEND_ORIGIN', '*')
     request_origin = request.headers.get('Origin')
-    # Si el administrador dejó '*' (dev), hacemos echo del Origin real para soportar
-    # solicitudes con credentials (el navegador rechaza '*' cuando Access-Control-Allow-Credentials es true).
     if configured_origin == '*' and request_origin:
         response.headers['Access-Control-Allow-Origin'] = request_origin
     else:
         response.headers['Access-Control-Allow-Origin'] = configured_origin
     response.headers['Access-Control-Allow-Credentials'] = 'true'
-    # Permitir estos encabezados en preflight (incluye Accept)
-    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization, Accept'
+    # include common headers used by browsers in preflight
+    response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Authorization, Accept'
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
-    # Recomendado para proxies/CDN
     response.headers['Vary'] = 'Origin'
-    # Opcional: cache del preflight
     response.headers['Access-Control-Max-Age'] = '86400'
     return response
 
@@ -76,19 +98,18 @@ def get_config():
     """Endpoint para servir configuraciones al frontend de forma segura"""
     return jsonify({
         "firebase": {
-            "apiKey": os.environ.get('AIzaSyAJ395j9EL5Nv81Q70Csc4zRKNp5e1Xrjo'),
-            "authDomain": os.environ.get('expo-project-1040e.firebaseapp.com'),
-            "projectId": os.environ.get('expo-project-1040e'),
-            "storageBucket": os.environ.get('expo-project-1040e.appspot.com'),
-            "messagingSenderId": os.environ.get('123456789012'),
-            "appId": os.environ.get('1:123456789012:web:abcdef123456'),
-            "databaseURL": os.environ.get('https://expo-project-1040e-default-rtdb.firebaseio.com')
+            "apiKey": os.environ.get('FIREBASE_API_KEY', "AIzaSyAJ395j9EL5Nv81Q70Csc4zRKNp5e1Xrjo"),
+            "authDomain": os.environ.get('FIREBASE_AUTH_DOMAIN', "expo-project-1040e.firebaseapp.com"),
+            "projectId": os.environ.get('FIREBASE_PROJECT_ID', "expo-project-1040e"),
+            "storageBucket": os.environ.get('FIREBASE_STORAGE_BUCKET', "expo-project-1040e.appspot.com"),
+            "messagingSenderId": os.environ.get('FIREBASE_MESSAGING_SENDER_ID', "123456789012"),
+            "appId": os.environ.get('FIREBASE_APP_ID', "1:123456789012:web:abcdef123456"),
+            "databaseURL": os.environ.get('FIREBASE_DATABASE_URL', "https://expo-project-1040e-default-rtdb.firebaseio.com")
         },
         "backend": {
             "url": os.environ.get('BACKEND_URL', 'http://localhost:5000')
         },
         "imgbb": {
-            # Carga la clave desde la variable de entorno IMGBB_API_KEY; usa la clave proporcionada como fallback
             "apiKey": os.environ.get('IMGBB_API_KEY', '1e66bbbd585957283148f799c1a73de4')
         }
     })
@@ -101,7 +122,7 @@ def register():
         password = data.get("password")
         name = data.get("name")
         age = data.get("age")
-        username = (data.get("username") or "").strip()            # NEW
+        username = (data.get("username") or "").strip()
         area = data.get("area")
         account_type = (data.get("accountType") or "").strip().lower()
 
@@ -120,16 +141,25 @@ def register():
             return jsonify({"success": False, "message": "Invalid account type."}), 400
 
         # Verifica si el correo ya existe en Firebase Auth
+        # Duplicate email check guarded if Admin not initialized
         try:
             firebase_auth.get_user_by_email(email)
             return jsonify({"success": False, "message": "This email is already registered."}), 409
-        except firebase_auth.UserNotFoundError:
-            pass
+        except Exception as e:
+            # Skip only when it's a "not found" or admin not initialized
+            if getattr(e, '__class__', None).__name__ == 'UserNotFoundError':
+                pass
+            else:
+                logging.warning(f"Skipping duplicate email check (Admin not ready?): {e}")
 
-        # Ejecutar el registro real (register_user lee todo desde request.get_json())
-        reg_resp = register_user()
+        us = get_user_service()
+        if not us:
+            return jsonify({"success": False, "message": "Backend user service unavailable."}), 503
 
-        # Auto-login + redirect (sin cambios)
+        # Ejecutar el registro real
+        reg_resp = us.register_user()
+
+        # Auto-login + redirect (sin cambios, pero usando lazy import)
         try:
             status_code = getattr(reg_resp, "status_code", 200)
             reg_json = None
@@ -139,32 +169,24 @@ def register():
                 reg_json = None
 
             if status_code in (200, 201) and reg_json and reg_json.get("success"):
-                # Crear un contexto de petición para llamar login_user con las mismas credenciales
+                # login with same credentials
                 with app.test_request_context('/login', method='POST', json={'email': email, 'password': password}):
-                    login_resp = login_user()
+                    login_resp = us.login_user()
 
-                # Construir la respuesta final con autoLogin + redirect y copiar cookies
                 try:
                     login_json = login_resp.get_json() or {}
                 except Exception:
                     login_json = {}
 
-                payload = {
-                    **login_json,
-                    "success": True,
-                    "autoLogin": True,
-                    "redirect": "/public/pages/blog.html"
-                }
+                payload = {**login_json, "success": True, "autoLogin": True, "redirect": "/public/pages/blog.html"}
                 final_resp = make_response(jsonify(payload), 200)
 
-                # Forward de Set-Cookie para conservar la sesión creada por login_user
                 for h, v in login_resp.headers:
                     if h.lower() == 'set-cookie':
                         final_resp.headers.add('Set-Cookie', v)
 
                 return final_resp
 
-            # Si el registro no fue exitoso, retornar tal cual
             return reg_resp
         except Exception as e:
             logging.error(f"Auto-login after register failed: {e}")
@@ -174,10 +196,27 @@ def register():
         logging.error(f"Error in /register: {e}\n{traceback.format_exc()}")
         return jsonify({"success": False, "message": "Internal server error."}), 500
 
-# Rutas de usuario (la lógica está en user_service.py)
-app.add_url_rule('/login', view_func=login_user, methods=['POST'])
-app.add_url_rule('/profile', view_func=get_profile, methods=['GET'])
-app.add_url_rule('/profile/update', view_func=update_profile, methods=['POST'])
+@app.route('/login', methods=['POST'])
+def login_route():
+    us = get_user_service()
+    if not us:
+        return jsonify({"success": False, "message": "Backend user service unavailable."}), 503
+    return us.login_user()
+
+@app.route('/profile', methods=['GET'])
+def profile_route():
+    us = get_user_service()
+    if not us:
+        return jsonify({"success": False, "message": "Backend user service unavailable."}), 503
+    return us.get_profile()
+
+@app.route('/profile/update', methods=['POST'])
+def profile_update_route():
+    us = get_user_service()
+    if not us:
+        return jsonify({"success": False, "message": "Backend user service unavailable."}), 503
+    return us.update_profile()
+
 # NOTE: Reemplazamos la wiring original de /profile/photo por un endpoint dedicado
 # que sube la imagen a ImgBB desde el servidor y devuelve la URL pública.
 # El frontend puede seguir llamando a /profile/photo con:
