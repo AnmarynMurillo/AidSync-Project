@@ -21,56 +21,119 @@
 /* Dark theme */
 [data-theme="dark"] {
   --color-bg: #001f33;
-  --color-card: #003d66;
+  --color-card: #001f33;
   --color-border: #005580;
   --color-text: #ffffff;
-  --color-text-secondary: #ffffff;
+  --color-text-secondary: #e0f7ff;
   --color-primary: #4db8ff;
   --color-accent: #16a085;
   --color-support1: #82dfcd;
-  --color-support2: #003d66;
+  --color-support2: #001f33;
   --color-placeholder: #82dfcd;
-  --color-shadow: 0 2px 16px #00000040;
+  --color-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
   color: var(--color-text);
   
-  /* Ensure all text is white in dark mode for better readability */
+  /* Base background */
+  background-color: var(--color-bg) !important;
+  
+  /* Ensure all text is white in dark mode */
   body, p, h1, h2, h3, h4, h5, h6, a, li, td, th, label, input, textarea, select, button {
     color: #ffffff !important;
   }
   
-  /* Specific selector for text that might be inside cards or other containers */
+  /* Set background for all containers */
+  .container, 
+  .section, 
+  .card, 
+  .team-member-card, 
+  .value-card, 
+  .mission-vision-card,
+  .donate-main,
+  .content-section,
+  .modal-content,
+  .banner-carousel {
+    background-color: var(--color-bg) !important;
+    border-color: var(--color-border) !important;
+  }
+  
+  /* Cards and containers */
+  .card,
+  .team-member,
+  .value-card,
+  .mission-vision-card {
+    background-color: var(--color-card) !important;
+    border: 1px solid var(--color-border);
+  }
+  
+  /* Form elements */
+  input, textarea, select {
+    background-color: var(--color-card) !important;
+    border: 1px solid var(--color-border) !important;
+    color: var(--color-text) !important;
+  }
+  
+  /* Text in specific containers */
   .what-we-do-right p, 
   .area-card-content p, 
   .faq-answer,
   .contact-desc,
-  .carousel-desc,
+  .carousel-desc {
+    color: #e0f7ff !important;
+  }
+  
+  /* Specific text elements */
   .hero-title,
   .dynamic-word,
   .section-title,
   .value-card h3,
-  .value-card p,
   .mission-vision-card h3,
-  .mission-vision-card p {
-    color: #f0f8ff !important;
-  }
-  
-  /* Hero Section */
-  .hero-section {
-    background: var(--color-bg);
-  }
-  
-  /* Team member cards */
-  .team-member-card {
-    background: var(--color-card);
-    border: 1px solid var(--color-border);
-  }
-  
+  .team-member h3,
   .member-name {
     color: var(--color-text) !important;
   }
   
+  .member-role,
+  .value-card p,
+  .mission-vision-card p,
+  .carousel-desc,
+  .contact-desc,
+  .what-we-do-right p,
+  .area-card-content p,
+  .faq-answer {
+    color: var(--color-text-secondary) !important;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    background: linear-gradient(135deg, var(--color-bg) 0%, #00304d 100%);
+  }
+  
+  /* Team member cards */
+  .team-member-card,
+  .team-member {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--color-shadow);
+    transition: all 0.3s ease;
+  }
+  
+  .team-member-card:hover,
+  .team-member:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(100, 255, 218, 0.1);
+  }
+  
   .member-role {
-    color: var(--color-support1) !important;
+    color: var(--color-accent) !important;
+  }
+  
+  .social-links a {
+    color: var(--color-text-secondary) !important;
+    transition: color 0.3s ease;
+  }
+  
+  .social-links a:hover {
+    color: var(--color-accent) !important;
   }
   
   /* Mission/Vision section */
@@ -80,22 +143,76 @@
   .value-card {
     background: var(--color-card);
     border: 1px solid var(--color-border);
-    color: var(--color-text) !important;
+    box-shadow: var(--color-shadow);
+    transition: all 0.3s ease;
+  }
+  
+  .mission-vision-card h3 {
+    color: var(--color-accent) !important;
+  }
+  
+  .mission-vision-card i {
+    color: var(--color-accent);
   }
   
   /* Values section */
   .values-section {
-    background: var(--color-bg);
+    background: linear-gradient(to bottom, var(--color-bg) 0%, #0a1a36 100%);
+  }
+  
+  .value-card {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
   }
   
   .value-card:hover {
     background: var(--color-primary);
+    color: #001f33 !important;
     transform: translateY(-5px);
+  }
+  
+  .value-card:hover h3,
+  .value-card:hover p {
+    color: #001f33 !important;
+  }
+  
+  .value-card i {
+    color: var(--color-accent);
   }
   
   /* Banner Carousel */
   .banner-carousel {
     background: var(--color-bg);
+  }
+  
+  .banner-overlay {
+    background: rgba(0, 31, 51, 0.85);
+  }
+  
+  /* Form elements */
+  input,
+  textarea,
+  select {
+    background: var(--color-card) !important;
+    border: 1px solid var(--color-border) !important;
+    color: var(--color-text) !important;
+  }
+  
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-text-secondary) !important;
+    opacity: 0.7;
+  }
+  
+  button, .btn {
+    background: var(--color-primary) !important;
+    color: var(--color-bg) !important;
+    transition: all 0.3s ease;
+  }
+  
+  button:hover, .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(22, 160, 133, 0.4);
   }
   
   .banner-content {

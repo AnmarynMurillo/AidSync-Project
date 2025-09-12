@@ -201,9 +201,9 @@ function initTeamCarousel() {
             hoverImage: '../../public/assets/Integrantes/Dushka2.jpg',
             bio: 'Transforming ideas into beautiful and intuitive user experiences.',
             social: {
-                email: '#',
+                email: 'mailto:dushka.jimenez2025@motta.superate.org.pa',
                 linkedin: '#',
-                github: '#'
+                github: 'https://github.com/ItsDushkaJimenez'
             }
         },
         {
@@ -213,21 +213,21 @@ function initTeamCarousel() {
             hoverImage: '../../public/assets/Integrantes/Elina2.jpg',
             bio: 'Building responsive and accessible web applications.',
             social: {
-                email: '#',
-                linkedin: '#',
-                github: '#'
+                email: 'mailto:elina.perez2025@motta.superate.org.pa',
+                linkedin: 'https://www.linkedin.com/in/elina-nicole-pérez-147358378',
+                github: 'https://github.com/elinanp11'
             }
         },
         {
             name: 'Isaura Ríos',
             role: 'Frontend Developer',
             image: '../../public/assets/Integrantes/Isaura1.jpg',
-            hoverImage: '../../public/assets/Integrantes/Ir2.png',
+            hoverImage: '../../public/assets/Integrantes/Ir2.jpg',
             bio: 'Bridging the gap between frontend and backend development.',
             social: {
-                email: '#',
-                linkedin: '#',
-                github: '#'
+                email: 'mailto:isaura.rios2025@motta.superate.org.pa',
+                linkedin: 'https://www.linkedin.com/in/isaura-ríos-492154378',
+                github: 'https://github.com/IsaMar59'
             }
         },
         {
@@ -237,9 +237,9 @@ function initTeamCarousel() {
             hoverImage: '../../public/assets/Integrantes/Jhostan2.jpg',
             bio: 'Building cross-platform mobile experiences.',
             social: {
-                email: '#',
+                email: 'mailto:jhostan.jimenez2025@motta.superate.org.pa',
                 linkedin: '#',
-                github: '#'
+                github: 'https://github.com/Jhostan'     
             }
         },
         {
@@ -249,9 +249,9 @@ function initTeamCarousel() {
             hoverImage: '../../public/assets/Integrantes/Josue2.jpg',
             bio: 'Automating deployments and ensuring system reliability.',
             social: {
-                email: '#',
+                email: 'mailto:gilberto.rodriguez2025@motta.superate.org.pa',
                 linkedin: '#',
-                github: '#'
+                github: 'https://github.com/JosueRodr99'
             }
         },
         {
@@ -261,9 +261,9 @@ function initTeamCarousel() {
             hoverImage: '../../public/assets/Integrantes/Juan2.jpg',
             bio: 'Ensuring the highest quality in every release.',
             social: {
-                email: '#',
-                linkedin: '#',
-                github: '#'
+                email: 'mailto:juan2.morales2025@motta.superate.org.pa',
+                linkedin: 'https://www.linkedin.com/in/juan-morales-223359378/',
+                github: 'https://github.com/Juanin348'
             }
         },
         {
@@ -273,9 +273,9 @@ function initTeamCarousel() {
             hoverImage: '../../public/assets/Integrantes/Anmaryn2.jpg',
             bio: 'Passionate about creating impactful solutions through technology.',
             social: {
-                email: '#',
+                email: 'mailto:anmaryn.murillo2025@motta.superate.org.pa',
                 linkedin: '#',
-                github: '#'
+                github: 'https://github.com/AnmarynMurillo'
             }
         },
         {
@@ -285,9 +285,9 @@ function initTeamCarousel() {
             hoverImage: '../../public/assets/Integrantes/Emily2.jpg',
             bio: 'Making the user experience.',
             social: {
-                email: '#',
-                linkedin: '#',
-                github: '#'
+                email: 'mailto:emily.bulgin2025@motta.superate.org.pa',
+                linkedin: 'https://www.linkedin.com/feed/',
+                github: 'https://github.com/soyemilymarie'
             }
         },
         {
@@ -297,9 +297,9 @@ function initTeamCarousel() {
             hoverImage: '../../public/assets/Integrantes/Patricia2.jpg',
             bio: 'Creating beautiful and intuitive user experiences.',
             social: {
-                email: '#',
+                email: 'mailto:patricia.fernandez2025@motta.superate.org.pa',
                 linkedin: '#',
-                github: '#'
+                github: 'https://github.com/SoyPatriciaFernandez'
             }
         },
         {
@@ -309,9 +309,9 @@ function initTeamCarousel() {
             hoverImage: '../../public/assets/Integrantes/Stephany2.jpg',
             bio: 'Searcher of information and data.',
             social: {
-                email: '#',
+                email: 'mailto:stephany.dominguez2025@motta.superate.org.pa',
                 linkedin: '#',
-                github: '#'
+                github: 'https://github.com/Fanny-ross30'
             }
         },
         {
@@ -321,9 +321,9 @@ function initTeamCarousel() {
             hoverImage: '../../public/assets/Integrantes/Luis2.jpg',
             bio: 'Extracting insights from complex data sets.',
             social: {
-                email: '#',
+                email: 'mailto:luis.camargo2025@motta.superate.org.pa',
                 linkedin: '#',
-                github: '#'
+                github: 'https://github.com/luisitoinsano'
             }
         }
     ];

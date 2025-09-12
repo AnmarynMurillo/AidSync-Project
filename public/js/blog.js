@@ -1,183 +1,183 @@
-// blog.js - Blog AidSync moderno, moderado y funcional
+// blog.js - Modern, moderated, and functional AidSync Blog
 
-// Datos de ejemplo para publicaciones
+// Sample blog post data
 const BLOG_POSTS = [
   // Health Organizations
   {
     id: 7,
-    titulo: 'Dona Vida: Saving Lives Through Blood Donation',
-    imagen: '/public/assets/img/donation/BRIGADA-MEDICA.jpg',
-    extracto: 'Dona Vida is a non-profit foundation that promotes voluntary blood donation in Panama.',
-    contenido: 'Dona Vida is a non-profit foundation that seeks to promote voluntary blood donation. The blood donated through Dona Vida strengthens the blood banks of its partner hospitals: Hospital Santo Tomás, Hospital del Niño, Instituto Oncológico Nacional, and Hospital Luis "Chicho" Fábrega. Your donation can save up to three lives!',
-    autor: 'AidSync Team',
-    fecha: '2025-06-15',
-    destacado: true,
+    title: 'Dona Vida: Saving Lives Through Blood Donation',
+    image: '/public/assets/img/donation/BRIGADA-MEDICA.jpg',
+    excerpt: 'Dona Vida is a non-profit foundation that promotes voluntary blood donation in Panama.',
+    content: 'Dona Vida is a non-profit foundation that seeks to promote voluntary blood donation. The blood donated through Dona Vida strengthens the blood banks of its partner hospitals: Hospital Santo Tomás, Hospital del Niño, Instituto Oncológico Nacional, and Hospital Luis "Chicho" Fábrega. Your donation can save up to three lives!',
+    author: 'AidSync Team',
+    date: '2025-06-15',
+    featured: true,
     video: '',
-    comentarios: []
+    comments: []
   },
   {
     id: 8,
-    titulo: 'United Way Panamá: Comprehensive Support for Vulnerable Communities',
-    imagen: '/public/assets/img/support_organization/saludparatodos.jpg',
-    extracto: 'United Way Panamá provides essential support and resources to those in need.',
-    contenido: 'United Way Panamá is dedicated to improving lives through various initiatives. Donations help supply basic needs, medicines, and support for beneficiaries, including emotional and psychological care, assistance to people in situations of domestic violence, economic support for families at risk, and educational and technological innovation. They also ensure job continuity for staff working directly with vulnerable populations.',
-    autor: 'AidSync Team',
-    fecha: '2025-06-10',
-    destacado: true,
+    title: 'United Way Panamá: Comprehensive Support for Vulnerable Communities',
+    image: '/public/assets/img/support_organization/saludparatodos.jpg',
+    excerpt: 'United Way Panamá provides essential support and resources to those in need.',
+    content: 'United Way Panamá is dedicated to improving lives through various initiatives. Donations help supply basic needs, medicines, and support for beneficiaries, including emotional and psychological care, assistance to people in situations of domestic violence, economic support for families at risk, and educational and technological innovation. They also ensure job continuity for staff working directly with vulnerable populations.',
+    author: 'AidSync Team',
+    date: '2025-06-10',
+    featured: true,
     video: '',
-    comentarios: []
+    comments: []
   },
   
   // Education Organizations
   {
     id: 9,
-    titulo: 'Una Empresa Un Aula: Transforming Education in Panama',
-    imagen: '/public/assets/img/support_organization/educa_futuro.jpg',
-    extracto: 'Support public education through classroom adoption and donations.',
-    contenido: '• Adopt a classroom: Sponsor a classroom with an initial donation and periodic contributions, improving infrastructure and receiving progress updates.\n\n• Solidarity sum, in-kind donations, skills donation, or networking donation: versatile options that allow support with material goods, professional services, and connections. This initiative promotes public education through online monetary donations or bank transfers.',
-    autor: 'AidSync Team',
-    fecha: '2025-06-05',
-    destacado: false,
+    title: 'A Company A Classroom: Transforming Education in Panama',
+    image: '/public/assets/img/support_organization/educa_futuro.jpg',
+    excerpt: 'Support public education through classroom adoption and donations.',
+    content: '• Adopt a classroom: Sponsor a classroom with an initial donation and periodic contributions, improving infrastructure and receiving progress updates.\n\n• Solidarity sum, in-kind donations, skills donation, or networking donation: versatile options that allow support with material goods, professional services, and connections. This initiative promotes public education through online monetary donations or bank transfers.',
+    author: 'AidSync Team',
+    date: '2025-06-05',
+    featured: false,
     video: '',
-    comentarios: []
+    comments: []
   },
   {
     id: 10,
-    titulo: 'Fundación Educativa Juan Pablo II: Empowering Youth Through Education',
-    imagen: '/public/assets/img/Carrusel_1/Educacion.jpg',
-    extracto: 'Providing scholarships to underprivileged Panamanian youth for over three decades.',
-    contenido: 'FEJPS is a non-profit foundation that grants school and university scholarships to underprivileged Panamanian youth with high academic and personal potential. For more than three decades, they have awarded over 3,200 scholarships, with an impact of more than $15 million in university education. At the secondary level, they have provided more than 2,500 scholarships with a 92% graduation rate.\n\nYou can support their mission through monthly or one-time tax-deductible donations via ACH transfers or recurring credit card payments.',
-    autor: 'AidSync Team',
-    fecha: '2025-05-30',
-    destacado: false,
+    title: 'Juan Pablo II Educational Foundation: Empowering Youth Through Education',
+    image: '/public/assets/img/Carrusel_1/Educacion.jpg',
+    excerpt: 'Providing scholarships to underprivileged Panamanian youth for over three decades.',
+    content: 'FEJPS is a non-profit foundation that grants school and university scholarships to underprivileged Panamanian youth with high academic and personal potential. For more than three decades, they have awarded over 3,200 scholarships, with an impact of more than $15 million in university education. At the secondary level, they have provided more than 2,500 scholarships with a 92% graduation rate.\n\nYou can support their mission through monthly or one-time tax-deductible donations via ACH transfers or recurring credit card payments.',
+    author: 'AidSync Team',
+    date: '2025-05-30',
+    featured: false,
     video: '',
-    comentarios: []
+    comments: []
   },
   
   // Environment Organizations
   {
     id: 11,
-    titulo: 'Ecobio Panamá: Protecting Our Natural Heritage',
-    imagen: '/public/assets/img/Carrusel_1/environment.jpg',
-    extracto: 'Dedicated to conserving Panama\'s unique biodiversity through sustainable initiatives.',
-    contenido: 'At Ecobio Panamá, we work tirelessly to protect our country\'s unique biodiversity. Our projects focus on ecosystem conservation, environmental education, and sustainable development. You can support our projects financially - every contribution, no matter the size, makes a big difference in preserving Panama\'s natural heritage for future generations.',
-    autor: 'AidSync Team',
-    fecha: '2025-05-25',
-    destacado: true,
+    title: 'Ecobio Panamá: Protecting Our Natural Heritage',
+    image: '/public/assets/img/Carrusel_1/environment.jpg',
+    excerpt: 'Dedicated to conserving Panama\'s unique biodiversity through sustainable initiatives.',
+    content: 'At Ecobio Panamá, we work tirelessly to protect our country\'s unique biodiversity. Our projects focus on ecosystem conservation, environmental education, and sustainable development. You can support our projects financially - every contribution, no matter the size, makes a big difference in preserving Panama\'s natural heritage for future generations.',
+    author: 'AidSync Team',
+    date: '2025-05-25',
+    featured: true,
     video: '',
-    comentarios: []
+    comments: []
   },
   {
     id: 12,
-    titulo: 'Fundación Cero Basura Panamá: A Cleaner Future',
-    imagen: '/public/assets/img/volunter/Reforestacion.jpeg',
-    extracto: 'Combatting waste and visual pollution through community action and education.',
-    contenido: 'Fundación Cero Basura Panamá was created on October 21, 2021, with the purpose of improving our country\'s environment while eliminating visual pollution caused by the high level of waste we see daily in our communities. You can contribute financially or in-kind to support their recycling and environmental education programs. Together, we can create cleaner, more sustainable communities across Panama.',
-    autor: 'AidSync Team',
-    fecha: '2025-05-20',
-    destacado: false,
+    title: 'Fundación Cero Basura Panamá: A Cleaner Future',
+    image: '/public/assets/img/volunter/Reforestacion.jpeg',
+    excerpt: 'Combatting waste and visual pollution through community action and education.',
+    content: 'Fundación Cero Basura Panamá was created on October 21, 2021, with the purpose of improving our country\'s environment while eliminating visual pollution caused by the high level of waste we see daily in our communities. You can contribute financially or in-kind to support their recycling and environmental education programs. Together, we can create cleaner, more sustainable communities across Panama.',
+    author: 'AidSync Team',
+    date: '2025-05-20',
+    featured: false,
     video: '',
-    comentarios: []
+    comments: []
   },
   
   // Social Welfare Organizations
   {
     id: 13,
-    titulo: 'Fundación Pro Integración: Supporting People with Disabilities',
-    imagen: '/public/assets/img/support_organization/red_solidaria.jpg',
-    extracto: 'Providing essential mobility and hearing devices to improve quality of life.',
-    contenido: 'Fundación Pro Integración (FUNPROI) provides vital support including:\n\n• Specialized devices to improve mobility for people with physical disabilities, such as wheelchairs, postural chairs, canes, and crutches.\n• Hearing aids and cochlear implants for people with hearing disabilities.\n• Transportation support to facilitate access to health services.\n\nYou can support their mission through bank transfers or Yappy donations.',
-    autor: 'AidSync Team',
-    fecha: '2025-05-15',
-    destacado: false,
+    title: 'Pro Integration Foundation: Supporting People with Disabilities',
+    image: '/public/assets/img/support_organization/red_solidaria.jpg',
+    excerpt: 'Providing essential mobility and hearing devices to improve quality of life.',
+    content: 'Fundación Pro Integración (FUNPROI) provides vital support including:\n\n• Specialized devices to improve mobility for people with physical disabilities, such as wheelchairs, postural chairs, canes, and crutches.\n• Hearing aids and cochlear implants for people with hearing disabilities.\n• Transportation support to facilitate access to health services.\n\nYou can support their mission through bank transfers or Yappy donations.',
+    author: 'AidSync Team',
+    date: '2025-05-15',
+    featured: false,
     video: '',
-    comentarios: []
+    comments: []
   },
   {
     id: 14,
-    titulo: 'Fundación HTN: Comprehensive Support for Social Causes',
-    imagen: '/public/assets/img/Carrusel_1/Social_welfare.png',
-    extracto: 'Supporting various social organizations through multiple donation channels.',
-    contenido: 'Fundación HTN offers multiple ways to support social causes:\n\n• Financial donations\n• Products and services needed by social organizations\n• You may even consider donating an inheritance through their platform\n\nThrough their intelligent system, you can provide financial donations, products, services, and even inheritances to support those in need across Panama.',
-    autor: 'AidSync Team',
-    fecha: '2025-05-05',
-    destacado: false,
+    title: 'HTN Foundation: Comprehensive Support for Social Causes',
+    image: '/public/assets/img/Carrusel_1/Social_welfare.png',
+    excerpt: 'Supporting various social organizations through multiple donation channels.',
+    content: 'Fundación HTN offers multiple ways to support social causes:\n\n• Financial donations\n• Products and services needed by social organizations\n• You may even consider donating an inheritance through their platform\n\nThrough their intelligent system, you can provide financial donations, products, services, and even inheritances to support those in need across Panama.',
+    author: 'AidSync Team',
+    date: '2025-05-05',
+    featured: false,
     video: '',
-    comentarios: []
+    comments: []
   },
   {
     id: 1,
-    titulo: 'Volunteering in Darién',
-    imagen: '/public/assets/img/donation/BRIGADA-MEDICA.jpg',
-    extracto: 'A life-changing experience helping rural communities in Darién... Read the full story!',
-    contenido: 'Full story of the experience in Darién. Lots of learning, teamwork, and gratitude. I participated in building a school and in health workshops for children and adults. I recommend everyone to live such an experience.',
-    autor: 'John Perez',
-    fecha: '2025-05-10',
-    destacado: true,
+    title: 'Volunteering in Darién',
+    image: '/public/assets/img/donation/BRIGADA-MEDICA.jpg',
+    excerpt: 'A life-changing experience helping rural communities in Darién... Read the full story!',
+    content: 'Full story of the experience in Darién. Lots of learning, teamwork, and gratitude. I participated in building a school and in health workshops for children and adults. I recommend everyone to live such an experience.',
+    author: 'John Perez',
+    date: '2025-05-10',
+    featured: true,
     video: '',
-    comentarios: [
-      { autor: 'Maria', texto: 'Inspiring! How can I participate?', fecha: '2025-05-11', aprobado: true }
+    comments: [
+      { author: 'Maria', text: 'Inspiring! How can I participate?', date: '2025-05-11', approved: true }
     ]
   },
   {
     id: 2,
-    titulo: 'Health Day in Chiriquí',
-    imagen: '/public/assets/img/volunter/Pro-comedores.jpg',
-    extracto: 'Doctors and volunteers provided care to over 200 people in rural areas of Chiriquí.',
-    contenido: 'Chronicle of the health day: doctors, nurses, and AidSync volunteers provided consultations, medicines, and prevention talks to families in remote communities. Thanks to everyone who supported!',
-    autor: 'Anna Torres',
-    fecha: '2025-04-28',
-    destacado: true,
+    title: 'Health Day in Chiriquí',
+    image: '/public/assets/img/volunter/Pro-comedores.jpg',
+    excerpt: 'Doctors and volunteers provided care to over 200 people in rural areas of Chiriquí.',
+    content: 'Chronicle of the health day: doctors, nurses, and AidSync volunteers provided consultations, medicines, and prevention talks to families in remote communities. Thanks to everyone who supported!',
+    author: 'Anna Torres',
+    date: '2025-04-28',
+    featured: true,
     video: 'https://www.youtube.com/embed/ScMzIvxBSi4',
-    comentarios: []
+    comments: []
   },
   {
     id: 3,
-    titulo: 'Urban Reforestation',
-    imagen: '/public/assets/img/volunter/Reforestacion.jpeg',
-    extracto: 'Over 500 trees planted in the city thanks to volunteers and partner companies.',
-    contenido: 'Campaign details: native species were planted in parks and main avenues. Students, companies, and families participated. Together for cleaner air!',
-    autor: 'Charles Ruiz',
-    fecha: '2025-04-15',
-    destacado: false,
+    title: 'Urban Reforestation',
+    image: '/public/assets/img/volunter/Reforestacion.jpeg',
+    excerpt: 'Over 500 trees planted in the city thanks to volunteers and partner companies.',
+    content: 'Campaign details: native species were planted in parks and main avenues. Students, companies, and families participated. Together for cleaner air!',
+    author: 'Charles Ruiz',
+    date: '2025-04-15',
+    featured: false,
     video: '',
-    comentarios: []
+    comments: []
   },
   {
     id: 4,
-    titulo: 'Stories of Hope',
-    imagen: '/public/assets/img/volunter/banco.jpg',
-    extracto: 'Testimonies of people benefited by AidSync and its social programs.',
-    contenido: 'Real stories of social impact: interviews with families who received support in health, education, and housing. AidSync continues to transform lives with your help.',
-    autor: 'Sophie Martinez',
-    fecha: '2025-03-30',
-    destacado: false,
+    title: 'Stories of Hope',
+    image: '/public/assets/img/volunter/banco.jpg',
+    excerpt: 'Testimonies of people benefited by AidSync and its social programs.',
+    content: 'Real stories of social impact: interviews with families who received support in health, education, and housing. AidSync continues to transform lives with your help.',
+    author: 'Sophie Martinez',
+    date: '2025-03-30',
+    featured: false,
     video: '',
-    comentarios: []
+    comments: []
   },
   {
     id: 5,
-    titulo: 'Youth Entrepreneurship Workshop',
-    imagen: '/public/assets/img/donation/BRIGADA-MEDICA.jpg',
-    extracto: 'Young people from different provinces participated in a workshop to create their own businesses.',
-    contenido: 'The workshop included mentoring, talks by entrepreneurs, and business simulations. Several projects received seed capital. The future belongs to the youth!',
-    autor: 'Laura Gomez',
-    fecha: '2025-03-15',
-    destacado: false,
+    title: 'Youth Entrepreneurship Workshop',
+    image: '/public/assets/img/donation/BRIGADA-MEDICA.jpg',
+    excerpt: 'Young people from different provinces participated in a workshop to create their own businesses.',
+    content: 'The workshop included mentoring, talks by entrepreneurs, and business simulations. Several projects received seed capital. The future belongs to the youth!',
+    author: 'Laura Gomez',
+    date: '2025-03-15',
+    featured: false,
     video: '',
-    comentarios: []
+    comments: []
   },
   {
     id: 6,
-    titulo: 'Alliance with Smiles Foundation',
-    imagen: '/public/assets/img/volunter/Pro-comedores.jpg',
-    extracto: 'New partnership to provide free dental care to vulnerable communities.',
-    contenido: 'AidSync and Smiles Foundation join forces to carry out oral health days in rural schools. Hygiene kits were delivered and more than 300 children were treated.',
-    autor: 'AidSync Team',
-    fecha: '2025-02-28',
-    destacado: false,
+    title: 'Alliance with Smiles Foundation',
+    image: '/public/assets/img/volunter/Pro-comedores.jpg',
+    excerpt: 'New partnership to provide free dental care to vulnerable communities.',
+    content: 'AidSync and Smiles Foundation join forces to carry out oral health days in rural schools. Hygiene kits were delivered and more than 300 children were treated.',
+    author: 'AidSync Team',
+    date: '2025-02-28',
+    featured: false,
     video: '',
-    comentarios: []
+    comments: []
   }
 ];
 
@@ -185,24 +185,24 @@ const POSTS_PER_PAGE = 4;
 let currentPage = 1;
 let filteredPosts = BLOG_POSTS;
 
-// Simulación de moderación de comentarios y publicaciones
+// Comment and post moderation simulation
 let PENDING_COMMENTS = [];
 let PENDING_POSTS = [];
 
-// Simulación de usuario autenticado
-let USER_LOGGED_IN = false; // Cambia a true para simular usuario logueado
-let IS_AIDSYNC_TEAM = false; // Cambia a true para simular equipo AidSync
+// Simulated authenticated user
+let USER_LOGGED_IN = false; // Change to true to simulate logged in user
+let IS_AIDSYNC_TEAM = false; // Change to true to simulate AidSync team member
 
-// Render destacados (solo aprobados)
+// Render featured posts (approved only)
 function renderFeatured() {
-  const featured = BLOG_POSTS.filter(p => p.destacado && (p.aprobado !== false || p.aprobado === undefined));
+  const featured = BLOG_POSTS.filter(p => p.featured && (p.approved !== false || p.approved === undefined));
   const container = document.getElementById('featured-posts');
   container.innerHTML = featured.map(post => `
     <div class="featured-card" data-id="${post.id}">
-      <img src="${post.imagen}" alt="${post.titulo}">
+      <img src="${post.image}" alt="${post.title}">
       <div class="card-content">
-        <div class="card-title">${post.titulo}</div>
-        <div class="card-excerpt">${post.extracto}</div>
+        <div class="card-title">${post.title}</div>
+        <div class="card-excerpt">${post.excerpt}</div>
         <button class="read-more">Read more</button>
       </div>
     </div>
@@ -212,19 +212,19 @@ function renderFeatured() {
   });
 }
 
-// Render lista (solo aprobados)
+// Render post list (approved only)
 function renderList(page = 1) {
   const list = document.getElementById('blog-list');
   const start = (page-1)*POSTS_PER_PAGE;
   const end = start+POSTS_PER_PAGE;
-  // Mostrar todos los posts aprobados o los que no tienen campo aprobado (posts originales)
-  const posts = filteredPosts.filter(p => (p.aprobado !== false && p.aprobado !== undefined) || p.aprobado === undefined).slice(start, end);
+  // Show all approved posts or those without an approved field (original posts)
+  const posts = filteredPosts.filter(p => (p.approved !== false && p.approved !== undefined) || p.approved === undefined).slice(start, end);
   list.innerHTML = posts.map(post => `
     <div class="blog-card" data-id="${post.id}">
-      <img src="${post.imagen}" alt="${post.titulo}">
+      <img src="${post.image}" alt="${post.title}">
       <div class="card-content">
-        <div class="card-title">${post.titulo}</div>
-        <div class="card-excerpt">${post.extracto}</div>
+        <div class="card-title">${post.title}</div>
+        <div class="card-excerpt">${post.excerpt}</div>
         <button class="read-more">Read more</button>
       </div>
     </div>
@@ -232,18 +232,18 @@ function renderList(page = 1) {
   renderPagination();
 }
 
-// Render paginación con solo 3 botones visibles
+// Render pagination with only 3 visible buttons
 function renderPagination() {
   const pag = document.getElementById('blog-pagination');
   const total = Math.ceil(filteredPosts.length/POSTS_PER_PAGE);
   pag.innerHTML = '';
-  // Si no hay páginas, no mostrar nada
+  // If no pages, do not show anything
   if (total < 2) return;
   for(let i=1;i<=total;i++) {
     const btn = document.createElement('button');
     btn.textContent = i;
     if(i===currentPage) btn.classList.add('active');
-    // Mostrar solo el actual y los adyacentes
+    // Show only the current and adjacent buttons
     if (Math.abs(i-currentPage) <= 1) {
       btn.setAttribute('data-visible','true');
     }
@@ -252,7 +252,7 @@ function renderPagination() {
   }
 }
 
-// Animación suave al cargar entradas
+// Smooth animation when loading posts
 function animateCards() {
   document.querySelectorAll('.blog-card, .featured-card').forEach(card => {
     card.classList.remove('visible');
@@ -262,7 +262,7 @@ function animateCards() {
   });
 }
 
-// Llamar animación después de renderizar
+// Call animation after rendering
 const oldRenderList = renderList;
 renderList = function(page = 1) {
   oldRenderList(page);
@@ -276,32 +276,70 @@ renderFeatured = function() {
   addReadMoreListeners();
 };
 
-// Modal de entrada (solo comentarios aprobados)
+// Entry modal (approved comments only)
 const modal = document.getElementById('blog-modal');
 const modalBody = modal.querySelector('.modal-body');
 const closeBtn = modal.querySelector('.modal-close');
 
 function openModal(post) {
-  let videoEmbed = post.video ? `<iframe width="100%" height="320" src="${post.video}" frameborder="0" allowfullscreen style="margin-bottom:1.2rem;"></iframe>` : '';
+  const commentsHtml = post.comments && post.comments.length > 0 
+    ? post.comments
+        .filter(c => c.approved !== false)
+        .map(c => `
+          <div class="comment">
+            <div class="comment-meta">${c.author} - ${c.date}</div>
+            <p>${c.text}</p>
+          </div>
+        `).join('')
+    : '<p>No comments yet. Be the first to comment!</p>';
   modalBody.innerHTML = `
-    <img src="${post.imagen}" alt="${post.titulo}">
-    <h2>${post.titulo}</h2>
-    <div class="modal-meta">${post.autor} | ${new Date(post.fecha).toLocaleDateString()}</div>
-    <div class="modal-content-text">${post.contenido}</div>
-    ${videoEmbed}
-    <div class="comments-section">
-      <h3>Comments</h3>
-      <div class="comments-list">
-        ${post.comentarios.filter(c=>c.aprobado).map(c=>`<div class="comment"><div class="comment-meta">${c.autor} | ${new Date(c.fecha).toLocaleDateString()}</div>${c.texto}</div>`).join('')}
+    <div class="modal-image-container">
+      ${post.video 
+        ? `<div class="video-container">
+             <iframe width="100%" height="400" src="${post.video}" frameborder="0" allowfullscreen></iframe>
+           </div>`
+        : post.image 
+          ? `<img src="${post.image}" alt="${post.title}">`
+          : '<div style="background: #f0f0f0; width: 100%; height: 300px; display: flex; align-items: center; justify-content: center; border-radius: 0.7rem;">No image available</div>'
+      }
+    </div>
+    <div class="modal-content-container">
+      <h2>${post.title}</h2>
+      <div class="modal-meta">
+        By ${post.author} • ${new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
       </div>
-      ${USER_LOGGED_IN ? `<form class="add-comment-form">
-        <textarea required placeholder="Write your comment..."></textarea>
-        <button type="submit">Send comment</button>
-      </form>` : `<div class="comment-login-msg">Log in to comment.</div>`}
-      <div class="comment-msg" style="color:#16a34a;margin-top:0.5rem;"></div>
+      <div class="modal-content-text">
+        ${post.content.split('\n').map(p => `<p>${p}</p>`).join('')}
+      </div>
+      <div class="comments-section">
+        <h3>Comments</h3>
+        <div class="comments-list">
+          ${commentsHtml}
+        </div>
+        ${USER_LOGGED_IN 
+          ? `
+            <form class="add-comment-form">
+              <textarea placeholder="Write your comment..." required></textarea>
+              <button type="submit">Post Comment</button>
+            </form>
+          `
+          : `
+            <div class="login-prompt">
+              <p>Log in to leave a comment</p>
+              <a href="/public/pages/login.html" class="login-button">Log In</a>
+            </div>
+          `
+        }
+      </div>  
     </div>
   `;
-  modal.setAttribute('aria-hidden','false');
+
+  if (USER_LOGGED_IN) {
+    setupCommentForm(post);
+  }
+
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
   modal.focus();
   if(USER_LOGGED_IN) setupCommentForm(post);
 }
@@ -314,20 +352,43 @@ closeBtn.onclick = closeModal;
 modal.onclick = e => { if(e.target===modal) closeModal(); };
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 
-// Comentarios: simula moderación (no aparecen hasta ser "aprobados")
+// Comments: simulate moderation (not shown until "approved")
 function setupCommentForm(post) {
   const form = modalBody.querySelector('.add-comment-form');
   const msg = modalBody.querySelector('.comment-msg');
-  form.onsubmit = e => {
+  form.onsubmit = (e) => {
     e.preventDefault();
-    const texto = form.querySelector('textarea').value;
-    PENDING_COMMENTS.push({postId: post.id, autor: 'User', texto, fecha: new Date().toISOString(), aprobado: false});
-    msg.textContent = 'Your comment was sent for review.';
-    form.reset();
+    const text = form.querySelector('textarea').value.trim();
+    if (!text) return;
+    
+    // Simulate server submission
+    const newComment = {
+      author: 'Current User', // In a real case, you would get the logged-in user
+      text: text,
+      date: new Date().toISOString().split('T')[0],
+      approved: IS_AIDSYNC_TEAM // If it's from the team, it's automatically approved
+    };
+    
+    // If it's from the team or doesn't require moderation, add directly
+    if (newComment.approved) {
+      if (!post.comments) post.comments = [];
+      post.comments.push(newComment);
+      openModal(post); // Reload the modal
+    } else {
+      // If moderation is required
+      PENDING_COMMENTS.push({
+        ...newComment,
+        postId: post.id
+      });
+      msg.textContent = 'Thank you for your comment! It will be visible after moderation.';
+      msg.className = 'comment-msg success';
+      form.reset();
+      setTimeout(() => msg.textContent = '', 3000);
+    }
   };
 }
 
-// Interfaz para enviar nueva publicación (solo si logueado)
+// Interface to submit new post (only if logged in)
 function renderNewPostForm() {
   const container = document.createElement('section');
   container.className = 'new-post-section';
@@ -335,12 +396,12 @@ function renderNewPostForm() {
   container.innerHTML = `
     <h2>Submit New Post</h2>
     <form id="new-post-form" class="new-post-form">
-      <input type="text" name="titulo" placeholder="Title" required maxlength="80">
-      <input type="text" name="autor" placeholder="Your name or organization" required maxlength="40">
-      <input type="url" name="imagen" placeholder="Image URL (optional)">
-      <textarea name="extracto" placeholder="Short excerpt (max 120 characters)" maxlength="120" required></textarea>
-      <textarea name="contenido" placeholder="Full content" required></textarea>
-      <label><input type="checkbox" name="destacado"> Mark as featured</label>
+      <input type="text" name="title" placeholder="Title" required maxlength="80">
+      <input type="text" name="author" placeholder="Your name or organization" required maxlength="40">
+      <input type="url" name="image" placeholder="Image URL (optional)">
+      <textarea name="excerpt" placeholder="Short excerpt (max 120 characters)" maxlength="120" required></textarea>
+      <textarea name="content" placeholder="Full content" required></textarea>
+      <label><input type="checkbox" name="featured"> Mark as featured</label>
       <button type="submit">Send post</button>
       <div class="post-msg" style="color:#16a34a;margin-top:0.5rem;"></div>
     </form>
@@ -370,7 +431,7 @@ function renderNewPostForm() {
   }
 }
 
-// Interfaz de moderación para el equipo AidSync (solo si es equipo)
+// Moderation interface for AidSync team (team members only)
 function renderModerationPanel() {
   if (!IS_AIDSYNC_TEAM) return;
   const panel = document.createElement('section');
@@ -445,7 +506,7 @@ window.rejectComment = function(i) {
   updateModerationPanel();
 };
 
-// Corregir botón Leer más para que funcione en todas las tarjetas
+// Fix Read More button to work on all cards
 function addReadMoreListeners() {
   // Featured
   document.querySelectorAll('.featured-card .read-more').forEach(btn => {
@@ -467,7 +528,7 @@ function addReadMoreListeners() {
   });
 }
 
-// Modifica renderFeatured y renderList para llamar addReadMoreListeners
+// Modify renderFeatured and renderList to call addReadMoreListeners
 const oldRenderList2 = renderList;
 renderList = function(page = 1) {
   oldRenderList2(page);
@@ -481,7 +542,7 @@ renderFeatured = function() {
   addReadMoreListeners();
 };
 
-// Inicialización
+// Initialization
 function initBlog() {
   renderNewPostForm();
   renderFeatured();
