@@ -1,4 +1,20 @@
 :root {
+
+  /* Paleta de colores pastel moderna */
+  --color-primary: #003d66;
+  --color-accent: #16a085;
+  --color-support1: #82dfcd;
+  --color-support2: #eaf4f5;
+  --color-bg: #fff;
+  --color-text: #000;
+  --color-card: #f9f9f9;
+  --color-border: #eaf4f5;
+  --color-education: #007bff;
+  --color-health: #dc3545;
+  --color-environment: #28a745;
+  --color-social: #ffc107;
+  --color-placeholder: #888;
+
   /* Modern color palette matching the design */
   --color-primary: #0f4c75;  /* Dark teal for primary elements */
   --color-accent: #16a085;   /* Teal accent color */
@@ -13,6 +29,7 @@
   --color-environment: #16a34a; /* Green for environment */
   --color-social: #eab308;   /* Yellow for social */
   --color-placeholder: #94a3b8; /* Medium gray for placeholders */
+
   --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
