@@ -3,35 +3,76 @@
 // backend por defecto (asegúrate que Flask corre en este host:port)
 let firebaseConfig = null;
 let backendUrl = null;
-let imgbbKey = null; // si no estaba ya definido
+let imgbbKey = null;
+// Default ImgBB API key and resolver
+const DEFAULT_IMGBB_KEY = '1e66bbbd585957283148f799c1a73de4';
+function resolveImgBBKey() {
+	try {
+		return window.__IMGBB_KEY || localStorage.getItem('as_imgbb_key') || DEFAULT_IMGBB_KEY;
+	} catch (_) {
+		return DEFAULT_IMGBB_KEY;
+	}
+}
+
+// Resolve backend URL reliably (dev fallback)
+function resolveDefaultBackend() {
+    // Allow overriding via window.__BACKEND_URL or localStorage
+    return window.__BACKEND_URL || localStorage.getItem('as_backend_url') || 'http://localhost:5000';
+}
 
 async function loadConfig() {
     try {
-        // Pedimos la configuración directamente al backend (evita solicitar /api/config
-        // al servidor estático que sirve los archivos en otro origen)
-        const res = await fetch('/api/config', { credentials: 'include' });
+        const defaultBackend = resolveDefaultBackend();
+        // Always hit Flask backend for config (not the static server on 127.0.0.1:5500)
+        const res = await fetch(`${defaultBackend}/api/config`, { credentials: 'include' });
         const cfg = await res.json();
         firebaseConfig = cfg.firebase;
-        backendUrl = (cfg.backend && cfg.backend.url) || 'http://localhost:5000';
-        imgbbKey = (cfg.imgbb && cfg.imgbb.apiKey) || null;
+        backendUrl = (cfg.backend && cfg.backend.url) || defaultBackend;
+        imgbbKey = (cfg.imgbb && cfg.imgbb.apiKey) || resolveImgBBKey(); // use resolver fallback
         initializeFirebase();
     } catch (e) {
-        // fallback local mínimo
+        // Fallbacks if backend is unreachable
         firebaseConfig = {
             apiKey: "AIzaSyAJ395j9EL5Nv81Q70Csc4zRKNp5e1Xrjo",
             authDomain: "expo-project-1040e.firebaseapp.com",
             databaseURL: "https://expo-project-1040e-default-rtdb.firebaseio.com",
-            projectId: "expo-project-1040e"
+            projectId: "expo-project-1040e",
+            storageBucket: "expo-project-1040e.appspot.com" // <-- ensure default bucket on fallback
         };
-        // conservar backendUrl por defecto si no obtenemos config
-        imgbbKey = null;
+        backendUrl = resolveDefaultBackend(); // <= FIX: never leave it null
+        imgbbKey = resolveImgBBKey(); // ensure ImgBB key is set on fallback
         initializeFirebase();
     }
 }
 
 function initializeFirebase() {
+    // Ensure storageBucket if missing but projectId available
+    if (firebaseConfig && !firebaseConfig.storageBucket && firebaseConfig.projectId) {
+        firebaseConfig.storageBucket = `${firebaseConfig.projectId}.appspot.com`;
+    }
     if (typeof firebase !== 'undefined' && (!firebase.apps || !firebase.apps.length)) {
         firebase.initializeApp(firebaseConfig);
+    }
+}
+
+// Helper to derive bucket and build refs safely (works without default bucket)
+function getStorageBucket() {
+    try {
+        const app = (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length) ? firebase.app() : null;
+        const opts = (app && app.options) || firebaseConfig || {};
+        return opts.storageBucket || (opts.projectId ? `${opts.projectId}.appspot.com` : null);
+    } catch (_) { return null; }
+}
+function getStorageRefForPath(path) {
+    if (typeof firebase === 'undefined' || !firebase.storage) return null;
+    const storage = firebase.storage();
+    const bucket = getStorageBucket();
+    try {
+        if (bucket) return storage.refFromURL(`gs://${bucket}/${String(path).replace(/^\/+/, '')}`);
+        // fallback to default bucket ref (may fail if no bucket configured)
+        return storage.ref().child(path);
+    } catch (_) {
+        return null;
     }
 }
 
@@ -78,7 +119,8 @@ async function fetchProfileRealtimeREST(idToken, uid) {
         area: val.area || '',
         email: val.email || '',
         accountType: val.accountType || '',
-        foto_url: val.foto_url || val.photoURL || '' // <-- incluye foto_url
+        foto_url: val.foto_url || val.photoURL || '', // <-- incluye foto_url
+        foto_path: val.foto_path || val.photoPath || '' // <-- soporte path en Storage
     };
 }
 
@@ -94,7 +136,8 @@ async function fetchProfileFirebaseSDK(uid) {
         area: val.area || '',
         email: val.email || (user && user.email) || '',
         accountType: val.accountType || '',
-        foto_url: val.foto_url || (user && user.photoURL) || '' // <-- incluye foto_url
+        foto_url: val.foto_url || (user && user.photoURL) || '', // <-- incluye foto_url
+        foto_path: val.foto_path || val.photoPath || '' // <-- soporte path en Storage
     };
 }
 
@@ -106,22 +149,234 @@ function renderProfile(data) {
     set('pf-area', data.area || '');
     set('pf-email', data.email || '');
     set('pf-accountType', data.accountType || '');
-    const pic = document.getElementById('profilePic');
-    if (pic) {
-        const fallback = (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser && firebase.auth().currentUser.photoURL) || '../assets/img/default-profile.png';
-        pic.src = data.foto_url || fallback;
+
+    // Smart profile photo resolution (supports URL or Storage path)
+    const fallback = (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser && firebase.auth().currentUser.photoURL) || '/public/assets/img/default-avatar.png';
+    const candidate = data.foto_url || data.foto_path || '';
+    setProfilePicSmart(candidate, fallback);
+
+    // NEW: prefer username (fallback to nombre) for header and local cache
+    const displayName = (data.username && String(data.username).trim()) || (data.nombre && String(data.nombre).trim()) || '';
+    if (displayName) {
+        updateLocalUserName(displayName);
+        setAuthHeaderName(displayName);
     }
 }
 
+// ------ Image handling enhancements (validation, resize/compress, URL resolution) ------
+const MAX_IMAGE_SIZE_MB = 5;          // Reject files larger than this (before compression attempt)
+const TARGET_MAX_DIMENSION = 1280;    // Max width/height after resize
+const JPEG_QUALITY = 0.85;            // Compression quality for JPEG output
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+
+// Force using ImgBB for all photo uploads
+const ALWAYS_USE_IMGBB = true;
+
+// Helper: consistent status updates
+function showStatus(text, color = '') {
+    const msg = document.getElementById('profile-status');
+    if (msg) { msg.textContent = text || ''; msg.style.color = color || ''; }
+}
+
+// Helper: detect likely CORS errors
+function isLikelyCorsError(err) {
+    const msg = (err && (err.message || err.toString())) || '';
+    return msg.includes('CORS') ||
+           msg.includes('Same Origin Policy') ||
+           msg.includes('preflight') ||
+           msg.includes('TypeError: NetworkError') ||
+           msg.includes('Failed to fetch');
+}
+
+// Add: should skip Firebase Storage?
+function shouldSkipFirebaseStorage() {
+    if (isFileProtocol()) return true;
+    if (window.__SKIP_FIREBASE_STORAGE === true) return true;
+    try {
+        const v = localStorage.getItem('as_skip_storage');
+        if (v && v !== 'false' && v !== '0') return true;
+    } catch {}
+    try {
+        const v2 = sessionStorage.getItem('as_storage_cors_bad');
+        if (v2 === '1') return true;
+    } catch {}
+    return false;
+}
+
+// Helper: check if running from file:// (will often break CORS)
+function isFileProtocol() {
+    try { return location && location.protocol === 'file:'; } catch { return false; }
+}
+
+// Helper: safe JSON parsing
+async function safeJson(res) {
+    try { return await res.json(); } catch { return null; }
+}
+
+// Helper: dataURL -> Blob (fallback when canvas.toBlob returns null)
+function dataURLToBlob(dataURL) {
+    const parts = dataURL.split(',');
+    const meta = parts[0];
+    const base64 = parts[1];
+    const mime = (meta.match(/data:(.*?);base64/) || [])[1] || 'image/jpeg';
+    const binStr = atob(base64);
+    const len = binStr.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) bytes[i] = binStr.charCodeAt(i);
+    return new Blob([bytes], { type: mime });
+}
+
+// Validates file type and rough size before processing
+function validateImageFile(file) {
+    if (!file) return { ok: false, reason: 'No file selected.' };
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+        return { ok: false, reason: 'Unsupported image type. Use JPG, PNG or WebP.' };
+    }
+    const sizeMB = file.size / (1024 * 1024);
+    if (sizeMB > MAX_IMAGE_SIZE_MB * 2) { // if wildly large, fail early
+        return { ok: false, reason: `Image too large. Max ${MAX_IMAGE_SIZE_MB}MB.` };
+    }
+    return { ok: true };
+}
+
+// Reads dimensions quickly
+function readImageAsDataURL(file) {
+    return new Promise((resolve, reject) => {
+        const fr = new FileReader();
+        fr.onload = () => resolve(fr.result);
+        fr.onerror = reject;
+        fr.readAsDataURL(file);
+    });
+}
+
+function loadImageFromDataURL(dataURL) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = dataURL;
+    });
+}
+
+// Resize/compress using canvas when needed
+async function preprocessImage(file) {
+    const valid = validateImageFile(file);
+    if (!valid.ok) throw new Error(valid.reason);
+
+    const dataURL = await readImageAsDataURL(file);
+    const img = await loadImageFromDataURL(dataURL);
+
+    const needsResize = Math.max(img.width, img.height) > TARGET_MAX_DIMENSION;
+    const needsReencode = file.type !== 'image/jpeg' && file.type !== 'image/jpg';
+
+    // If no resize and size is acceptable, use original
+    const sizeMB = file.size / (1024 * 1024);
+    if (!needsResize && !needsReencode && sizeMB <= MAX_IMAGE_SIZE_MB) {
+        return file; // keep as-is
+    }
+
+    // Compute target dims
+    let targetW = img.width;
+    let targetH = img.height;
+    if (needsResize) {
+        if (img.width >= img.height) {
+            targetW = TARGET_MAX_DIMENSION;
+            targetH = Math.round((img.height / img.width) * TARGET_MAX_DIMENSION);
+        } else {
+            targetH = TARGET_MAX_DIMENSION;
+            targetW = Math.round((img.width / img.height) * TARGET_MAX_DIMENSION);
+        }
+    }
+
+    const canvas = document.createElement('canvas');
+    canvas.width = targetW;
+    canvas.height = targetH;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, targetW, targetH);
+
+    // Export as JPEG to ensure reasonable size (with fallback)
+    let blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', JPEG_QUALITY));
+    if (!blob) {
+        // Fallback for older browsers or rare toBlob null cases
+        const fallbackDataURL = canvas.toDataURL('image/jpeg', JPEG_QUALITY);
+        blob = dataURLToBlob(fallbackDataURL);
+    }
+    const newName = (file.name || 'photo').replace(/\.(png|webp|jpeg|jpg)$/i, '') + '.jpg';
+    return new File([blob], newName, { type: 'image/jpeg', lastModified: Date.now() });
+}
+
+// Backend-assisted resolver for Storage paths (requires backend endpoint)
+async function resolvePhotoURLViaBackend(path) {
+    if (!backendUrl || !path) return null;
+    try {
+        const url = `${backendUrl}/storage/url?path=${encodeURIComponent(path)}`;
+        const res = await timeoutFetch(url, { credentials: 'include' }, BACKEND_TIMEOUT);
+        if (!res.ok) return null;
+        const data = await safeJson(res);
+        return (data && (data.url || data.downloadURL || data.foto_url)) || null;
+    } catch (_) {
+        return null;
+    }
+}
+
+// Resolve photo URLs possibly stored as Firebase Storage paths
+async function resolvePhotoURLMaybe(pathOrUrl) {
+    if (!pathOrUrl) return null;
+    if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl;
+
+    if (typeof firebase !== 'undefined' && firebase.storage) {
+        try {
+            if (/^gs:\/\//i.test(pathOrUrl)) {
+                const ref = firebase.storage().refFromURL(pathOrUrl);
+                return await ref.getDownloadURL();
+            } else {
+                const ref = getStorageRefForPath(pathOrUrl);
+                if (!ref) return null;
+                return await ref.getDownloadURL();
+            }
+        } catch (e) {
+            // Try backend resolver on CORS failure
+            if (isLikelyCorsError(e)) {
+                try { sessionStorage.setItem('as_storage_cors_bad', '1'); } catch {}
+                const viaBackend = await resolvePhotoURLViaBackend(pathOrUrl).catch(() => null);
+                if (viaBackend) return viaBackend;
+                console.warn('Storage URL resolution blocked by CORS. Configure bucket CORS or expose /storage/url in backend.');
+            }
+        }
+    }
+    return null;
+}
+
+function setProfilePicSmart(candidateUrl, fallbackUrl) {
+    const pic = document.getElementById('profilePic');
+    if (!pic) return;
+    const fallback = fallbackUrl || ((typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser && firebase.auth().currentUser.photoURL) || '/public/assets/img/default-avatar.png');
+
+    if (!candidateUrl) {
+        pic.src = fallback;
+        return;
+    }
+    if (/^https?:\/\//i.test(candidateUrl)) {
+        pic.src = candidateUrl;
+        return;
+    }
+    // Resolve async if it's a storage path
+    resolvePhotoURLMaybe(candidateUrl)
+        .then((resolved) => { pic.src = resolved || fallback; })
+        .catch(() => { pic.src = fallback; });
+}
+
 // ----------------- ImgBB upload helper -----------------
-async function uploadToImgBB(file) {
+async function uploadToImgBB(fileOrBlob) {
     if (!imgbbKey) throw new Error('No ImgBB key configured');
+    const asFile = fileOrBlob instanceof File ? fileOrBlob : new File([fileOrBlob], 'upload.jpg', { type: 'image/jpeg' });
+
     // convierte a base64
     const base64 = await new Promise((resolve, reject) => {
         const fr = new FileReader();
-        fr.onload = () => resolve(fr.result.split(',')[1]);
+        fr.onload = () => resolve(String(fr.result).split(',')[1]);
         fr.onerror = reject;
-        fr.readAsDataURL(file);
+        fr.readAsDataURL(asFile);
     });
     const form = new FormData();
     form.append('image', base64);
@@ -129,8 +384,45 @@ async function uploadToImgBB(file) {
     const res = await fetch(url, { method: 'POST', body: form });
     const data = await res.json();
     if (!res.ok || !data || !data.data) throw new Error('ImgBB upload failed');
-    // data.data.display_url or data.data.url
     return data.data.display_url || data.data.url || null;
+}
+
+// Small helper to sync avatar to header and storage
+function updateLocalUserPhoto(url) {
+    try {
+        const raw = localStorage.getItem('as_user') || localStorage.getItem('user') || '{}';
+        const obj = JSON.parse(raw);
+        const profile = { ...(obj.profile || {}), avatarUrl: url };
+        const merged = { ...obj, photoURL: url, avatarUrl: url, avatar: url, profile };
+        localStorage.setItem('as_user', JSON.stringify(merged));
+        window.dispatchEvent(new Event('as:user-updated'));
+    } catch (_) { /* ignore */ }
+}
+
+// NEW: sync username for header (localStorage + Firebase Auth displayName)
+function updateLocalUserName(name) {
+    try {
+        const raw = localStorage.getItem('as_user') || localStorage.getItem('user') || '{}';
+        const obj = JSON.parse(raw);
+        const profile = { ...(obj.profile || {}), displayName: name, username: name };
+        const merged = { ...obj, displayName: name, username: name, name, headerLabel: name, profile };
+        localStorage.setItem('as_user', JSON.stringify(merged));
+        window.dispatchEvent(new Event('as:user-updated'));
+    } catch (_) { /* ignore */ }
+    try {
+        if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
+            const u = firebase.auth().currentUser;
+            if (!u.displayName || u.displayName !== name) {
+                u.updateProfile({ displayName: name }).catch(()=>{});
+            }
+        }
+    } catch (_) { /* ignore */ }
+}
+
+// NEW: best-effort update for common header placeholders
+function setAuthHeaderName(name) {
+    const ids = ['auth-header-name', 'header-username', 'auth-username', 'nav-username'];
+    ids.forEach(id => { const el = document.getElementById(id); if (el) el.textContent = name || ''; });
 }
 
 // ----------------- Subida de foto (modificada) -----------------
@@ -140,80 +432,69 @@ function setupPhotoUpload() {
     form.addEventListener('submit', async (ev) => {
         ev.preventDefault();
         const input = document.getElementById('photoInput');
-        const msg = document.getElementById('profile-status');
-        if (!input || !input.files || !input.files[0]) { if (msg) { msg.textContent='Select a file'; msg.style.color='red'; } return; }
-        const file = input.files[0];
-        const token = await getStoredIdToken();
-        const uid = (token && decodeUidFromToken(token)) || (firebase.auth().currentUser && firebase.auth().currentUser.uid);
-
-        // 1) intenta backend upload (si tienes endpoint y token)
-        if (token) {
-            try {
-                const fd = new FormData();
-                fd.append('foto', file);
-                const res = await fetch(`${backendUrl}/profile/photo`, {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${token}` },
-                    credentials: 'include', // <- incluir cookies/sesión para CORS con credenciales
-                    body: fd
-                });
-                const data = await res.json();
-                if (res.ok && data.success && data.foto_url) {
-                    const pic = document.getElementById('profilePic'); if (pic) pic.src = data.foto_url;
-                    // Si tienes firebase session, actualiza Auth & RTDB localmente también
-                    try { if (firebase.auth().currentUser) await firebase.auth().currentUser.updateProfile({ photoURL: data.foto_url }); } catch(e){}
-                    if (uid && firebase.database) { firebase.database().ref('users/' + uid + '/foto_url').set(data.foto_url).catch(()=>{}); }
-                    if (msg) { msg.textContent='Profile picture updated.'; msg.style.color='green'; }
-                    return;
-                }
-            } catch (e) {
-                // backend falló: seguimos a ImgBB / Firebase
-            }
+        if (!input || !input.files || !input.files[0]) {
+            showStatus('Select a file', 'red');
+            return;
         }
 
-        // 2) intenta ImgBB (si está configurado)
-        if (imgbbKey) {
+        // Preprocess (validate + compress/resize)
+        let file = input.files[0];
+        try {
+            showStatus('Processing image...');
+            file = await preprocessImage(file);
+        } catch (e) {
+            showStatus(e.message || 'Invalid image.', 'red');
+            console.error('preprocessImage failed:', e);
+            return;
+        }
+
+        // Ensure user is logged-in
+        if (!(typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser)) {
+            showStatus('You must be logged in to upload a photo.', 'red');
+            return;
+        }
+        const uid = firebase.auth().currentUser.uid;
+
+        // Enforce ImgBB flow only
+        if (ALWAYS_USE_IMGBB) {
+            if (!imgbbKey) {
+                showStatus('ImgBB API key not configured. Set it in backend /api/config.', 'red');
+                return;
+            }
             try {
+                showStatus('Uploading photo (ImgBB)...');
                 const url = await uploadToImgBB(file);
-                if (url) {
-                    // actualizar Auth photoURL (si existe sesión) y RTDB
-                    try { if (firebase && firebase.auth().currentUser) await firebase.auth().currentUser.updateProfile({ photoURL: url }); } catch(e){}
-                    if (uid && firebase.database) {
-                        try { await firebase.database().ref('users/' + uid + '/foto_url').set(url); } catch(e){}
-                    }
-                    const pic = document.getElementById('profilePic'); if (pic) pic.src = url;
-                    if (msg) { msg.textContent='Profile picture uploaded to ImgBB.'; msg.style.color='green'; }
-                    return;
-                }
-            } catch (e) {
-                console.warn('ImgBB upload failed:', e);
-            }
-        }
+                if (!url) throw new Error('ImgBB did not return a URL');
 
-        // 3) fallback Firebase Storage
-        if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser && firebase.storage) {
-            try {
-                const user = firebase.auth().currentUser;
-                const uid2 = user.uid;
-                const ref = firebase.storage().ref().child(`profile_pics/${uid2}/${file.name}`);
-                const snapshot = await ref.put(file);
-                const url = await snapshot.ref.getDownloadURL();
-                await user.updateProfile({ photoURL: url });
-                // guardar en RTDB
-                try { await firebase.database().ref('users/' + uid2 + '/foto_url').set(url); } catch(e){}
-                const pic = document.getElementById('profilePic'); if (pic) pic.src = url;
-                if (msg) { msg.textContent='Profile picture updated (Firebase).'; msg.style.color='green'; }
+                // Update Firebase Auth and RTDB with the link
+                try { await firebase.auth().currentUser.updateProfile({ photoURL: url }); } catch {}
+                try {
+                    await firebase.database().ref('users/' + uid).update({
+                        foto_url: url,
+                        // opcional: metadatos
+                        imgbb: { url, updatedAt: Date.now() }
+                    });
+                    // también eliminar paths antiguos que ya no usaremos
+                    await firebase.database().ref('users/' + uid + '/foto_path').remove().catch(() => {});
+                } catch {}
+
+                // Update UI/local cache
+                setProfilePicSmart(url);
+                updateLocalUserPhoto(url);
+                showStatus('Profile picture uploaded to ImgBB.', 'green');
                 return;
             } catch (e) {
-                if (msg) { msg.textContent='Failed to upload photo.'; msg.style.color='red'; }
+                console.error('ImgBB upload failed:', e);
+                showStatus(e && e.message ? e.message : 'ImgBB upload failed.', 'red');
+                return;
             }
-        } else {
-            if (msg) { msg.textContent='No upload method available.'; msg.style.color='red'; }
         }
+
+        // Nota: Como usamos ALWAYS_USE_IMGBB, no alcanzaremos backend ni Firebase Storage.
     });
 }
 
-const BACKEND_TIMEOUT = 3000;
+const BACKEND_TIMEOUT = 8000; // was 3000
 
 function timeoutFetch(resource, options = {}, timeout = BACKEND_TIMEOUT) {
     const controller = new AbortController();
@@ -243,6 +524,8 @@ async function tryFetchProfileBackend(idToken) {
         const data = await res.json();
         if (!data.success) throw new Error('backend-no-success');
         return data.user;
+// Diferencia entre fallo de red/timeout y rechazo por autorización
+// (This block was duplicated and is now removed)
     } catch (err) {
         // Diferencia entre fallo de red/timeout y rechazo por autorización
         console.warn('Backend profile fetch failed:', err);
@@ -345,7 +628,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 area: val.area || '',
                                 email: val.email || (user.email || ''),
                                 accountType: val.accountType || '',
-                                foto_url: val.foto_url || user.photoURL || ''
+                                foto_url: val.foto_url || user.photoURL || '',
+                                foto_path: val.foto_path || val.photoPath || ''
                             });
                             if (msgEl) { msgEl.textContent = ''; }
                         }

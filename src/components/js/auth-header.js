@@ -1,602 +1,520 @@
 /**
- * AidSync Authenticated Header Component
- * Handles user menu, mobile navigation, theme, auth state, and session timeout/extend
+ * auth-header.js
+ * Componente de cabecera con integración de autenticación (Firebase) + animaciones.
+ *
+ * Requisitos en el HTML (auth-header.html):
+ *  - Botones/Elementos con data-auth:
+ *    [data-auth="login"], [data-auth="register"], [data-auth="logout"],
+ *    [data-auth="username"], [data-auth="avatar"],
+ *    [data-auth="profile-toggle"] (botón para abrir/cerrar el menú del perfil),
+ *    [data-auth="menu"] (contenedor del menú desplegable del perfil).
+ *
+ * Notas:
+ *  - Este script detecta Firebase en modo modular o compat. Si no existe, intenta cargar desde CDN.
+ *  - Para inicializar automáticamente en modo modular, define window.FIREBASE_CONFIG en tu HTML antes de este script.
+ *    Ejemplo:
+ *      <script>
+ *        window.FIREBASE_CONFIG = { apiKey: "...", authDomain: "...", projectId: "...", appId: "..." };
+ *      </script>
+ *
+ *  - Al hacer logout, redirige a "index.html".
+ *  - Las animaciones son livianas y se aplican a botones y menú del perfil.
  */
-class AuthHeader {
-  static DEFAULT_AVATAR = '/public/assets/img/default-avatar.png';
-  static SESSION_KEY = 'as_session_expires_at';
-  static WARNING_KEY = 'as_session_warning_at';
-  static SESSION_DURATION_MS = 60 * 60 * 1000; // 1 hour
-  static WARNING_DURATION_MS = 60 * 1000; // 1 minute
 
-  constructor() {
-    // ...existing code...
-    this.initializeElements();
-    this.sessionTimers = { check: null, countdown: null };
-    this.isAuthenticated = false; // nuevo estado centralizado
-    this.initialize();
-  }
-
-  /**
-   * Initialize DOM element references
-   */
-  initializeElements() {
-    // Main elements
-    this.authHeader = document.getElementById('authHeader');
-    // Permitir configurar si el componente debe autoiniciar sesión cuando no existan timestamps.
-    // data-autostart-session="false" desactiva esta función; por defecto, true.
-    this.autoStartSession = !this.authHeader || this.authHeader.dataset.autostartSession !== 'false';
-
-    this.userMenu = document.querySelector('.as-header__user-menu');
-    this.userMenuButton = document.getElementById('userMenuButton');
-    this.userDropdown = document.getElementById('userDropdown');
-    // Mobile
-    this.burgerButton = document.querySelector('.as-header__burger');
-    this.mobileMenu = document.getElementById('as-header__mobile-menu');
-    this.mobileCloseButton = document.querySelector('.as-header__mobile-close');
-    // User info elements
-    this.userName = document.getElementById('userName');
-    this.userDisplayName = document.getElementById('dropdownName');
-    this.userEmail = document.getElementById('dropdownEmail');
-    this.userAvatar = document.getElementById('userAvatar');
-    this.dropdownAvatar = document.getElementById('dropdownAvatar');
-    this.logoutBtn = document.getElementById('logoutBtn');
-    this.headerLogoutBtn = document.getElementById('headerLogoutBtn');
+(function () {
+  function AuthHeader(root) {
+    this.root = root || document;
     
-    // Mobile user info elements
-    this.mobileUserName = document.getElementById('mobileUserName');
-    this.mobileUserEmail = document.getElementById('mobileUserEmail');
-    this.mobileUserAvatar = document.getElementById('mobileUserAvatar');
-    this.mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
+    // Cache DOM
+    this.wrap = this.root.querySelector('#asHeaderUser');
+    this.nameEl = this.root.querySelector('#rightUserName');
+    this.avatarEl = this.root.querySelector('#rightUserAvatar');
+    this.logoutBtn = this.root.querySelector('#headerLogoutBtn');
     
-    // Dark mode toggle
-    this.darkModeToggles = Array.from(document.querySelectorAll('.as-header__icon-btn'));
+    this.handleLogout = this.handleLogout.bind(this);
+    this._rtdbRef = null;
+    this._authUnsubscribe = null;
     
-    // Session modal elements
-    this.sessionModal = document.getElementById('as-session-modal');
-    this.sessionCountdownEl = document.getElementById('sessionCountdown');
-    this.sessionExtendBtn = document.getElementById('sessionExtendBtn');
-    this.sessionLogoutBtn = document.getElementById('sessionLogoutBtn');
+    // FORZAR CSS inmediato
+    this.forceCorrectCSS();
+    this.ensureStyles();
+    this.ensureLogo();
+    
+    // FORZAR detección inmediata de usuario
+    this.forceDetectUser();
+    
+    this.setupEvents();
+    this.initAuth();
   }
 
-  /**
-   * Initialize the component
-   */
-  async initialize() {
+  AuthHeader.DEFAULT_AVATAR = '/public/assets/img/default-avatar.png';
+
+  // NUEVO: aplicar CSS crítico inmediato
+  AuthHeader.prototype.forceCorrectCSS = function () {
     try {
-      this.setupEventListeners();
-      this.setupMobileMenu();
-      this.setupDarkModeToggle();
-      this.setupClickOutsideHandlers();
-      await this.checkAuthState();
-      this.setupSessionManagement();
-    } catch (error) {
-      console.error('Error initializing auth header:', error);
-    }
-  }
-
-  // --- Auth state (Firebase optional) ---
-  /**
-   * Check authentication state
-   */
-  async checkAuthState() {
-    try {
-      if (typeof firebase === 'undefined' || !firebase.auth) {
-        const expiresAt = parseInt(localStorage.getItem(AuthHeader.SESSION_KEY) || '0', 10);
-        const now = Date.now();
-        if (!expiresAt || now >= expiresAt) {
-          if (this.autoStartSession) {
-            // Autoiniciar sesión local para el header autenticado
-            this.setSessionExpiry(now + AuthHeader.SESSION_DURATION_MS);
-            this.isAuthenticated = true;
-          } else {
-            this.isAuthenticated = false;
-          }
-        } else {
-          this.isAuthenticated = true;
+      const header = this.root.querySelector('#authHeader');
+      if (header) {
+        // Aplicar estilos inline como fallback inmediato
+        header.style.cssText = 'height:60px!important;min-height:60px!important;max-height:60px!important;background:linear-gradient(135deg,#0e5a8a 0%,#0ea5a6 100%)!important;position:sticky!important;top:0;z-index:1000;width:100%!important;box-shadow:0 2px 8px rgba(0,0,0,.1)';
+        
+        const container = this.root.querySelector('.as-header__container');
+        if (container) {
+          container.style.cssText = 'height:60px!important;padding:0 1rem!important;display:flex!important;align-items:center!important;justify-content:space-between!important;max-width:1280px;margin:0 auto;position:relative;gap:12px';
         }
-        // Cargar información de usuario si hay sesión válida
-        if (this.isAuthenticated) {
-          const u = this.getStoredUser();
-          if (u) this.updateAuthUI(u);
-          else this.toggleAuthUI(true);
-        } else {
-          this.resetUserProfile();
-          this.toggleAuthUI(false);
+        
+        const logo = this.root.querySelector('.as-header__logo');
+        if (logo) {
+          logo.style.cssText = 'height:40px!important;max-height:40px!important;width:auto!important;object-fit:contain!important';
         }
-        return this.isAuthenticated;
-      }
-
-      const user = firebase.auth().currentUser;
-      if (user) {
-        this.updateAuthUI(user);
-        this.isAuthenticated = true;
-        return true;
-      } else {
-        this.resetUserProfile();
-        this.toggleAuthUI(false);
-        this.isAuthenticated = false;
-        return false;
-      }
-    } catch (error) {
-      console.error('Error checking auth state:', error);
-      this.isAuthenticated = false;
-      return false;
-    }
-  }
-
-  // Helpers para normalizar y leer usuario almacenado
-  pick(...vals) { return vals.find(v => typeof v === 'string' && v.trim().length) || null; }
-  normalizeUser(u) {
-    if (!u) return null;
-    const displayName = this.pick(u.displayName, u.name, u.username, u.fullName,
-      u?.profile?.name,
-      [u.given_name, u.family_name].filter(Boolean).join(' ').trim(),
-      [u.firstName, u.lastName].filter(Boolean).join(' ').trim());
-    const email = this.pick(u.email, u.mail, u.emailAddress, u?.profile?.email);
-    const photoURL = this.pick(u.photoURL, u.picture, u.avatarUrl, u.avatar, u?.profile?.avatarUrl);
-    return {
-      displayName: displayName || 'User',
-      email: email || '',
-      photoURL: photoURL || AuthHeader.DEFAULT_AVATAR,
-    };
-  }
-
-  getStoredUser() {
-    try {
-      const tryParse = (raw) => { try { return JSON.parse(raw); } catch { return null; } };
-      // Claves comunes
-      const raw = localStorage.getItem('user') || localStorage.getItem('as_user') ||
-                  sessionStorage.getItem('user') || sessionStorage.getItem('as_user');
-      let u = raw ? tryParse(raw) : null;
-      if (!u) {
-        // Intento con claves de Firebase persistidas
-        for (let i = 0; i < localStorage.length; i++) {
-          const k = localStorage.key(i);
-          if (k && k.startsWith('firebase:authUser:')) {
-            u = tryParse(localStorage.getItem(k));
-            if (u) break;
-          }
+        
+        const nav = this.root.querySelector('.as-header__nav');
+        if (nav) {
+          nav.style.cssText = 'position:absolute!important;left:50%!important;transform:translateX(-50%)!important';
         }
-      }
-      return u ? this.normalizeUser(u) : null;
-    } catch (_) { return null; }
-  }
-
-  refreshUserFromStorage() {
-    const u = this.getStoredUser();
-    if (u) this.updateAuthUI(u);
-  }
-
-  /**
-   * Update UI based on authentication state
-   * @param {Object} user - Firebase user object
-   */
-  updateAuthUI(user) {
-    if (!user) { this.toggleAuthUI(false); return; }
-    // Acepta tanto objetos Firebase como normalizados
-    const norm = this.normalizeUser(user);
-
-    // Update desktop view
-    if (this.userName) this.userName.textContent = norm.displayName;
-    if (this.userDisplayName) this.userDisplayName.textContent = norm.displayName;
-    if (this.userEmail) this.userEmail.textContent = norm.email;
-    if (this.userAvatar) this.userAvatar.src = norm.photoURL;
-    if (this.dropdownAvatar) this.dropdownAvatar.src = norm.photoURL;
-
-    // Update mobile view
-    if (this.mobileUserName) this.mobileUserName.textContent = norm.displayName;
-    if (this.mobileUserEmail) this.mobileUserEmail.textContent = norm.email;
-    if (this.mobileUserAvatar) this.mobileUserAvatar.src = norm.photoURL;
-
-    this.toggleAuthUI(true);
-  }
-
-  /**
-   * Reset user profile to default state
-   */
-  resetUserProfile() {
-    // Reset desktop view
-    if (this.userName) this.userName.textContent = 'Guest';
-    if (this.userDisplayName) this.userDisplayName.textContent = 'Guest';
-    if (this.userEmail) this.userEmail.textContent = '';
-    if (this.userAvatar) this.userAvatar.src = AuthHeader.DEFAULT_AVATAR;
-    if (this.dropdownAvatar) this.dropdownAvatar.src = AuthHeader.DEFAULT_AVATAR;
-
-    // Reset mobile view
-    if (this.mobileUserName) this.mobileUserName.textContent = 'Guest';
-    if (this.mobileUserEmail) this.mobileUserEmail.textContent = '';
-    if (this.mobileUserAvatar) this.mobileUserAvatar.src = AuthHeader.DEFAULT_AVATAR;
-  }
-
-  /**
-   * Toggle UI elements based on authentication state
-   * @param {boolean} isAuthenticated - Whether the user is authenticated
-   */
-  toggleAuthUI(isAuthenticated) {
-    // Mostrar/ocultar elementos por estado
-    if (this.userMenu) {
-      this.userMenu.style.display = isAuthenticated ? 'flex' : 'none';
-    }
-    const authElements = document.querySelectorAll('[data-auth]');
-    authElements.forEach(el => {
-      if (el.dataset.auth === 'authenticated') {
-        el.style.display = isAuthenticated ? '' : 'none';
-      } else if (el.dataset.auth === 'guest') {
-        el.style.display = isAuthenticated ? 'none' : '';
-      }
-    });
-  }
-
-  // --- NUEVO: obtener usuario almacenado ---
-  getStoredUser() {
-    try {
-      const tryParse = (raw) => { try { return JSON.parse(raw); } catch { return null; } };
-      // Claves comunes
-      const raw = localStorage.getItem('user') || localStorage.getItem('as_user') ||
-                  sessionStorage.getItem('user') || sessionStorage.getItem('as_user');
-      let u = raw ? tryParse(raw) : null;
-      if (!u) {
-        // Intento con claves de Firebase persistidas
-        for (let i = 0; i < localStorage.length; i++) {
-          const k = localStorage.key(i);
-          if (k && k.startsWith('firebase:authUser:')) {
-            u = tryParse(localStorage.getItem(k));
-            if (u) break;
-          }
+        
+        const navList = this.root.querySelector('.as-header__nav-list');
+        if (navList) {
+          navList.style.cssText = 'list-style:none!important;display:flex!important;gap:1rem!important;margin:0!important;padding:0!important';
         }
-      }
-      return u ? this.normalizeUser(u) : null;
-    } catch (_) { return null; }
-  }
-
-  refreshUserFromStorage() {
-    const u = this.getStoredUser();
-    if (u) this.updateAuthUI(u);
-  }
-
-  /**
-   * Set up event listeners
-   */
-  setupEventListeners() {
-    // User menu toggle
-    if (this.userMenuButton) {
-      this.userMenuButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this.toggleUserDropdown();
-      });
-    }
-
-    // Logout buttons (dropdown, mobile, header visible)
-    [this.logoutBtn, this.mobileLogoutBtn, this.headerLogoutBtn].forEach(btn => {
-      if (btn) {
-        btn.addEventListener('click', (e) => {
-          e.preventDefault();
-          this.handleLogout();
+        
+        const navLinks = this.root.querySelectorAll('.as-header__nav-link');
+        navLinks.forEach(link => {
+          link.style.cssText = 'color:#fff!important;font-weight:600!important;text-decoration:none!important;padding:.3rem .6rem!important;border-radius:.3rem!important;font-size:14px!important';
         });
-      }
-    });
-
-    // Session extend and logout buttons
-    if (this.sessionExtendBtn) {
-      this.sessionExtendBtn.addEventListener('click', () => this.extendSession(true));
-    }
-    if (this.sessionLogoutBtn) {
-      this.sessionLogoutBtn.addEventListener('click', () => this.handleLogout());
-    }
-  }
-
-  /**
-   * Set up mobile menu functionality
-   */
-  setupMobileMenu() {
-    if (this.burgerButton) {
-      this.burgerButton.addEventListener('click', () => {
-        const isExpanded = this.burgerButton.getAttribute('aria-expanded') === 'true';
-        this.burgerButton.setAttribute('aria-expanded', String(!isExpanded));
-        if (this.mobileMenu) {
-          this.mobileMenu.classList.toggle('open', !isExpanded);
-          document.body.style.overflow = !isExpanded ? 'hidden' : '';
+        
+        if (this.avatarEl) {
+          this.avatarEl.style.cssText = 'width:32px!important;height:32px!important;border-radius:50%!important;object-fit:cover!important;border:2px solid rgba(255,255,255,.9)!important';
         }
+        
+        if (this.nameEl) {
+          this.nameEl.style.cssText = 'color:#fff!important;font-weight:700!important;max-width:120px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;font-size:13px!important';
+        }
+        
+        if (this.logoutBtn) {
+          this.logoutBtn.style.cssText = 'background:transparent!important;color:#fff!important;border:2px solid rgba(255,255,255,.9)!important;padding:.25rem .6rem!important;border-radius:999px!important;font-weight:700!important;cursor:pointer!important;font-size:12px!important';
+        }
+      }
+    } catch (e) {
+      console.warn('Force CSS failed:', e);
+    }
+  };
+
+  // NUEVO: detección agresiva de usuario desde múltiples fuentes
+  AuthHeader.prototype.forceDetectUser = function () {
+    // 1. Verificar Firebase Auth actual
+    if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
+      this.applyUser(firebase.auth().currentUser);
+      return;
+    }
+    
+    // 2. Verificar localStorage
+    const stored = this.getStoredUser();
+    if (stored && (stored.uid || stored.email)) {
+      this.applyUser(stored);
+      return;
+    }
+    
+    // 3. Verificar token Firebase en localStorage
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k && k.indexOf('firebase:authUser:') === 0) {
+        try {
+          var fu = JSON.parse(localStorage.getItem(k));
+          if (fu && fu.uid) {
+            this.applyUser(fu);
+            return;
+          }
+        } catch (_) {}
+      }
+    }
+    
+    // Si no hay usuario, ocultar
+    this.setVisible(false);
+  };
+
+  AuthHeader.prototype.setupEvents = function () {
+    if (this.logoutBtn) {
+      this.logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.handleLogout();
       });
     }
-
-    if (this.mobileCloseButton) {
-      this.mobileCloseButton.addEventListener('click', () => this.closeMobileMenu());
-    }
-  }
-
-  /**
-   * Set up dark mode toggle
-   */
-  setupDarkModeToggle() {
-    if (!this.darkModeToggles || !this.darkModeToggles.length) return;
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const savedTheme = localStorage.getItem('theme');
-    const isDark = savedTheme ? savedTheme === 'dark' : prefersDark;
-    this.applyTheme(isDark);
-    this.darkModeToggles.forEach(btn => btn.addEventListener('click', () => {
-      const nowDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      this.applyTheme(!nowDark);
-      localStorage.setItem('theme', !nowDark ? 'dark' : 'light');
-    }));
-  }
-
-  /**
-   * Apply theme to the document
-   * @param {boolean} isDark - Whether to apply dark theme
-   */
-  applyTheme(isDark) {
-    if (isDark) document.documentElement.setAttribute('data-theme', 'dark');
-    else document.documentElement.removeAttribute('data-theme');
-  }
-
-  /**
-   * Set up click outside handlers for dropdowns
-   */
-  setupClickOutsideHandlers() {
-    document.addEventListener('click', (e) => {
-      // Close user dropdown when clicking outside
-      if (this.userMenuButton && !this.userMenuButton.contains(e.target) && 
-          this.userDropdown && !this.userDropdown.contains(e.target)) {
-        this.closeUserDropdown();
-      }
-      
-      // Close mobile menu when clicking outside
-      if (this.mobileMenu && this.mobileMenu.classList.contains('open') && 
-          !this.mobileMenu.contains(e.target) && 
-          this.burgerButton && !this.burgerButton.contains(e.target)) {
-        this.closeMobileMenu();
+    
+    window.addEventListener('as:user-updated', () => this.refreshFromStorage());
+    window.addEventListener('storage', (e) => {
+      if (!e.key) return;
+      if (e.key === 'user' || e.key === 'as_user' || (e.key && e.key.indexOf('firebase:authUser:') === 0)) {
+        this.refreshFromStorage();
       }
     });
-  }
+  };
 
-  /**
-   * Toggle user dropdown menu
-   */
-  toggleUserDropdown() {
-    const isExpanded = this.userMenuButton && this.userMenuButton.getAttribute('aria-expanded') === 'true';
-    if (this.userMenuButton) this.userMenuButton.setAttribute('aria-expanded', String(!isExpanded));
-    if (this.userDropdown) this.userDropdown.dataset.visible = (!isExpanded).toString();
-    if (this.userMenu) this.userMenu.setAttribute('aria-expanded', String(!isExpanded));
-  }
-
-  /**
-   * Close user dropdown menu
-   */
-  closeUserDropdown() {
-    if (this.userMenuButton) this.userMenuButton.setAttribute('aria-expanded', 'false');
-    if (this.userDropdown) this.userDropdown.dataset.visible = 'false';
-    if (this.userMenu) this.userMenu.setAttribute('aria-expanded', 'false');
-  }
-
-  /**
-   * Close mobile menu
-   */
-  closeMobileMenu() {
-    if (this.burgerButton) this.burgerButton.setAttribute('aria-expanded', 'false');
-    if (this.mobileMenu) this.mobileMenu.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  // --- Session handling ---
-  /**
-   * Set up session management
-   */
-  setupSessionManagement() {
-    // Gestionar sesión únicamente si el usuario está autenticado
-    const expiresAt = parseInt(localStorage.getItem(AuthHeader.SESSION_KEY) || '0', 10);
-
-    if (this.isAuthenticated) {
-      if (!expiresAt || Date.now() >= expiresAt) {
-        // Crear o renovar una sesión válida
-        this.setSessionExpiry(Date.now() + AuthHeader.SESSION_DURATION_MS);
-      }
-      this.startSessionCheckLoop();
+  AuthHeader.prototype.initAuth = async function () {
+    // Esperar más tiempo para Firebase
+    await this.waitForFirebaseAuth(8000);
+    const auth = this.getAuth();
+    if (auth && typeof auth.onAuthStateChanged === 'function') {
+      if (this._authUnsubscribe) this._authUnsubscribe();
+      
+      this._authUnsubscribe = auth.onAuthStateChanged((user) => {
+        console.log('🔥 Firebase Auth State Change:', user ? user.uid : 'null');
+        this.applyUser(user);
+      });
     } else {
-      this.clearSessionTimers();
-      // Si no hay sesión válida, aseguramos que el modal esté oculto
-      this.hideSessionModal();
+      console.warn('🔥 Firebase Auth not available, using stored user');
+      this.applyUser(this.getStoredUser());
     }
-  }
+  };
 
-  /**
-   * Set session expiry timestamp
-   * @param {number} ts - Timestamp in milliseconds
-   */
-  setSessionExpiry(ts) {
-    localStorage.setItem(AuthHeader.SESSION_KEY, String(ts));
-    localStorage.removeItem(AuthHeader.WARNING_KEY);
-  }
+  AuthHeader.prototype.ensureLogo = function () {
+    try {
+      var logo = this.root.querySelector('#authHeader .as-header__logo');
+      if (!logo) return;
+      
+      var sources = [
+        '/public/assets/logos/White_name.png',
+        '/public/assets/logos/white_name.png',
+        '/public/assets/logos/white-name.png',
+        '/public/assets/logos/White_Name.png',
+        '/public/assets/logos/logito.png'
+      ];
+      
+      var current = logo.getAttribute('src');
+      if (current && sources.indexOf(current) !== 0) sources.unshift(current);
+      
+      logo.dataset.asLogoIdx = '0';
+      logo.alt = 'AidSync Logo';
+      
+      logo.onerror = () => {
+        var i = parseInt(logo.dataset.asLogoIdx || '0', 10) + 1;
+        if (i < sources.length) { 
+          logo.dataset.asLogoIdx = String(i); 
+          logo.src = sources[i]; 
+        } else {
+          var parent = logo.parentElement;
+          if (parent) {
+            var span = document.createElement('span');
+            span.textContent = 'AidSync';
+            span.style.fontWeight = '700';
+            span.style.color = '#fff';
+            span.style.fontSize = '18px';
+            logo.replaceWith(span);
+          }
+        }
+      };
+      
+      logo.src = sources[0];
+    } catch (_) {}
+  };
 
-  /**
-   * Start the session check loop
-   */
-  startSessionCheckLoop() {
-    this.clearSessionTimers();
-    const check = () => {
-      const now = Date.now();
-      const expiresAt = parseInt(localStorage.getItem(AuthHeader.SESSION_KEY) || '0', 10);
-      if (!expiresAt) return;
-      const msLeft = expiresAt - now;
-      if (msLeft <= 0) {
-        this.autoLogout();
+  AuthHeader.prototype.applyUser = function (user) {
+    console.log('📝 Applying user to header:', user);
+    
+    if (!user) {
+      this.detachRtdb();
+      return this.setVisible(false);
+    }
+    
+    // Datos iniciales mejorados
+    const stored = this.getStoredUser() || {};
+    const norm = this.normalizeUser(user, stored);
+    
+    console.log('📝 Normalized user:', norm);
+    
+    if (this.nameEl) {
+      this.nameEl.textContent = norm.displayName;
+      console.log('📝 Set header name:', norm.displayName);
+    }
+    
+    this.safeSetAvatar(this.avatarEl, norm.photoURL);
+    this.setVisible(true);
+    
+    // RTDB con UID válido
+    const uid = user.uid || user.user_id || stored.uid;
+    if (uid) {
+      console.log('🔗 Connecting to RTDB for UID:', uid);
+      this.attachRtdb(uid);
+    }
+  };
+
+  AuthHeader.prototype.attachRtdb = function (uid) {
+    try {
+      if (typeof firebase === 'undefined' || !firebase.database || !uid) {
+        console.warn('🔗 Cannot attach RTDB:', { firebase: typeof firebase, database: !!firebase.database, uid });
         return;
       }
-      if (msLeft <= AuthHeader.WARNING_DURATION_MS) {
-        const warnedAt = parseInt(localStorage.getItem(AuthHeader.WARNING_KEY) || '0', 10);
-        if (!warnedAt) {
-          localStorage.setItem(AuthHeader.WARNING_KEY, String(now));
-          this.showSessionModal(Math.ceil(msLeft / 1000));
+      
+      this.detachRtdb();
+      
+      const ref = firebase.database().ref('users/' + uid);
+      this._rtdbRef = ref;
+      
+      console.log('🔗 RTDB listener attached for:', uid);
+      
+      ref.on('value', (snap) => {
+        const v = snap.val() || {};
+        console.log('📡 RTDB data received:', v);
+        
+        // Actualizar nombre en tiempo real
+        const name = (v.username || v.nombre || v.name || '').toString().trim();
+        if (name && this.nameEl) {
+          const clean = name.includes('@') ? name.split('@')[0] : name;
+          this.nameEl.textContent = clean;
+          console.log('📡 Updated header name from RTDB:', clean);
+          this.updateLocalStorage('displayName', clean);
         }
-      } else {
-        this.hideSessionModal();
-        localStorage.removeItem(AuthHeader.WARNING_KEY);
-      }
-      // Sincronizar perfil en esta pestaña si cambia en storage
-      const u = this.getStoredUser();
-      if (u) {
-        const dn = u.displayName;
-        if (this.userName && this.userName.textContent !== dn) {
-          this.updateAuthUI(u);
+        
+        // Actualizar foto en tiempo real
+        const photo = (v.foto_url || v.photoURL || '').toString().trim();
+        if (photo) {
+          this.safeSetAvatar(this.avatarEl, photo);
+          console.log('📡 Updated header photo from RTDB:', photo);
+          this.updateLocalStorage('photoURL', photo);
         }
-      }
-    };
-    check();
-    this.sessionTimers.check = setInterval(check, 1000);
+        
+        // Datos adicionales
+        if (v.email) this.updateLocalStorage('email', v.email);
+        if (v.accountType) this.updateLocalStorage('accountType', v.accountType);
+      }, (error) => {
+        console.error('📡 RTDB listener error:', error);
+        setTimeout(() => {
+          if (!this._rtdbRef) this.attachRtdb(uid);
+        }, 3000);
+      });
+    } catch (e) {
+      console.error('🔗 Error setting up RTDB listener:', e);
+    }
+  };
 
-    window.addEventListener('storage', (e) => {
-      if (e.key === AuthHeader.SESSION_KEY || e.key === AuthHeader.WARNING_KEY) {
-        const now = Date.now();
-        const expiresAt = parseInt(localStorage.getItem(AuthHeader.SESSION_KEY) || '0', 10);
-        const msLeft = expiresAt - now;
-        if (msLeft <= 0) this.autoLogout();
-        else if (msLeft <= AuthHeader.WARNING_DURATION_MS) this.showSessionModal(Math.ceil(msLeft / 1000));
-        else this.hideSessionModal();
+  AuthHeader.prototype.updateLocalStorage = function (key, value) {
+    try {
+      const raw = localStorage.getItem('as_user') || localStorage.getItem('user') || '{}';
+      const obj = JSON.parse(raw);
+      obj[key] = value;
+      localStorage.setItem('as_user', JSON.stringify(obj));
+      window.dispatchEvent(new CustomEvent('as:user-updated', { detail: { [key]: value } }));
+    } catch (e) {
+      console.warn('💾 Error updating localStorage:', e);
+    }
+  };
+
+  AuthHeader.prototype.detachRtdb = function () {
+    try { 
+      if (this._rtdbRef) { 
+        this._rtdbRef.off(); 
+        this._rtdbRef = null; 
+      } 
+    } catch (e) {
+      console.warn('Error detaching RTDB:', e);
+    }
+  };
+
+  AuthHeader.prototype.setVisible = function (show) {
+    if (!this.wrap) return;
+    this.wrap.style.display = show ? 'flex' : 'none';
+    if (show) this.wrap.style.visibility = 'visible';
+  };
+
+  AuthHeader.prototype.handleLogout = async function () {
+    // Cleanup listeners antes del logout
+    this.detachRtdb();
+    if (this._authUnsubscribe) {
+      this._authUnsubscribe();
+      this._authUnsubscribe = null;
+    }
+    
+    try { 
+      const auth = this.getAuth(); 
+      if (auth) await auth.signOut(); 
+    } catch (e) {
+      console.warn('Firebase signOut error:', e);
+    }
+    
+    try {
+      localStorage.removeItem('user'); 
+      localStorage.removeItem('as_user'); 
+      localStorage.removeItem('idToken');
+      localStorage.removeItem('uid');
+      sessionStorage.removeItem('user'); 
+      sessionStorage.removeItem('as_user');
+    } catch (e) {
+      console.warn('Storage cleanup error:', e);
+    }
+    
+    window.location.href = '/public/index.html';
+  };
+
+  AuthHeader.prototype.refreshFromStorage = function () {
+    const stored = this.getStoredUser();
+    if (stored && this.nameEl && this.avatarEl) {
+      const norm = this.normalizeUser(null, stored);
+      this.nameEl.textContent = norm.displayName;
+      this.safeSetAvatar(this.avatarEl, norm.photoURL);
+    }
+  };
+
+  AuthHeader.prototype.normalizeUser = function (u, s) {
+    var get = function (obj, path) { 
+      try { 
+        return path.split('.').reduce((o, k) => (o && o[k] != null ? o[k] : null), obj); 
+      } catch (_) { 
+        return null; 
+      } 
+    };
+    
+    // PRIORIDAD ABSOLUTA: username de RTDB
+    var username = this.pick(
+      get(s, 'username'),     // localStorage username
+      get(u, 'username'),     // firebase user username  
+      get(s, 'nombre'),       // localStorage nombre
+      get(u, 'nombre'),       // firebase user nombre
+      get(s, 'displayName'),  // localStorage displayName
+      get(u, 'displayName'),  // firebase user displayName
+      get(u, 'email')         // fallback email
+    );
+    
+    if (typeof username === 'string' && username.indexOf('@') !== -1) {
+      username = username.split('@')[0];
+    }
+    
+    // PRIORIDAD ABSOLUTA: foto_url de RTDB
+    var photoURL = this.pick(
+      get(s, 'foto_url'),     // localStorage foto_url (desde RTDB)
+      get(u, 'foto_url'),     // firebase user foto_url
+      get(s, 'photoURL'),     // localStorage photoURL
+      get(u, 'photoURL'),     // firebase user photoURL
+      get(s, 'avatarUrl'),    // localStorage avatarUrl
+      get(u, 'avatarUrl')     // firebase user avatarUrl
+    );
+    
+    return { 
+      displayName: (username && username.trim()) || 'User', 
+      photoURL: photoURL || AuthHeader.DEFAULT_AVATAR 
+    };
+  };
+
+  AuthHeader.prototype.pick = function () {
+    for (var i = 0; i < arguments.length; i++) { 
+      var v = arguments[i]; 
+      if (typeof v === 'string' && v.trim().length) return v; 
+    }
+    return null;
+  };
+
+  AuthHeader.prototype.safeSetAvatar = function (img, url) {
+    if (!img) return;
+    
+    // Manejar errores de carga
+    img.onerror = () => { 
+      img.src = AuthHeader.DEFAULT_AVATAR; 
+    };
+    
+    // Si es una URL válida, usarla directamente
+    if (url && (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:'))) {
+      img.src = url;
+    } else {
+      img.src = AuthHeader.DEFAULT_AVATAR;
+    }
+  };
+
+  AuthHeader.prototype.ensureStyles = function () {
+    try {
+      const isShadow = !!(this.root && this.root.host);
+      const container = isShadow ? this.root : document.head;
+
+      // CSS crítico mejorado
+      if (!(container.querySelector && container.querySelector('#as-header-critical-css'))) {
+        const critical = document.createElement('style');
+        critical.id = 'as-header-critical-css';
+        critical.textContent = `
+          #authHeader{height:60px!important;min-height:60px!important;max-height:60px!important;background:linear-gradient(135deg,#0e5a8a 0%,#0ea5a6 100%)!important;position:sticky!important;top:0;z-index:1000;width:100%!important}
+          #authHeader .as-header__container{height:60px!important;padding:0 1rem!important;display:flex!important;align-items:center!important;justify-content:space-between!important;max-width:1280px;margin:0 auto;position:relative}
+          #authHeader .as-header__nav-list{list-style:none!important;margin:0!important;padding:0!important;display:flex!important;gap:1rem!important}
+          #authHeader .as-header__nav-link{text-decoration:none!important;color:#fff!important;font-size:14px!important;padding:.3rem .6rem!important}
+          #authHeader .as-header__user{display:none!important;align-items:center!important;gap:.6rem!important}
+          #authHeader .as-header__user-avatar{width:32px!important;height:32px!important;border-radius:50%!important}
+          #authHeader .as-header__user-name{color:#fff!important;font-size:13px!important;max-width:120px!important}
+          #authHeader .as-header__user-logout{font-size:12px!important;padding:.25rem .6rem!important;background:transparent!important;color:#fff!important;border:2px solid rgba(255,255,255,.9)!important}
+        `;
+        container.appendChild(critical);
       }
-      if (e.key === 'user' || e.key === 'as_user' || (e.key && e.key.startsWith('firebase:authUser:'))) {
-        this.refreshUserFromStorage();
+
+      // Import CSS del componente
+      if (!(container.querySelector && container.querySelector('#as-header-import-css'))) {
+        const style = document.createElement('style');
+        style.id = 'as-header-import-css';
+        style.textContent = `@import url("/src/components/css/auth-header.css");`;
+        container.appendChild(style);
+      }
+
+      // Fallback más agresivo
+      setTimeout(() => {
+        this.forceCorrectCSS(); // Aplicar estilos inline como último recurso
+      }, 100);
+    } catch (_) {}
+  };
+
+  AuthHeader.prototype.getAuth = function () {
+    try { 
+      if (typeof firebase !== 'undefined' && firebase.auth) return firebase.auth(); 
+    } catch (_) {}
+    return null;
+  };
+
+  AuthHeader.prototype.waitForFirebaseAuth = function (timeoutMs, intervalMs) {
+    timeoutMs = timeoutMs || 3000;
+    intervalMs = intervalMs || 120;
+    return new Promise((resolve) => {
+      var start = Date.now();
+      (function loop() {
+        if (typeof firebase !== 'undefined' && firebase.auth) return resolve(true);
+        if (Date.now() - start > timeoutMs) return resolve(false);
+        setTimeout(loop, intervalMs);
+      })();
+    });
+  };
+
+  AuthHeader.prototype.getStoredUser = function () {
+    try {
+      var parse = function (s) { 
+        try { return JSON.parse(s); } catch (e) { return null; } 
+      };
+      var raw = localStorage.getItem('as_user') || localStorage.getItem('user');
+      var u = raw ? parse(raw) : null;
+      if (u) return u;
+      
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && k.indexOf('firebase:authUser:') === 0) {
+          var fu = parse(localStorage.getItem(k));
+          if (fu) return fu;
+        }
+      }
+      return null;
+    } catch (_) { return null; }
+  };
+
+  // Bootstrap
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      if (document.getElementById('authHeader') && !window.authHeader) {
+        window.authHeader = new AuthHeader(document);
       }
     });
-  }
-
-  /**
-   * Show session warning modal
-   * @param {number} seconds - Seconds until session expires
-   */
-  showSessionModal(seconds) {
-    if (!this.sessionModal) return;
-    this.sessionModal.setAttribute('aria-hidden', 'false');
-    this.updateCountdown(seconds);
-    this.clearCountdown();
-    let remaining = seconds;
-    this.sessionTimers.countdown = setInterval(() => {
-      remaining -= 1;
-      this.updateCountdown(Math.max(remaining, 0));
-      if (remaining <= 0) {
-        this.clearCountdown();
-        this.autoLogout();
-      }
-    }, 1000);
-  }
-
-  /**
-   * Hide session warning modal
-   */
-  hideSessionModal() {
-    if (!this.sessionModal) return;
-    this.sessionModal.setAttribute('aria-hidden', 'true');
-    this.clearCountdown();
-  }
-
-  /**
-   * Update countdown display in the session modal
-   * @param {number} sec - Seconds remaining
-   */
-  updateCountdown(sec) {
-    if (this.sessionCountdownEl) this.sessionCountdownEl.textContent = String(sec);
-  }
-
-  /**
-   * Clear session timers
-   */
-  clearSessionTimers() {
-    if (this.sessionTimers.check) clearInterval(this.sessionTimers.check);
-    if (this.sessionTimers.countdown) clearInterval(this.sessionTimers.countdown);
-    this.sessionTimers.check = null;
-    this.sessionTimers.countdown = null;
-  }
-
-  /**
-   * Clear countdown timer
-   */
-  clearCountdown() {
-    if (this.sessionTimers.countdown) clearInterval(this.sessionTimers.countdown);
-    this.sessionTimers.countdown = null;
-  }
-
-  /**
-   * Extend the session expiry
-   * @param {boolean} hideModal - Whether to hide the warning modal after extending
-   */
-  extendSession(hideModal = false) {
-    this.setSessionExpiry(Date.now() + AuthHeader.SESSION_DURATION_MS);
-    if (hideModal) this.hideSessionModal();
-    // Reiniciar el bucle de verificación para tomar el nuevo tiempo
-    this.startSessionCheckLoop();
-  }
-
-  /**
-   * Automatically log out the user
-   */
-  async autoLogout() {
-    try {
-      // Asegurar limpieza de timers y modal antes de salir
-      this.hideSessionModal();
-      this.clearSessionTimers();
-      await this.handleLogout(true);
-    } catch (e) {
-      this.redirectToHome();
+  } else {
+    if (document.getElementById('authHeader') && !window.authHeader) {
+      window.authHeader = new AuthHeader(document);
     }
   }
 
-  /**
-   * Handle user logout
-   * @param {boolean} silent - Whether to suppress UI feedback during logout
-   */
-  async handleLogout(silent = false) {
-    try {
-      // Button loading state (only if not silent)
-      if (!silent) {
-        [this.logoutBtn, this.mobileLogoutBtn].forEach(btn => {
-          if (btn) {
-            const originalText = btn.textContent;
-            btn.disabled = true;
-            btn.dataset.original = originalText;
-            btn.textContent = 'Logging out...';
-          }
-        });
-      }
-      
-      // Sign out from Firebase
-      if (typeof firebase !== 'undefined' && firebase.auth) {
-        await firebase.auth().signOut();
-      }
-      
-      // Clear local/session storage
-      localStorage.removeItem(AuthHeader.SESSION_KEY);
-      localStorage.removeItem(AuthHeader.WARNING_KEY);
-      localStorage.removeItem('user');
-      sessionStorage.removeItem('user');
-      this.clearSessionTimers();
-      this.hideSessionModal();
-      this.redirectToHome();
-    } catch (err) {
-      console.error('Error during logout:', err);
-      
-      // Reset button state
-      [this.logoutBtn, this.mobileLogoutBtn].forEach(btn => {
-        if (btn) {
-          btn.disabled = false;
-          btn.textContent = btn.dataset.original || 'Logout';
-        }
-      });
-      
-      if (!silent) alert('Failed to log out. Please try again.');
+  // Cleanup al destruir
+  AuthHeader.prototype.destroy = function () {
+    this.detachRtdb();
+    if (this._authUnsubscribe) {
+      this._authUnsubscribe();
+      this._authUnsubscribe = null;
     }
-  }
+  };
 
-  /**
-   * Redirect to the home page
-   */
-  redirectToHome() {
-    window.location.href = '/index.html';
-  }
-}
-
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('authHeader')) {
-    window.authHeader = new AuthHeader();
-  }
-});
+  try { window.AuthHeader = AuthHeader; } catch (_) {}
+})();

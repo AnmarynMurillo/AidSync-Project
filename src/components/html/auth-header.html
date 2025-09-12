@@ -1,134 +1,73 @@
 <!-- Auth Header Component -->
 <header id="authHeader" class="as-header" role="banner">
   <div class="as-header__container">
-    <!-- Logo Area -->
-    <div class="as-header__logo-area">
-      <a href="/index.html" class="as-header__logo-link">
-        <img src="/public/assets/logos/White_name.png" alt="AidSync Logo" class="as-header__logo" />
-      </a>
-    </div>
+    <!-- Logo -->
+    <a href="/public/index.html" class="as-header__logo-link">
+      <img class="as-header__logo" src="/public/assets/logos/White_name.png" alt="AidSync Logo" decoding="async" fetchpriority="high" />
+    </a>
 
-    <!-- Main Navigation -->
+    <!-- Nav (center) -->
     <nav class="as-header__nav" aria-label="Main navigation">
       <ul class="as-header__nav-list">
         <li><a href="/public/pages/blog.html" class="as-header__nav-link">Blog</a></li>
         <li><a href="/public/pages/volunteer.html" class="as-header__nav-link">Volunteer</a></li>
-        <li><a href="/public/pages/donate.html" class="as-header__nav-link">Donation</a></li>
-        <li><a href="/public/pages/map.html" class="as-header__nav-link">Map</a></li>
-        <li><a href="/public/pages/about.html" class="as-header__nav-link">About Us</a></li>
+        <li><a href="/public/pages/donate.html" class="as-header__nav-link">Donate</a></li>
+        <li><a href="/public/pages/about.html" class="as-header__nav-link">About</a></li>
         <li><a href="/public/pages/profile.html" class="as-header__nav-link">Profile</a></li>
       </ul>
     </nav>
 
-    <!-- User Actions -->
+    <!-- Authenticated user only -->
     <div class="as-header__user-actions">
-      <!-- Dark Mode Toggle (match main header styles) -->
-      <button class="as-header__icon-btn" id="darkModeBtn" aria-label="Toggle dark mode">
-        <span class="as-header__icon as-header__icon--moon"></span>
-      </button>
-
-      <!-- Logout visible (autenticado) -->
-      <button id="headerLogoutBtn" class="as-header__btn as-header__btn--login" data-auth="authenticated">Logout</button>
-      
-      <!-- User Menu (autenticado) -->
-      <div class="as-header__user-menu" aria-expanded="false" data-auth="authenticated">
-        <button class="as-header__user-btn" id="userMenuButton" aria-expanded="false" aria-haspopup="true">
-          <img id="userAvatar" src="/public/assets/img/default-avatar.png" alt="User Avatar" class="as-header__user-avatar">
-          <span id="userName" class="as-header__user-name">Guest</span>
-          <i class="fas fa-chevron-down as-header__dropdown-arrow"></i>
-        </button>
-        
-        <!-- Dropdown Menu -->
-        <div class="as-header__dropdown" id="userDropdown" aria-labelledby="userMenuButton">
-          <div class="as-header__dropdown-header">
-            <img id="dropdownAvatar" src="/public/assets/img/default-avatar.png" alt="User Avatar" class="as-header__dropdown-avatar">
-            <div class="as-header__user-info">
-              <span id="dropdownName" class="as-header__user-display-name">Loading...</span>
-              <span id="dropdownEmail" class="as-header__user-email">user@example.com</span>
-            </div>
-          </div>
-          <div class="as-header__dropdown-divider"></div>
-          <a href="/public/pages/profile.html" class="as-header__dropdown-item">
-            <svg class="as-header__dropdown-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            My Profile
-          </a>
-          <div class="as-header__dropdown-divider"></div>
-          <a href="/public/pages/settings.html" class="as-header__dropdown-item">
-            <i class="fas fa-cog as-header__dropdown-icon"></i>
-            Settings
-          </a>
-          <div class="as-header__dropdown-divider"></div>
-          <a href="#" id="logoutBtn" class="as-header__dropdown-item as-header__dropdown-item--logout">Logout</a>
-        </div>
+      <div class="as-header__user" id="asHeaderUser" style="display:none">
+        <img id="rightUserAvatar" class="as-header__user-avatar" src="/public/assets/img/default-avatar.png" alt="User avatar">
+        <span id="rightUserName" class="as-header__user-name">User</span>
+        <button id="headerLogoutBtn" class="as-header__user-logout" aria-label="Logout">Logout</button>
       </div>
     </div>
-
-    <!-- Botones globales (solo modo oscuro) -->
-    <div class="as-header__global-actions">
-      <!-- opcional: segundo toggle si se requiere en móvil -->
-      <button class="as-header__icon-btn" aria-label="Toggle dark mode">
-        <span class="as-header__icon as-header__icon--moon"></span>
-      </button>
-    </div>
-
-    <!-- Mobile Menu Toggle -->
-    <button class="as-header__burger" aria-label="Open menu" aria-controls="as-header__mobile-menu" aria-expanded="false">
-      <span class="as-header__burger-bar"></span>
-      <span class="as-header__burger-bar"></span>
-      <span class="as-header__burger-bar"></span>
-    </button>
   </div>
-  
-  <!-- Mobile Menu -->
-  <nav class="as-header__mobile-menu" id="as-header__mobile-menu" aria-label="Mobile navigation">
-    <button class="as-header__mobile-close" aria-label="Close menu">&times;</button>
-    
-    <!-- Mobile User Info -->
-    <div class="as-header__mobile-user" data-auth="authenticated">
-      <img id="mobileUserAvatar" src="/public/assets/img/default-avatar.png" alt="User" class="as-header__mobile-avatar">
-      <div class="as-header__mobile-user-details">
-        <span id="mobileUserName" class="as-header__mobile-username">Guest</span>
-        <span id="mobileUserEmail" class="as-header__mobile-email">guest@example.com</span>
-      </div>
-    </div>
-    
-    <!-- Mobile Navigation -->
-    <ul class="as-header__mobile-list">
-      <li><a href="/index.html" class="as-header__mobile-link">Blog</a></li>
-      <li><a href="/public/pages/volunteer.html" class="as-header__mobile-link">Volunteer</a></li>
-      <li><a href="/public/pages/donate.html" class="as-header__mobile-link">Donation</a></li>
-      <li><a href="/public/pages/map.html" class="as-header__mobile-link">Map</a></li>
-      <li><a href="/public/pages/about.html" class="as-header__mobile-link">About Us</a></li>
-      <li class="as-header__mobile-divider"></li>
-      <li data-auth="authenticated"><a href="/public/pages/profile.html" class="as-header__mobile-link">My Profile</a></li>
-      <li data-auth="authenticated"><a href="#" id="mobileLogoutBtn" class="as-header__mobile-link as-header__mobile-link--logout">Logout</a></li>
-    </ul>
-    
-    <!-- Mobile Theme Toggle -->
-    <div class="as-header__mobile-theme">
-      <span>Dark Mode</span>
-      <label class="as-header__theme-switch">
-        <input type="checkbox" id="mobileThemeToggle">
-        <span class="as-header__theme-slider"></span>
-      </label>
-    </div>
-  </nav>
 </header>
-
-<!-- Session Extend Modal -->
-<div id="as-session-modal" class="as-session-modal" aria-hidden="true" role="dialog" aria-modal="true">
-  <div class="as-session-modal__backdrop"></div>
-  <div class="as-session-modal__content" role="document">
-    <h3 class="as-session-modal__title">¿Mantener sesión?</h3>
-    <p class="as-session-modal__text">
-      Tu sesión está por expirar. Se cerrará en <strong><span id="sessionCountdown">60</span>s</strong>.
-    </p>
-    <div class="as-session-modal__actions">
-      <button id="sessionExtendBtn" class="as-header__btn as-header__btn--register">Mantener sesión</button>
-      <button id="sessionLogoutBtn" class="as-header__btn as-header__btn--login">Cerrar sesión</button>
+        <img id="rightUserAvatar" class="as-header__user-avatar" src="/public/assets/img/default-avatar.png" alt="User avatar">
+        <span id="rightUserName" class="as-header__user-name">User</span>
+        <button id="headerLogoutBtn" class="as-header__user-logout" aria-label="Logout">Logout</button>
+      </div>
     </div>
   </div>
-</div>
+</header>
+        <li><a href="/public/pages/volunteer.html" class="as-header__nav-link">Volunteer</a></li>
+        <li><a href="/public/pages/donate.html" class="as-header__nav-link">Donate</a></li>
+        <li><a href="/public/pages/about.html" class="as-header__nav-link">About us</a></li>
+      </ul>
+    </nav>
+
+    <!-- Acciones (derecha) -->
+    <div class="as-header__user-actions">
+      <!-- Invitado -->
+      <div id="asHeaderGuest">
+        <a id="headerLoginLink" class="as-header__guest-link" href="/public/pages/login.html">Login</a>
+        <span class="as-header__guest-sep">/</span>
+        <a id="headerRegisterLink" class="as-header__guest-link" href="/public/pages/register.html">Register</a>
+      </div>
+      <!-- Usuario -->
+      <div class="as-header__user" id="asHeaderUser" style="display:none">
+        <img id="rightUserAvatar" class="as-header__user-avatar" src="/public/assets/img/default-avatar.png" alt="User avatar">
+        <span id="rightUserName" class="as-header__user-name">User</span>
+        <button id="headerLogoutBtn" class="as-header__user-logout" aria-label="Logout">Logout</button>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="as-header__user" id="asHeaderUser" style="display:none">
+        <img id="rightUserAvatar" class="as-header__user-avatar" src="/public/assets/img/default-avatar.png" alt="User avatar">
+        <span id="rightUserName" class="as-header__user-name">User</span>
+        <button id="headerLogoutBtn" class="as-header__user-logout" aria-label="Logout">Logout</button>
+      </div>
+    </div>
+  </div>
+</header>
+        <span id="rightUserName" class="as-header__user-name">User</span>
+        <button id="headerLogoutBtn" class="as-header__user-logout" aria-label="Logout">Logout</button>
+      </div>
+    </div>
+  </div>
+</header>

@@ -541,13 +541,51 @@ renderFeatured = function() {
   animateCards();
   addReadMoreListeners();
 };
-
-// Initialization
+// DETECTAR si usuario está logueado
+function detectUserStatus() {
+  // 1. Firebase Auth
+  if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
+    USER_LOGGED_IN = true;
+    return;
+  }
+  
+  // 2. localStorage
+  const stored = localStorage.getItem('as_user') || localStorage.getItem('user');
+  if (stored) {
+    try {
+      const user = JSON.parse(stored);
+      if (user && (user.uid || user.email)) {
+        USER_LOGGED_IN = true;
+        return;
+      }
+    } catch (_) {}
+  }
+  
+  // 3. Firebase token en localStorage
+  for (var i = 0; i < localStorage.length; i++) {
+    var k = localStorage.key(i);
+    if (k && k.indexOf('firebase:authUser:') === 0) {
+      try {
+        var fu = JSON.parse(localStorage.getItem(k));
+        if (fu && fu.uid) {
+          USER_LOGGED_IN = true;
+          return;
+        }
+      } catch (_) {}
+    }
+  }
+  
+  USER_LOGGED_IN = false;
+}
 function initBlog() {
+  detectUserStatus(); // NUEVO: detectar estado de usuario
+  console.log('👤 User logged in:', USER_LOGGED_IN);
+  
   renderNewPostForm();
   renderFeatured();
   renderList();
   renderModerationPanel();
+  
   // Buscador
   const searchInput = document.getElementById('blog-search');
   if(searchInput) {
