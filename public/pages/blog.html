@@ -8,12 +8,13 @@
   <link rel="stylesheet" href="/public/css/styles.css">
   <link rel="stylesheet" href="/public/css/blog.css">
   <link rel="icon" href="/public/assets/logos/logito.ico" type="image/x-icon">
-  <link rel="stylesheet" href="/src/components/css/header.css">
+  <link rel="stylesheet" href="/src/components/css/auth-header.css">
   <link rel="stylesheet" href="/src/components/css/footer.css">
 </head>
 <body>
   <!-- Header -->
   <div id="header-container"></div>
+
   <main class="blog-main">
     <section class="blog-controls">
       <input id="blog-search" type="search" placeholder="Search the blog..." aria-label="Search the blog">
@@ -27,6 +28,7 @@
       <div id="blog-pagination" class="blog-pagination"></div>
     </section>
   </main>
+
   <!-- Modal for full post -->
   <div id="blog-modal" class="blog-modal" aria-hidden="true" tabindex="-1">
     <div class="modal-content">
@@ -34,6 +36,7 @@
       <div class="modal-body"></div>
     </div>
   </div>
+
   <!-- Global Footer -->
   <div id="footer-container"></div>
   
@@ -43,31 +46,32 @@
   <!-- Script del blog -->
   <script src="/public/js/blog.js"></script>
   
-  <!-- Carga dinámica del header y footer -->
+  <!-- Carga dinámica del auth-header y footer -->
   <script>
-    // Cargar header
-    fetch('/src/components/html/header.html')
-      .then(r => r.text())
-      .then(html => {
-        const headerContainer = document.getElementById('header-include');
-        if (headerContainer) {
-          headerContainer.innerHTML = html;
-          console.log('Header cargado correctamente');
+    // Cargar auth-header (HTML + JS)
+    (async function loadAuthHeader(){
+      try {
+        const hc = document.getElementById('header-container');
+        const res = await fetch('/src/components/html/auth-header.html', { cache: 'no-cache' });
+        hc.innerHTML = await res.text();
+        if (!window.AuthHeader) {
+          await new Promise((resolve, reject) => {
+            const s = document.createElement('script');
+            s.src = '/src/components/js/auth-header.js';
+            s.onload = resolve; s.onerror = reject; document.body.appendChild(s);
+          });
         }
-      })
-      .catch(error => console.error('Error al cargar el header:', error));
+        if (window.AuthHeader && !window.authHeader && document.getElementById('authHeader')) {
+          window.authHeader = new window.AuthHeader();
+        }
+      } catch (e) { console.error('Auth header load error:', e); }
+    })();
 
     // Cargar footer
     fetch('/src/components/html/footer.html')
       .then(r => r.text())
-      .then(html => {
-        const footerContainer = document.getElementById('footer-container');
-        if (footerContainer) {
-          footerContainer.innerHTML = html;
-          console.log('Footer cargado correctamente');
-        }
-      })
-      .catch(error => console.error('Error al cargar el footer:', error));
+      .then(html => { const c = document.getElementById('footer-container'); if (c) c.innerHTML = html; })
+      .catch(err => console.error('Footer load error:', err));
   </script>
 </body>
 </html>

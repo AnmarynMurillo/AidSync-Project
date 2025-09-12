@@ -1,52 +1,76 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <link rel="stylesheet" href="/public/css/profile.css">
-    <!-- Firebase v8 en orden correcto  test test  esto es un test -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <link rel="stylesheet" href="../css/profile.css">
+  <link rel="stylesheet" href="/src/components/css/auth-header.css">
+  <!-- Firebase v8 en orden correcto -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 </head>
 <body>
-    <button class="back-btn" aria-label="Back to home" onclick="window.location.href='../index.html'">←</button>
-    <main class="profile-main">
-      <section class="profile-section">
-        <h1>Profile</h1>
-        <div id="profileContainer">
-          <div class="profile-avatar">
-            <img id="profilePic" class="profile-pic" src="../assets/img/default-profile.png" alt="Foto de perfil" width="150" height="150">
-            <form id="photoForm" enctype="multipart/form-data" class="photo-form">
-              <input type="file" id="photoInput" accept="image/*" style="display:none">
-              <button type="button" class="change-photo-btn" id="changePhotoBtn">Change image</button>
-            </form>
-          </div>
-          <dl class="profile-dl">
-            <dt>Username</dt><dd id="pf-username">-</dd>
-            <dt>Full name</dt><dd id="pf-name">-</dd>
-            <dt>Age</dt><dd id="pf-age">-</dd>
-            <dt>Volunteering Area</dt><dd id="pf-area">-</dd>
-            <dt>Email</dt><dd id="pf-email">-</dd>
-            <dt>Account Type</dt><dd id="pf-accountType">-</dd>
-          </dl>
-          <div id="profile-status" class="profile-status"></div>
+  <!-- Header -->
+  <div id="header-container"></div>
+
+  <main class="profile-main">
+    <section class="profile-section">
+      <h1>Profile</h1>
+      <div id="profileContainer">
+        <div class="profile-avatar">
+          <img id="profilePic" class="profile-pic" src="../assets/img/default-profile.png" alt="Foto de perfil" width="150" height="150">
+          <form id="photoForm" enctype="multipart/form-data" class="photo-form">
+            <input type="file" id="photoInput" accept="image/*" style="display:none">
+            <button type="button" class="change-photo-btn" id="changePhotoBtn">Change image</button>
+          </form>
         </div>
-      </section>
-    </main>
-    <script src="../js/profile.js"></script>
-    <script>
-      // Trigger file input from custom button
-      const changeBtn = document.getElementById('changePhotoBtn');
-      const inputEl = document.getElementById('photoInput');
-      const formEl = document.getElementById('photoForm');
-      if(changeBtn && inputEl && formEl){
-        changeBtn.addEventListener('click', function(){ inputEl.click(); });
-        inputEl.addEventListener('change', function(){ if(this.files && this.files[0]){ formEl.requestSubmit(); } });
-      }
-    </script>
+        <dl class="profile-dl">
+          <dt>Username</dt><dd id="pf-username">-</dd>
+          <dt>Full name</dt><dd id="pf-name">-</dd>
+          <dt>Age</dt><dd id="pf-age">-</dd>
+          <dt>Volunteering Area</dt><dd id="pf-area">-</dd>
+          <dt>Email</dt><dd id="pf-email">-</dd>
+          <dt>Account Type</dt><dd id="pf-accountType">-</dd>
+        </dl>
+        <div id="profile-status" class="profile-status"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../js/profile.js"></script>
+  <script>
+    // Cargar auth-header (HTML + JS)
+    (async function loadAuthHeader(){
+      try {
+        const hc = document.getElementById('header-container');
+        const res = await fetch('/src/components/html/auth-header.html', { cache: 'no-cache' });
+        hc.innerHTML = await res.text();
+        if (!window.AuthHeader) {
+          await new Promise((resolve, reject) => {
+            const s = document.createElement('script');
+            s.src = '/src/components/js/auth-header.js';
+            s.onload = resolve; s.onerror = reject; document.body.appendChild(s);
+          });
+        }
+        if (window.AuthHeader && !window.authHeader && document.getElementById('authHeader')) {
+          window.authHeader = new window.AuthHeader();
+        }
+      } catch (e) { console.error('Auth header load error:', e); }
+    })();
+  </script>
+  <script>
+    // Trigger file input from custom button
+    const changeBtn = document.getElementById('changePhotoBtn');
+    const inputEl = document.getElementById('photoInput');
+    const formEl = document.getElementById('photoForm');
+    if(changeBtn && inputEl && formEl){
+      changeBtn.addEventListener('click', function(){ inputEl.click(); });
+      inputEl.addEventListener('change', function(){ if(this.files && this.files[0]){ formEl.requestSubmit(); } });
+    }
+  </script>
 </body>
 </html>
 

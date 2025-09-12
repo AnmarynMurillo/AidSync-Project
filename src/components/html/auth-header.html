@@ -11,23 +11,27 @@
     <!-- Main Navigation -->
     <nav class="as-header__nav" aria-label="Main navigation">
       <ul class="as-header__nav-list">
-        <li><a href="/index.html" class="as-header__nav-link active">Home</a></li>
+        <li><a href="/public/pages/blog.html" class="as-header__nav-link">Blog</a></li>
         <li><a href="/public/pages/volunteer.html" class="as-header__nav-link">Volunteer</a></li>
-        <li><a href="/public/pages/donate.html" class="as-header__nav-link">Donate</a></li>
+        <li><a href="/public/pages/donate.html" class="as-header__nav-link">Donation</a></li>
+        <li><a href="/public/pages/map.html" class="as-header__nav-link">Map</a></li>
         <li><a href="/public/pages/about.html" class="as-header__nav-link">About Us</a></li>
-        <li><a href="/public/pages/contact.html" class="as-header__nav-link">Contact</a></li>
+        <li><a href="/public/pages/profile.html" class="as-header__nav-link">Profile</a></li>
       </ul>
     </nav>
 
     <!-- User Actions -->
-    <div class="as-header__actions">
-      <!-- Dark Mode Toggle -->
-      <button class="as-header__darkmode-btn" aria-label="Toggle dark mode">
-        <i class="fas fa-moon"></i>
+    <div class="as-header__user-actions">
+      <!-- Dark Mode Toggle (match main header styles) -->
+      <button class="as-header__icon-btn" id="darkModeBtn" aria-label="Toggle dark mode">
+        <span class="as-header__icon as-header__icon--moon"></span>
       </button>
+
+      <!-- Logout visible (autenticado) -->
+      <button id="headerLogoutBtn" class="as-header__btn as-header__btn--login" data-auth="authenticated">Logout</button>
       
-      <!-- User Menu -->
-      <div class="as-header__user-menu">
+      <!-- User Menu (autenticado) -->
+      <div class="as-header__user-menu" aria-expanded="false" data-auth="authenticated">
         <button class="as-header__user-btn" id="userMenuButton" aria-expanded="false" aria-haspopup="true">
           <img id="userAvatar" src="/public/assets/img/default-avatar.png" alt="User Avatar" class="as-header__user-avatar">
           <span id="userName" class="as-header__user-name">Guest</span>
@@ -43,34 +47,29 @@
               <span id="dropdownEmail" class="as-header__user-email">user@example.com</span>
             </div>
           </div>
-        <div class="as-header__dropdown-divider"></div>
-        <a href="/public/pages/profile.html" class="as-header__dropdown-item">
-          <svg class="as-header__dropdown-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          My Profile
-        </a>
+          <div class="as-header__dropdown-divider"></div>
+          <a href="/public/pages/profile.html" class="as-header__dropdown-item">
+            <svg class="as-header__dropdown-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            My Profile
+          </a>
           <div class="as-header__dropdown-divider"></div>
           <a href="/public/pages/settings.html" class="as-header__dropdown-item">
             <i class="fas fa-cog as-header__dropdown-icon"></i>
             Settings
           </a>
           <div class="as-header__dropdown-divider"></div>
-          <a href="#" id="logoutBtn" class="as-header__dropdown-item as-header__dropdown-item--logout">
-          <svg class="as-header__dropdown-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Logout
-        </a>
+          <a href="#" id="logoutBtn" class="as-header__dropdown-item as-header__dropdown-item--logout">Logout</a>
+        </div>
       </div>
     </div>
 
     <!-- Botones globales (solo modo oscuro) -->
     <div class="as-header__global-actions">
-      <button class="as-header__icon-btn as-header__darkmode-btn" aria-label="Toggle dark mode">
+      <!-- opcional: segundo toggle si se requiere en móvil -->
+      <button class="as-header__icon-btn" aria-label="Toggle dark mode">
         <span class="as-header__icon as-header__icon--moon"></span>
       </button>
     </div>
@@ -88,7 +87,7 @@
     <button class="as-header__mobile-close" aria-label="Close menu">&times;</button>
     
     <!-- Mobile User Info -->
-    <div class="as-header__mobile-user">
+    <div class="as-header__mobile-user" data-auth="authenticated">
       <img id="mobileUserAvatar" src="/public/assets/img/default-avatar.png" alt="User" class="as-header__mobile-avatar">
       <div class="as-header__mobile-user-details">
         <span id="mobileUserName" class="as-header__mobile-username">Guest</span>
@@ -97,17 +96,15 @@
     </div>
     
     <!-- Mobile Navigation -->
-    <ul class="as-header__mobile-nav">
-      <li><a href="/index.html" class="as-header__mobile-link active">Home</a></li>
+    <ul class="as-header__mobile-list">
+      <li><a href="/index.html" class="as-header__mobile-link">Blog</a></li>
       <li><a href="/public/pages/volunteer.html" class="as-header__mobile-link">Volunteer</a></li>
-      <li><a href="/public/pages/donate.html" class="as-header__mobile-link">Donate</a></li>
+      <li><a href="/public/pages/donate.html" class="as-header__mobile-link">Donation</a></li>
+      <li><a href="/public/pages/map.html" class="as-header__mobile-link">Map</a></li>
       <li><a href="/public/pages/about.html" class="as-header__mobile-link">About Us</a></li>
-      <li><a href="/public/pages/contact.html" class="as-header__mobile-link">Contact</a></li>
       <li class="as-header__mobile-divider"></li>
-      <li><a href="/public/pages/profile.html" class="as-header__mobile-link">My Profile</a></li>
-      <li><a href="/public/pages/settings.html" class="as-header__mobile-link">Settings</a></li>
-      <li class="as-header__mobile-divider"></li>
-      <li><a href="#" id="mobileLogoutBtn" class="as-header__mobile-link as-header__mobile-link--logout">Logout</a></li>
+      <li data-auth="authenticated"><a href="/public/pages/profile.html" class="as-header__mobile-link">My Profile</a></li>
+      <li data-auth="authenticated"><a href="#" id="mobileLogoutBtn" class="as-header__mobile-link as-header__mobile-link--logout">Logout</a></li>
     </ul>
     
     <!-- Mobile Theme Toggle -->
@@ -119,31 +116,19 @@
       </label>
     </div>
   </nav>
-
-  <!-- Menú lateral/desplegable móvil -->
-  <!-- Mobile Menu -->
-  <nav class="as-header__mobile-menu" id="as-header__mobile-menu" aria-label="Mobile navigation">
-    <button class="as-header__mobile-close" aria-label="Close menu">&times;</button>
-    <ul class="as-header__mobile-list">
-      <li><a href="/index.html">Home</a></li>
-      <li><a href="/public/pages/volunteer.html">Volunteer</a></li>
-      <li><a href="/public/pages/donate.html">Donate</a></li>
-      <li><a href="/public/pages/about.html">About us</a></li>
-      <li><a href="/public/pages/map.html">Map</a></li>
-      <li class="as-header__mobile-user-info">
-        <img id="mobileUserAvatar" src="/public/assets/img/default-avatar.png" alt="User Avatar" class="as-header__mobile-avatar">
-        <div>
-          <div id="mobileUserName" class="as-header__mobile-name">Loading...</div>
-          <div id="mobileUserEmail" class="as-header__mobile-email">user@example.com</div>
-        </div>
-      </li>
-      <li><a href="/public/pages/profile.html" class="as-header__mobile-profile-link">My Profile</a></li>
-      <li><a href="#" id="mobileLogoutBtn" class="as-header__mobile-logout">Logout</a></li>
-    </ul>
-    <div class="as-header__mobile-actions">
-      <button class="as-header__icon-btn as-header__darkmode-btn" aria-label="Toggle dark mode">
-        <span class="as-header__icon as-header__icon--moon"></span>
-      </button>
-    </div>
-  </nav>
 </header>
+
+<!-- Session Extend Modal -->
+<div id="as-session-modal" class="as-session-modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="as-session-modal__backdrop"></div>
+  <div class="as-session-modal__content" role="document">
+    <h3 class="as-session-modal__title">¿Mantener sesión?</h3>
+    <p class="as-session-modal__text">
+      Tu sesión está por expirar. Se cerrará en <strong><span id="sessionCountdown">60</span>s</strong>.
+    </p>
+    <div class="as-session-modal__actions">
+      <button id="sessionExtendBtn" class="as-header__btn as-header__btn--register">Mantener sesión</button>
+      <button id="sessionLogoutBtn" class="as-header__btn as-header__btn--login">Cerrar sesión</button>
+    </div>
+  </div>
+</div>
