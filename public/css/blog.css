@@ -196,15 +196,19 @@ body[data-theme="dark"] {
 .blog-modal[aria-hidden="false"] {
   display: flex;
 }
-.modal-content {
+.blog-modal .modal-content {
   background: var(--card);
   border-radius: 1.2rem;
   box-shadow: 0 8px 32px #0003;
-  max-width: 600px;
-  width: 95vw;
+  max-width: 900px;
+  width: 90vw;
+  max-height: 90vh;
   padding: 2rem;
   position: relative;
   animation: modalIn 0.2s;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 @keyframes modalIn {
   from { transform: translateY(40px) scale(0.98); opacity: 0; }
@@ -224,12 +228,31 @@ body[data-theme="dark"] {
 .modal-close:hover {
   color: #222;
 }
+.modal-body {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.modal-image-container {
+  flex: 1;
+  min-width: 300px;
+}
+
+.modal-content-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .modal-body img {
   width: 100%;
   border-radius: 0.7rem;
-  margin-bottom: 1.1rem;
+  margin-bottom: 0;
   object-fit: cover;
-  max-height: 220px;
+  max-height: 400px;
+  height: 100%;
 }
 .modal-body h2 {
   font-size: 1.5rem;
@@ -293,11 +316,34 @@ body[data-theme="dark"] .comment {
   background: var(--card);
   color: var(--text);
 }
-.add-comment-form button {
-  align-self: flex-end;
+.add-comment-form button,
+.login-button {
+  align-self: flex-start;
   background: var(--accent);
   color: #fff;
   border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+  margin-top: 1rem;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.login-button {
+  background: var(--primary);
+  margin-top: 0.5rem;
+}
+
+.login-button:hover {
+  background: var(--primary-dark);
+  text-decoration: none;
+}
+
+.add-comment-form button {
   border-radius: 0.7rem;
   padding: 0.5rem 1.3rem;
   font-size: 1.05rem;

@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
         let wordIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
-        const typeSpeed = 100;
-        const deleteSpeed = 30;
+        const typeSpeed = 200;  // Increased from 100 to 200ms per character
+        const deleteSpeed = 50;  // Increased from 30 to 50ms per character
 
         /**
          * Type effect function
@@ -94,8 +94,6 @@ document.addEventListener('DOMContentLoaded', function() {
 function initBannerCarousel() {
     const carouselSlide = document.querySelector('.carousel-slide');
     const slides = document.querySelectorAll('.slide');
-    const prevBtn = document.querySelector('.carousel-control.prev');
-    const nextBtn = document.querySelector('.carousel-control.next');
     const dotsContainer = document.querySelector('.carousel-dots');
     
     if (!carouselSlide) return; // Exit if no carousel found
@@ -130,27 +128,20 @@ function initBannerCarousel() {
         updateCarousel();
     }
 
-    // Previous slide
-    function prevSlide() {
-        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-        updateCarousel();
-    }
-
     // Go to specific slide
     function goToSlide(index) {
         currentIndex = index;
         updateCarousel();
     }
 
-    // Event listeners
-    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
-    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+    // Auto-advance slides
+    setInterval(nextSlide, 5000);
 
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft') prevSlide();
-        if (e.key === 'ArrowRight') nextSlide();
-    });
+    // Handle window resize
+    window.addEventListener('resize', updateCarousel);
+    
+    // Initialize the carousel
+    updateCarousel();
 
     // Touch events for mobile
     let touchStartX = 0;
@@ -173,17 +164,19 @@ function initBannerCarousel() {
             if (swipeDiff > 0) {
                 nextSlide();
             } else {
-                prevSlide();
+                nextSlide();
             }
         }
     }
 
-    // Pause on hover
-    const carousel = document.querySelector('.banner-carousel');
-    if (carousel) {
-        carousel.addEventListener('mouseenter', () => {});
-        carousel.addEventListener('mouseleave', () => {});
-    }
+    // Dot navigation
+    dotsContainer.addEventListener('click', (e) => {
+        const dot = e.target.closest('.dot');
+        if (dot) {
+            currentIndex = parseInt(dot.dataset.index);
+            updateCarousel();
+        }
+    });
 }
 
 // Team Carousel Functionality
@@ -202,132 +195,140 @@ function initTeamCarousel() {
     
     const teamMembers = [
         {
-            name: 'Anmaryn Murillo',
-            role: 'Project Lead',
-            image: '../../public/assets/members/Anmaryn.png',
-            bio: 'Passionate about creating impactful solutions through technology.',
-            social: {
-                twitter: '#',
-                linkedin: '#',
-                github: '#'
-            }
-        },
-        {
             name: 'Dushka Jimenez',
-            role: 'UI/UX Designer',
-            image: '../../public/assets/members/Dushka.png',
+            role: 'Designer',
+            image: '../../public/assets/Integrantes/Dushka1.jpg',
+            hoverImage: '../../public/assets/Integrantes/Dushka2.jpg',
             bio: 'Transforming ideas into beautiful and intuitive user experiences.',
             social: {
-                twitter: '#',
+                email: 'mailto:dushka.jimenez2025@motta.superate.org.pa',
                 linkedin: '#',
-                github: '#'
+                github: 'https://github.com/ItsDushkaJimenez'
             }
         },
         {
             name: 'Elina Perez',
             role: 'Frontend Developer',
-            image: '../../public/assets/members/Elina.png',
+            image: '../../public/assets/Integrantes/Elina1.jpg',
+            hoverImage: '../../public/assets/Integrantes/Elina2.jpg',
             bio: 'Building responsive and accessible web applications.',
             social: {
-                twitter: '#',
-                linkedin: '#',
-                github: '#'
-            }
-        },
-        {
-            name: 'Emily Bulgin',
-            role: 'Backend Developer',
-            image: '../../public/assets/members/Emily.png',
-            bio: 'Creating robust and scalable server-side solutions.',
-            social: {
-                twitter: '#',
-                linkedin: '#',
-                github: '#'
+                email: 'mailto:elina.perez2025@motta.superate.org.pa',
+                linkedin: 'https://www.linkedin.com/in/elina-nicole-pérez-147358378',
+                github: 'https://github.com/elinanp11'
             }
         },
         {
             name: 'Isaura Ríos',
-            role: 'Full Stack Developer',
-            image: '../../public/assets/members/Isaura.png',
+            role: 'Frontend Developer',
+            image: '../../public/assets/Integrantes/Isaura1.jpg',
+            hoverImage: '../../public/assets/Integrantes/Ir2.jpg',
             bio: 'Bridging the gap between frontend and backend development.',
             social: {
-                twitter: '#',
-                linkedin: '#',
-                github: '#'
+                email: 'mailto:isaura.rios2025@motta.superate.org.pa',
+                linkedin: 'https://www.linkedin.com/in/isaura-ríos-492154378',
+                github: 'https://github.com/IsaMar59'
             }
         },
         {
             name: 'Jhostan Jimenez',
-            role: 'Mobile Developer',
-            image: '../../public/assets/members/Jhostan.png',
+            role: 'Frontend Developer',
+            image: '../../public/assets/Integrantes/Jhostan1.jpg',
+            hoverImage: '../../public/assets/Integrantes/Jhostan2.jpg',
             bio: 'Building cross-platform mobile experiences.',
             social: {
-                twitter: '#',
+                email: 'mailto:jhostan.jimenez2025@motta.superate.org.pa',
                 linkedin: '#',
-                github: '#'
+                github: 'https://github.com/Jhostan'     
             }
         },
         {
             name: 'Josue Rodriguez',
-            role: 'DevOps Engineer',
-            image: '../../public/assets/members/Josue.png',
+            role: 'Frontend Developer',
+            image: '../../public/assets/Integrantes/Josue1.jpg',
+            hoverImage: '../../public/assets/Integrantes/Josue2.jpg',
             bio: 'Automating deployments and ensuring system reliability.',
             social: {
-                twitter: '#',
+                email: 'mailto:gilberto.rodriguez2025@motta.superate.org.pa',
                 linkedin: '#',
-                github: '#'
+                github: 'https://github.com/JosueRodr99'
             }
         },
         {
             name: 'Juan Morales',
-            role: 'QA Engineer',
-            image: '../../public/assets/members/Juan.png',
+            role: 'Backend Developer',
+            image: '../../public/assets/Integrantes/Juan1.jpg',
+            hoverImage: '../../public/assets/Integrantes/Juan2.jpg',
             bio: 'Ensuring the highest quality in every release.',
             social: {
-                twitter: '#',
-                linkedin: '#',
-                github: '#'
+                email: 'mailto:juan2.morales2025@motta.superate.org.pa',
+                linkedin: 'https://www.linkedin.com/in/juan-morales-223359378/',
+                github: 'https://github.com/Juanin348'
             }
         },
         {
-            name: 'Luis Camargo',
-            role: 'Data Scientist',
-            image: '../../public/assets/members/Luis.png',
-            bio: 'Extracting insights from complex data sets.',
+            name: 'Anmaryn Murillo',
+            role: 'Frontend Developer',
+            image: '../../public/assets/Integrantes/Anmaryn1.jpg',
+            hoverImage: '../../public/assets/Integrantes/Anmaryn2.jpg',
+            bio: 'Passionate about creating impactful solutions through technology.',
             social: {
-                twitter: '#',
+                email: 'mailto:anmaryn.murillo2025@motta.superate.org.pa',
                 linkedin: '#',
-                github: '#'
+                github: 'https://github.com/AnmarynMurillo'
+            }
+        },
+        {
+            name: 'Emily Bulgin',
+            role: 'Designer',
+            image: '../../public/assets/Integrantes/Emily1.jpg',
+            hoverImage: '../../public/assets/Integrantes/Emily2.jpg',
+            bio: 'Making the user experience.',
+            social: {
+                email: 'mailto:emily.bulgin2025@motta.superate.org.pa',
+                linkedin: 'https://www.linkedin.com/feed/',
+                github: 'https://github.com/soyemilymarie'
             }
         },
         {
             name: 'Patricia Fernandez',
-            role: 'Product Manager',
-            image: '../../public/assets/members/Patricia.png',
-            bio: 'Defining product vision and strategy.',
+            role: 'Designer',
+            image: '../../public/assets/Integrantes/Patricia1.jpg',
+            hoverImage: '../../public/assets/Integrantes/Patricia2.jpg',
+            bio: 'Creating beautiful and intuitive user experiences.',
             social: {
-                twitter: '#',
+                email: 'mailto:patricia.fernandez2025@motta.superate.org.pa',
                 linkedin: '#',
-                github: '#'
+                github: 'https://github.com/SoyPatriciaFernandez'
             }
         },
         {
             name: 'Stephany Dominguez',
-            role: 'UX Researcher',
-            image: '../../public/assets/members/Stephany.png',
-            bio: 'Understanding user needs and behaviors.',
+            role: 'Data Researcher',
+            image: '../../public/assets/Integrantes/Stephany1.jpg',
+            hoverImage: '../../public/assets/Integrantes/Stephany2.jpg',
+            bio: 'Searcher of information and data.',
             social: {
-                twitter: '#',
+                email: 'mailto:stephany.dominguez2025@motta.superate.org.pa',
                 linkedin: '#',
-                github: '#'
+                github: 'https://github.com/Fanny-ross30'
+            }
+        },
+        {
+            name: 'Luis Camargo',
+            role: 'Backend Developer',
+            image: '../../public/assets/Integrantes/Luis1.jpg',
+            hoverImage: '../../public/assets/Integrantes/Luis2.jpg',
+            bio: 'Extracting insights from complex data sets.',
+            social: {
+                email: 'mailto:luis.camargo2025@motta.superate.org.pa',
+                linkedin: '#',
+                github: 'https://github.com/luisitoinsano'
             }
         }
     ];
 
     const dotsContainer = document.querySelector('.team-carousel-dots');
-    const prevBtn = carousel.closest('.team-carousel-container').querySelector('.carousel-control.prev');
-    const nextBtn = carousel.closest('.team-carousel-container').querySelector('.carousel-control.next');
-    
     let currentIndex = 0;
     let itemsPerView = calculateItemsPerView();
     
@@ -367,12 +368,14 @@ function initTeamCarousel() {
             <div class="team-member" data-index="${index}">
                 <div class="member-image-container">
                     <div class="image-wrapper">
-                        <img src="${member.image}" alt="${member.name}" class="member-image" 
+                        <img src="${member.image}" alt="${member.name}" class="member-image default-image" 
                              onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=003d66&color=fff&size=300'">
+                        <img src="${member.hoverImage}" alt="${member.name} (hover)" class="member-image hover-image" 
+                             onerror="this.onerror=null; this.style.display='none'">
                     </div>
                     <div class="social-links">
-                        <a href="${member.social.twitter}" target="_blank" rel="noopener noreferrer" aria-label="${member.name}'s Twitter">
-                            <i class="fab fa-twitter"></i>
+                        <a href="${member.social.email}" target="_blank" rel="noopener noreferrer" aria-label="${member.name}'s Email">
+                            <i class="fas fa-envelope"></i>
                         </a>
                         <a href="${member.social.linkedin}" target="_blank" rel="noopener noreferrer" aria-label="${member.name}'s LinkedIn">
                             <i class="fab fa-linkedin-in"></i>
@@ -441,29 +444,21 @@ function initTeamCarousel() {
         document.querySelectorAll('.dot').forEach((dot, i) => {
             dot.classList.toggle('active', i === activeDotIndex);
         });
-        
-        // Update button states
-        prevBtn.disabled = currentIndex <= 0;
-        nextBtn.disabled = currentIndex >= maxIndex;
-        
-        // Add/remove disabled state for better UX
-        prevBtn.classList.toggle('disabled', prevBtn.disabled);
-        nextBtn.classList.toggle('disabled', nextBtn.disabled);
     }
     
-    // Event listeners
-    prevBtn.addEventListener('click', () => {
+    // Event listeners for navigation
+    function goToPrev() {
         const maxIndex = Math.max(0, teamMembers.length - itemsPerView);
         if (currentIndex > 0) {
             currentIndex--;
         } else {
             // If at the start, loop to the end
-            currentIndex = maxIndex;
+            currentIndex = maxIndex > 0 ? maxIndex : 0;
         }
         updateCarousel();
-    });
+    }
     
-    nextBtn.addEventListener('click', () => {
+    function goToNext() {
         const maxIndex = Math.max(0, teamMembers.length - itemsPerView);
         if (currentIndex < maxIndex) {
             currentIndex++;
@@ -472,7 +467,7 @@ function initTeamCarousel() {
             currentIndex = 0;
         }
         updateCarousel();
-    });
+    }
     
     // Dot navigation
     dotsContainer.addEventListener('click', (e) => {
@@ -526,9 +521,18 @@ function initTeamCarousel() {
     renderTeam();
     updateCarousel();
     
-    // Recalculate on window resize
-    window.addEventListener('resize', () => {
+    // Recalculate on window resize with debounce
+    const debouncedResize = debounce(() => {
         itemsPerView = calculateItemsPerView();
         updateCarousel();
-    });
+    }, 250);
+    
+    window.addEventListener('resize', debouncedResize);
+    
+    // Cleanup event listeners on component unmount if needed
+    return () => {
+        if (prevBtn) prevBtn.removeEventListener('click', goToPrev);
+        if (nextBtn) nextBtn.removeEventListener('click', goToNext);
+        window.removeEventListener('resize', debouncedResize);
+    };
 }

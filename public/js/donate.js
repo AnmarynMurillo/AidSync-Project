@@ -20,7 +20,7 @@ const CAUSES = [
       categoria: 'health',
       color: '#dc2626',
       colorHover: '#b91c1c',
-      img: '../assets/img/donation/BRIGADA-MEDICA.jpg',
+      img: '../assets/img/donation/brigada-medica.jpg',
       desc: 'Health campaigns and prevention in rural communities.',
       descLarga: 'Health for All brings medical brigades, prevention workshops, and basic care to remote rural communities.',
       location: 'Chiriqui',
@@ -70,11 +70,22 @@ const CAUSES = [
         card.style.setProperty('--cat-color', c.color);
         card.style.setProperty('--cat-color-hover', c.colorHover);
         card.innerHTML = `
-          <img src="${c.img}" alt="${c.nombre}">
+          <div class="card-image-container">
+            <img src="${c.img}" alt="${c.nombre}" class="card-image">
+            <div class="card-category" style="background-color: ${c.color}">${c.categoria.charAt(0).toUpperCase() + c.categoria.slice(1)}</div>
+          </div>
           <div class="card-content">
-            <div class="card-title">${c.nombre}</div>
-            <div class="card-desc">${c.desc}</div>
-            <button class="donate-btn">Donate now</button>
+            <h3 class="card-title">${c.nombre}</h3>
+            <p class="card-description">${c.desc}</p>
+            <div class="card-footer">
+              <div class="card-location">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>${c.location}</span>
+              </div>
+              <button class="donate-btn">
+                <i class="fas fa-heart"></i> Donate Now
+              </button>
+            </div>
           </div>
         `;
         
@@ -139,24 +150,31 @@ const CAUSES = [
               </div>
             </div>
             
-            <div class="amount-section">
-              <h2 class="amount-title">Seleccione el monto de donación</h2>
-              <div class="amount-buttons">
-                <button class="amount-btn" data-amount="10">$10</button>
-                <button class="amount-btn" data-amount="25">$25</button>
-                <button class="amount-btn" data-amount="50">$50</button>
-                <button class="amount-btn" data-amount="100">$100</button>
+            <form id="donation-form" class="donation-form">
+              <div class="amount-section">
+                <h2 class="amount-title">Select Donation Amount</h2>
+                <div class="amount-buttons">
+                  <button type="button" class="amount-btn" data-amount="10">10</button>
+                  <button type="button" class="amount-btn" data-amount="25">25</button>
+                  <button type="button" class="amount-btn" data-amount="50">50</button>
+                  <button type="button" class="amount-btn" data-amount="100">100</button>
+                </div>
+                
+                <div class="other-amount-container">
+                  <label for="custom-amount" class="other-amount-label">Or enter a custom amount:</label>
+                  <div class="other-amount">
+                    <div class="dollar-sign">$</div>
+                    <input type="number" id="custom-amount" name="amount" class="amount-input" placeholder="Enter amount" min="1" step="0.01" required>
+                  </div>
+                </div>
               </div>
               
-              <div class="other-amount">
-                <div class="dollar-sign">$</div>
-                <input type="number" class="amount-input" placeholder="Otro monto" min="1">
+              <div class="donate-btn-container">
+                <button type="submit" class="donate-btn">
+                  <i class="fas fa-heart"></i> Donate Now
+                </button>
               </div>
-              
-              <button class="donate-btn">
-                <i class="fas fa-heart"></i> Donar ahora
-              </button>
-            </div>
+            </form>
           </div>
         </div>
       </div>
@@ -192,17 +210,48 @@ const CAUSES = [
       amountBtns.forEach(btn => btn.classList.remove('selected'));
     });
     
-    // Handle donation button click
-    donateBtn.addEventListener('click', function() {
-      const selectedBtn = modal.querySelector('.amount-btn.selected');
-      const amount = amountInput.value || (selectedBtn ? selectedBtn.dataset.amount : '0');
+    // Handle form submission
+    const donationForm = modal.querySelector('#donation-form');
+    donationForm.addEventListener('submit', function(e) {
+      e.preventDefault();
       
-      if (parseInt(amount) > 0) {
-        alert(`¡Gracias por tu donación de $${amount}!`);
-        closeModal();
-      } else {
-        alert('Por favor selecciona o ingresa un monto válido');
+      // Get donation amount
+      const selectedBtn = modal.querySelector('.amount-btn.selected');
+      const customAmount = modal.querySelector('#custom-amount').value;
+      let amount = '';
+      
+      if (selectedBtn) {
+        amount = selectedBtn.dataset.amount;
+      } else if (customAmount) {
+        amount = customAmount;
       }
+      
+      // Validate amount
+      if (!amount || isNaN(amount) || Number(amount) <= 0) {
+        alert('Please enter a valid donation amount.');
+        return;
+      }
+      
+      // Get cause name
+      const causeName = modal.querySelector('.modal-title').textContent;
+      
+      // Show success message
+      const contentSection = modal.querySelector('.content-section');
+      contentSection.innerHTML = `
+        <div class="donation-success">
+          <div class="success-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h2>Thank you for your donation!</h2>
+          <p>Your generous donation of $${amount} to <strong>${causeName}</strong> has been received.</p>
+          <button id="close-success" class="donate-btn">
+            <i class="fas fa-check"></i> Done
+          </button>
+        </div>
+      `;
+      
+      // Add event listener to close button
+      document.getElementById('close-success').addEventListener('click', closeModal);
     });
     
     // Prevent body scroll when modal is open
