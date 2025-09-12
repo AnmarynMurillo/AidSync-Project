@@ -8,10 +8,10 @@
   --border: var(--color-border, #e6edf3);
   --shadow: 0 10px 24px rgba(0,61,102,.12);
   --radius: 20px;
-  --gap-y: 12px;
-  --gap-x: 16px;
-  --gap-y-lg: 16px;
-  --gap-x-lg: 22px;
+  --gap-y: 16px;
+  --gap-x: 18px;
+  --gap-y-lg: 20px;
+  --gap-x-lg: 26px;
 }
 
 html, body { height: 100%; }
@@ -23,24 +23,65 @@ body{
   font-family: 'Poppins','Nunito',Arial,sans-serif;
 }
 
-/* Logo */
-#logo-link{ display:block; width:fit-content; margin: 16px auto 0; }
-#logo-link img{ width:84px; height:84px; display:block; margin:0 auto 8px; object-fit:contain; filter:drop-shadow(0 3px 8px rgba(0,61,102,.15)); }
+/* Back button (top-left) */
+.back-btn{
+  position: fixed;
+  top: 14px; left: 14px;
+  right: auto;
+  display: inline-flex; align-items:center; justify-content:center;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: #ffffffcc;
+  color: var(--primary);
+  font-size: 20px; font-weight: 800; line-height:1;
+  cursor:pointer;
+  box-shadow: 0 6px 16px rgba(0,61,102,.12);
+  transition: background .2s ease, color .2s ease, border-color .2s ease, transform .15s ease;
+  z-index: 1000;
+}
+.back-btn:hover{
+  background: var(--accent);
+  color:#fff; border-color: transparent;
+  transform: translateY(-1px);
+}
 
 /* Layout */
 .register-main{
-  padding-block: clamp(16px, 4vh, 48px); /* balanced breathing space */
-  display: grid;                         /* replace flex */
-  place-content: center;                 /* centers both axes */
+  padding-block: clamp(24px, 4vh, 48px); /* lift card a bit up */
+  display: grid;
+  place-content: center;
+  place-items: center; /* center content horizontally and vertically */
+  position: relative;
+  overflow: hidden;
+  min-height: 100dvh; /* center relative to viewport height */
+}
+.register-main::before,
+.register-main::after{
+  content:"";
+  position:absolute;
+  width: 42vw; height: 42vw; max-width: 640px; max-height: 640px;
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+  opacity: .28;
+}
+.register-main::before{
+  top:-12vw; left:-10vw;
+  background: radial-gradient(closest-side, var(--color-support1, #82dfcd), transparent 70%);
+}
+.register-main::after{
+  bottom:-16vw; right:-12vw;
+  background: radial-gradient(closest-side, #bde9ff, transparent 70%);
 }
 .register-section{
   width:100%;
-  max-width: clamp(900px, 92vw, 1160px);
+  max-width: 860px; /* wider to reduce side empty space */
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 20px 22px;
+  padding: 28px 32px;
   animation: modalIn .45s ease-out both;
 }
 .register-section h1{
@@ -54,8 +95,12 @@ body{
 /* Form grid */
 .register-form{
   display:grid;
-  grid-template-columns: 1fr;            /* mobile */
-  gap: var(--gap-y) var(--gap-x);
+  grid-template-columns: 1fr;            /* mobile: single column */
+  gap: 14px 18px;                        /* row and column gaps */
+  align-items: start;
+  justify-items: stretch;                 /* stretch controls to full width */
+  width: 100%;
+  margin: 0 auto;
 }
 .register-form > *{ margin:0; min-width:0; }
 
@@ -63,9 +108,9 @@ body{
 .register-form input,
 .register-form select{
   width:100%;
-  min-height:44px;
-  padding: 10px 12px;
-  font-size:14px;
+  min-height:42px;           /* lower control height */
+  padding: 10px 12px;        /* tighter padding */
+  font-size:14px;            /* slightly smaller text */
   color:var(--text);
   background:#fff;
   border:1px solid var(--border);
@@ -99,14 +144,17 @@ body{
 
 /* Button */
 .register-btn{
-  grid-column:1 / -1;
   background: linear-gradient(180deg, #1dc7a3 0%, #16a085 100%);
   color:#fff; border:0; border-radius:999px;
-  padding:10px 14px; font-size:.95rem; font-weight:700; letter-spacing:.3px;
+  padding:12px 22px; font-size:1rem; font-weight:700; letter-spacing:.3px;
   cursor:pointer; box-shadow:0 6px 12px rgba(22,160,133,.20);
-  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease, opacity .15s ease;
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease, opacity .15s ease, background .15s ease;
 }
-.register-btn:hover{ transform:translateY(-1px); box-shadow:0 12px 22px rgba(22,160,133,.32); }
+.register-btn:hover{ 
+  transform:translateY(-1px); 
+  box-shadow:0 12px 22px rgba(22,160,133,.32); 
+  background: linear-gradient(180deg, #21d1ad 0%, #14957a 100%);
+}
 .register-btn.is-loading{ opacity:.75; cursor:progress; position:relative; }
 .register-btn.is-loading::after{
   content:""; position:absolute; right:14px; top:50%; width:16px; height:16px; margin-top:-8px;
@@ -134,35 +182,45 @@ body{
 }
 .register-links a{ color: var(--accent); font-weight:700; text-decoration:underline; }
 
-/* Responsive placements */
-/* Tablet: 2 columns */
-@media (min-width:600px){
-  .register-form{ grid-template-columns: repeat(2, minmax(260px,1fr)); }
-  .register-form #name{ grid-column:1/2; }
-  .register-form #age{ grid-column:2/3; }
-  .register-form #email{ grid-column:1/-1; }
-  .register-form #username{ grid-column:1/-1; }
-  .register-form #password{ grid-column:1/2; }
-  .register-form #confirmPassword{ grid-column:2/3; }
-  .register-form #area{ grid-column:1/2; }
-  .register-form #accountType{ grid-column:2/3; }
+/* Actions outside the card */
+.register-actions{
+  max-width: 860px; /* match card width */
+  margin: 16px auto 8px; /* tighter spacing under card */
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+}
+.register-actions .register-btn{
+  width: min(460px, 92vw); /* match form width */
 }
 
-/* Desktop: 3 columns */
-@media (min-width:1024px){
-  .register-form{ grid-template-columns: repeat(3, minmax(220px,1fr)); gap: var(--gap-y-lg) var(--gap-x-lg); }
+/* Responsive placements */
+/* Tablet and up: two equal columns, invisible division */
+@media (min-width:720px){
+  .register-form{ 
+    grid-template-columns: 1fr 1fr; 
+    gap: var(--gap-y-lg) 32px;        /* more space at the center union */
+    grid-auto-flow: row;              /* place strictly by rows to keep pairs */
+  }
+
   /* Row 1 */
-  .register-form #name{ grid-column:1/2; }
-  .register-form #age{ grid-column:2/3; }
-  .register-form #username{ grid-column:3/4; }
+  #username{ grid-column: 1; }
+  #area{ grid-column: 2; }
+
   /* Row 2 */
-  .register-form #email{ grid-column:1/3; } /* spans two columns */
+  #name{ grid-column: 1; }
+  #accountType{ grid-column: 2; }
+
   /* Row 3 */
-  .register-form #password{ grid-column:1/2; }
-  .register-form #confirmPassword{ grid-column:2/3; }
-  .register-form #area{ grid-column:3/4; }
+  #email{ grid-column: 1; }
+  #age{ grid-column: 2; }
+
   /* Row 4 */
-  .register-form #accountType{ grid-column:1/2; }
+  #password{ grid-column: 1; }
+  #confirmPassword{ grid-column: 2; }
+
+  /* Status spans both columns */
+  #registerMessage{ grid-column: 1 / -1; }
 }
 
 /* Animations */
