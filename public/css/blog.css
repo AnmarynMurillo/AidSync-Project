@@ -16,12 +16,13 @@ body[data-theme="dark"] {
   --text: var(--text-dark);
 }
 .blog-main {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 2.5rem 1rem 2rem 1rem;
+  padding: 2.5rem 2rem 2rem 2rem;
   background: var(--bg);
   min-height: 100vh;
   font-family: 'Poppins', 'Nunito', Arial, sans-serif;
+  width: 95%;
 }
 .blog-main h1, .blog-main h2 {
   width: 100%;
@@ -33,10 +34,102 @@ body[data-theme="dark"] {
   display: block;
   letter-spacing: 0.5px;
 }
-@media (max-width: 600px) {
-  .blog-main h1, .blog-main h2 {
-    font-size: 1.3rem;
-    margin-bottom: 1.2rem;
+/* Tablet Styles */
+@media (max-width: 1024px) {
+  .blog-main {
+    max-width: 100%;
+    padding: 1.5rem 1.25rem;
+  }
+  .blog-card {
+    flex: 1 1 calc(50% - 30px);
+    min-width: 280px;
+  }
+  .featured-card {
+    min-width: 280px;
+  }
+  .modal-body {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .modal-image-container {
+    width: 100%;
+    min-width: 100%;
+  }
+}
+
+/* Mobile Styles */
+@media (max-width: 640px) {
+  .blog-main {
+    padding: 1.25rem 1rem;
+  }
+  
+  .blog-main h1, 
+  .blog-main h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .blog-card {
+    flex: 1 1 100%;
+    margin: 0 0 20px;
+    min-width: 100%;
+  }
+  
+  .featured-posts {
+    padding-bottom: 1rem;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .featured-card {
+    min-width: 85vw;
+    scroll-snap-align: start;
+    margin-right: 1rem;
+  }
+  
+  .featured-card:last-child {
+    margin-right: 0;
+  }
+  
+  .blog-controls {
+    margin-bottom: 1rem;
+  }
+  
+  #blog-search {
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+    min-height: 48px;
+  }
+  
+  .blog-pagination {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .blog-pagination button {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.9rem;
+  }
+  
+  .modal-body {
+    padding: 0.5rem;
+  }
+  
+  .modal-content {
+    width: 95vw;
+    padding: 1rem;
+  }
+  
+  .modal-body img {
+    max-height: 250px;
+  }
+  
+  .modal-content-text {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  .add-comment-form textarea {
+    min-height: 100px;
   }
 }
 .featured-section {
@@ -51,7 +144,14 @@ body[data-theme="dark"] {
   display: flex;
   gap: 1.5rem;
   overflow-x: auto;
-  padding-bottom: 0.5rem;
+  padding: 0.5rem 0.5rem 1.5rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.featured-posts::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome, Safari and Opera */
 }
 .featured-card {
   min-width: 320px;
@@ -129,9 +229,11 @@ body[data-theme="dark"] {
   box-shadow: 0 4px 16px #003d6620;
 }
 .blog-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 0 -10px 2rem;
+  justify-content: center;
 }
 @media (max-width: 700px) {
   .blog-list {
@@ -143,12 +245,25 @@ body[data-theme="dark"] {
 }
 .blog-card {
   background: var(--card);
-  border-radius: 1.1rem;
-  box-shadow: var(--shadow);
+  border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 4px 15px var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s;
+  height: 100%;
+  margin: 0 10px 30px;
+  flex: 1 1 calc(33.333% - 40px);
+  min-width: 300px;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Improve touch targets for mobile */
+.blog-card a,
+.blog-card button {
+  position: relative;
+  z-index: 1;
 }
 .blog-card:hover {
   transform: translateY(-4px) scale(1.02);
@@ -233,6 +348,35 @@ body[data-theme="dark"] {
   flex-direction: row;
   gap: 2rem;
   align-items: flex-start;
+  padding: 0.5rem;
+}
+
+/* Prevent horizontal scrolling on mobile */
+@media (max-width: 640px) {
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  
+  .modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .modal-body {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .modal-image-container {
+    width: 100%;
+  }
+  
+  .modal-content-text {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
 }
 
 .modal-image-container {
