@@ -390,45 +390,113 @@ function setupCommentForm(post) {
 
 // Interface to submit new post (only if logged in)
 function renderNewPostForm() {
-  const container = document.createElement('section');
-  container.className = 'new-post-section';
-  container.style.display = USER_LOGGED_IN ? 'block' : 'none';
+  const container = document.createElement('div');
+  container.className = 'new-post-container';
   container.innerHTML = `
-    <h2>Submit New Post</h2>
-    <form id="new-post-form" class="new-post-form">
-      <input type="text" name="title" placeholder="Title" required maxlength="80">
-      <input type="text" name="author" placeholder="Your name or organization" required maxlength="40">
-      <input type="url" name="image" placeholder="Image URL (optional)">
-      <textarea name="excerpt" placeholder="Short excerpt (max 120 characters)" maxlength="120" required></textarea>
-      <textarea name="content" placeholder="Full content" required></textarea>
-      <label><input type="checkbox" name="featured"> Mark as featured</label>
-      <button type="submit">Send post</button>
-      <div class="post-msg" style="color:#16a34a;margin-top:0.5rem;"></div>
-    </form>
-    ${!USER_LOGGED_IN ? '<div class="comment-login-msg">Log in to submit posts.</div>' : ''}
+    <div class="new-post-toggle" id="newPostToggle">
+      <i class="fas fa-plus"></i> New Post
+    </div>
+    <div class="new-post-section" id="newPostSection" style="display: none;">
+      <h2>Create New Post</h2>
+      <form id="new-post-form" class="new-post-form">
+        <div class="form-group">
+          <input type="text" name="title" placeholder=" " required maxlength="80">
+          <label>Title</label>
+        </div>
+        <div class="form-group">
+          <input type="text" name="author" placeholder=" " required maxlength="40" value="${USER_LOGGED_IN ? (window.currentUser?.displayName || '') : ''}">
+          <label>Your name or organization</label>
+        </div>
+        <div class="form-group">
+          <input type="url" name="image" placeholder=" ">
+          <label>Image URL (optional)</label>
+        </div>
+        <div class="form-group">
+          <textarea name="excerpt" placeholder=" " maxlength="120" required></textarea>
+          <label>Short excerpt (max 120 characters)</label>
+        </div>
+        <div class="form-group">
+          <textarea name="content" placeholder=" " required></textarea>
+          <label>Full content</label>
+        </div>
+        <div class="form-footer">
+          <label class="checkbox-container">
+            <input type="checkbox" name="featured">
+            <span class="checkmark"></span>
+            <span>Mark as featured</span>
+          </label>
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" id="cancelPostBtn">Cancel</button>
+            <button type="submit" class="btn-submit">
+              <span class="btn-text">Publish</span>
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+        <div class="post-msg"></div>
+      </form>
+    </div>
   `;
-  document.querySelector('.blog-main').insertBefore(container, document.querySelector('.featured-section'));
-  if(USER_LOGGED_IN) {
-    document.getElementById('new-post-form').onsubmit = function(e) {
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(this));
-      PENDING_POSTS.push({
-        id: Date.now(),
-        titulo: data.titulo,
-        imagen: data.imagen || '../../public/assets/images/hero/voluntariado.jpg',
-        extracto: data.extracto,
-        contenido: data.contenido,
-        autor: data.autor,
-        fecha: new Date().toISOString(),
-        destacado: !!data.destacado,
-        video: '',
-        comentarios: [],
-        aprobado: false
-      });
-      this.querySelector('.post-msg').textContent = 'Your post was sent for review.';
-      this.reset();
-    };
+  
+  // Insert at the beginning of the main content
+  const main = document.querySelector('.blog-main');
+  main.insertBefore(container, main.firstChild);
+  
+  // Only show the toggle if user is logged in
+  const toggle = document.getElementById('newPostToggle');
+  const formSection = document.getElementById('newPostSection');
+  
+  if (!USER_LOGGED_IN) {
+    toggle.style.display = 'none';
+    return;
   }
+  
+  // Toggle form visibility
+  toggle.addEventListener('click', () => {
+    formSection.style.display = formSection.style.display === 'none' ? 'block' : 'none';
+    toggle.classList.toggle('active');
+  });
+  
+  // Handle cancel button
+  document.getElementById('cancelPostBtn')?.addEventListener('click', () => {
+    formSection.style.display = 'none';
+    toggle.classList.remove('active');
+  });
+  
+  // Form submission
+  document.getElementById('new-post-form')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+    
+    // Add to pending posts
+    PENDING_POSTS.push({
+      id: Date.now(),
+      titulo: data.title,
+      imagen: data.image || '/public/assets/images/hero/voluntariado.jpg',
+      extracto: data.excerpt,
+      contenido: data.content,
+      autor: data.author,
+      fecha: new Date().toISOString(),
+      destacado: !!data.featured,
+      video: '',
+      comentarios: [],
+      aprobado: false
+    });
+    
+    // Show success message
+    const msg = this.querySelector('.post-msg');
+    msg.textContent = 'Your post has been submitted for review.';
+    msg.style.color = '#16a34a';
+    this.reset();
+    
+    // Hide form after submission
+    setTimeout(() => {
+      formSection.style.display = 'none';
+      toggle.classList.remove('active');
+      msg.textContent = '';
+    }, 3000);
+  });
 }
 
 // Moderation interface for AidSync team (team members only)

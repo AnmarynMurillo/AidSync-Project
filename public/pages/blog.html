@@ -5,10 +5,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog | AidSync</title>
+  <!-- Favicon -->
+  <link rel="icon" href="/public/assets/logos/logito.ico" type="image/x-icon">
+  
+  <!-- CSS -->
   <link rel="stylesheet" href="/public/css/styles.css">
   <link rel="stylesheet" href="/public/css/blog.css">
-  <link rel="icon" href="/public/assets/logos/logito.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/src/components/css/header.css">
+  <link rel="stylesheet" href="/src/components/css/auth-header.css">
   <link rel="stylesheet" href="/src/components/css/footer.css">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <!-- Header -->
@@ -45,101 +53,121 @@
   <!-- Script del blog -->
   <script src="/public/js/blog.js"></script>
   
-  <!-- Carga dinámica del auth-header y footer -->
+  <!-- Load Header and Footer -->
   <script>
+    // Function to load scripts
     function loadScript(src) {
       return new Promise((resolve, reject) => {
         const s = document.createElement('script');
-        s.src = src; s.onload = resolve; s.onerror = reject;
+        s.src = src; 
+        s.onload = resolve; 
+        s.onerror = reject;
         document.head.appendChild(s);
       });
     }
 
-    async function ensureFirebaseReady() {
-      if (window.firebase && firebase.apps && firebase.apps.length) return true;
-      if (!window.firebase) await loadScript('https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js');
-      if (!firebase.auth) await loadScript('https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js');
-      if (!firebase.database) await loadScript('https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js');
-      try {
-        const backend = window.__BACKEND_URL || localStorage.getItem('as_backend_url') || 'http://localhost:5000';
-        const res = await fetch(`${backend}/api/config`, { credentials: 'include' });
-        const cfg = await res.json();
-        const fb = cfg.firebase || null;
-        if (fb && (!firebase.apps || !firebase.apps.length)) firebase.initializeApp(fb);
-      } catch (_) {
-        try {
-          const fb = {
-            apiKey: "AIzaSyAJ395j9EL5Nv81Q70Csc4zRKNp5e1Xrjo",
-            authDomain: "expo-project-1040e.firebaseapp.com",
-            databaseURL: "https://expo-project-1040e-default-rtdb.firebaseio.com",
-            projectId: "expo-project-1040e",
-            storageBucket: "expo-project-1040e.appspot.com"
-          };
-          if (!firebase.apps || !firebase.apps.length) firebase.initializeApp(fb);
-        } catch (_) {}
-      }
-      return true;
+    // Function to load styles
+    function loadStyles(href) {
+      return new Promise((resolve, reject) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        link.onload = resolve;
+        link.onerror = reject;
+        document.head.appendChild(link);
+      });
     }
 
-    (async function loadAuthHeader(){
+    // Load header
+    async function loadHeader() {
       try {
-        const host = document.getElementById('header-container');
-        // Limpia cualquier contenido previo
-        host.innerHTML = '';
-        // Reusar shadowRoot si ya existe, o crearlo
-        const shadow = host.shadowRoot || (host.attachShadow ? host.attachShadow({ mode: 'open' }) : host);
-
-        // Cargar HTML del componente
-        const res = await fetch('/src/components/html/auth-header.html', { cache: 'no-cache' });
-        const html = await res.text();
-        shadow.innerHTML = html;
-
-        // CSS crítico inmediato (sin bullets)
-        if (!shadow.querySelector('#as-header-critical-css')) {
-          const critical = document.createElement('style');
-          critical.id = 'as-header-critical-css';
-          critical.textContent = `
-            #authHeader .as-header__nav-list{list-style:none;margin:0;padding:0}
-            #authHeader .as-header__nav-link{text-decoration:none}
-          `;
-          shadow.appendChild(critical);
+        const headerContainer = document.getElementById('header-container');
+        
+        // Clear any existing content
+        headerContainer.innerHTML = '';
+        
+        // Create shadow DOM for encapsulation
+        const shadow = headerContainer.attachShadow({ mode: 'open' });
+        
+        // Add critical styles first
+        const critical = document.createElement('style');
+        critical.textContent = `
+          .as-header__nav-list { list-style: none; margin: 0; padding: 0; }
+          .as-header__nav-link { text-decoration: none; }
+          .as-header { background: #003d66; color: white; padding: 1rem 0; }
+          .as-header__container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 0 1rem;
+          }
+          .as-header__logo { height: 40px; }
+        `;
+        shadow.appendChild(critical);
+        
+        // Load header HTML
+        const response = await fetch('/src/components/html/header.html');
+        const html = await response.text();
+        
+        // Create a template element to parse HTML
+        const template = document.createElement('template');
+        template.innerHTML = html;
+        
+        // Clone and append the template content
+        const headerContent = template.content.cloneNode(true);
+        shadow.appendChild(headerContent);
+        
+        // Load header styles
+        await loadStyles('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+        
+        // Load header scripts
+        await loadScript('/src/components/js/header.js');
+        
+        // Initialize header if function exists
+        if (window.initHeader) {
+          window.initHeader();
         }
-
-        // Importar SOLO el CSS del header dentro del shadow
-        if (!shadow.querySelector('#as-header-import-css')) {
-          const style = document.createElement('style');
-          style.id = 'as-header-import-css';
-          style.textContent = '@import url("/src/components/css/auth-header.css");';
-          shadow.appendChild(style);
-        }
-
-        // Asegura Firebase y carga JS del componente
-        await ensureFirebaseReady();
-        if (!window.AuthHeader) {
-          await new Promise((resolve, reject) => {
-            const s = document.createElement('script');
-            s.src = '/src/components/js/auth-header.js';
-            s.onload = resolve; s.onerror = reject; document.body.appendChild(s);
-          });
-        }
-
-        if (window.AuthHeader && shadow.querySelector('#authHeader')) {
-          // Evita múltiples instancias
-          if (!host._authHeaderInstance) {
-            host._authHeaderInstance = new window.AuthHeader(shadow);
+        
+      } catch (error) {
+        console.error('Error loading header:', error);
+      }
+    }
+    
+    // Load footer
+    async function loadFooter() {
+      try {
+        const footerContainer = document.getElementById('footer-container');
+        const response = await fetch('/src/components/html/footer.html');
+        footerContainer.innerHTML = await response.text();
+      } catch (error) {
+        console.error('Error loading footer:', error);
+      }
+    }
+    
+    // Initialize everything when DOM is loaded
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        await Promise.all([
+          loadHeader(),
+          loadFooter()
+        ]);
+        
+        // Initialize auth header if it exists
+        if (window.AuthHeader && typeof window.AuthHeader === 'function') {
+          const headerContainer = document.getElementById('header-container');
+          if (headerContainer && headerContainer.shadowRoot) {
+            const shadow = headerContainer.shadowRoot;
+            if (!headerContainer._authHeaderInstance) {
+              headerContainer._authHeaderInstance = new window.AuthHeader(shadow);
+            }
           }
         }
-      } catch (e) { console.error('Auth header load error:', e); }
-    })();
-
-    // Cargar footer
-    fetch('/src/components/html/footer.html')
-      .then(r => r.text())
-      .then(html => { const c = document.getElementById('footer-container'); if (c) c.innerHTML = html; })
-      .catch(err => console.error('Footer load error:', err));
-  </script>
-</body>
-</html>
+      } catch (error) {
+        console.error('Initialization error:', error);
+      }
+    });
   </script>
 </body>
 </html>
