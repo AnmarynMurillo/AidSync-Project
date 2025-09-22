@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="/public/css/styles.css">
   <link rel="stylesheet" href="/public/css/blog.css">
   <link rel="icon" href="/public/assets/logos/logito.ico" type="image/x-icon">
-  <link rel="stylesheet" href="/src/components/css/auth-header.css">
   <link rel="stylesheet" href="/src/components/css/footer.css">
 </head>
 <body>
@@ -48,12 +47,74 @@
   
   <!-- Carga dinámica del auth-header y footer -->
   <script>
-    // Cargar auth-header (HTML + JS)
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = src; s.onload = resolve; s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    }
+
+    async function ensureFirebaseReady() {
+      if (window.firebase && firebase.apps && firebase.apps.length) return true;
+      if (!window.firebase) await loadScript('https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js');
+      if (!firebase.auth) await loadScript('https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js');
+      if (!firebase.database) await loadScript('https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js');
+      try {
+        const backend = window.__BACKEND_URL || localStorage.getItem('as_backend_url') || 'http://localhost:5000';
+        const res = await fetch(`${backend}/api/config`, { credentials: 'include' });
+        const cfg = await res.json();
+        const fb = cfg.firebase || null;
+        if (fb && (!firebase.apps || !firebase.apps.length)) firebase.initializeApp(fb);
+      } catch (_) {
+        try {
+          const fb = {
+            apiKey: "AIzaSyAJ395j9EL5Nv81Q70Csc4zRKNp5e1Xrjo",
+            authDomain: "expo-project-1040e.firebaseapp.com",
+            databaseURL: "https://expo-project-1040e-default-rtdb.firebaseio.com",
+            projectId: "expo-project-1040e",
+            storageBucket: "expo-project-1040e.appspot.com"
+          };
+          if (!firebase.apps || !firebase.apps.length) firebase.initializeApp(fb);
+        } catch (_) {}
+      }
+      return true;
+    }
+
     (async function loadAuthHeader(){
       try {
-        const hc = document.getElementById('header-container');
+        const host = document.getElementById('header-container');
+        // Limpia cualquier contenido previo
+        host.innerHTML = '';
+        // Reusar shadowRoot si ya existe, o crearlo
+        const shadow = host.shadowRoot || (host.attachShadow ? host.attachShadow({ mode: 'open' }) : host);
+
+        // Cargar HTML del componente
         const res = await fetch('/src/components/html/auth-header.html', { cache: 'no-cache' });
-        hc.innerHTML = await res.text();
+        const html = await res.text();
+        shadow.innerHTML = html;
+
+        // CSS crítico inmediato (sin bullets)
+        if (!shadow.querySelector('#as-header-critical-css')) {
+          const critical = document.createElement('style');
+          critical.id = 'as-header-critical-css';
+          critical.textContent = `
+            #authHeader .as-header__nav-list{list-style:none;margin:0;padding:0}
+            #authHeader .as-header__nav-link{text-decoration:none}
+          `;
+          shadow.appendChild(critical);
+        }
+
+        // Importar SOLO el CSS del header dentro del shadow
+        if (!shadow.querySelector('#as-header-import-css')) {
+          const style = document.createElement('style');
+          style.id = 'as-header-import-css';
+          style.textContent = '@import url("/src/components/css/auth-header.css");';
+          shadow.appendChild(style);
+        }
+
+        // Asegura Firebase y carga JS del componente
+        await ensureFirebaseReady();
         if (!window.AuthHeader) {
           await new Promise((resolve, reject) => {
             const s = document.createElement('script');
@@ -61,8 +122,12 @@
             s.onload = resolve; s.onerror = reject; document.body.appendChild(s);
           });
         }
-        if (window.AuthHeader && !window.authHeader && document.getElementById('authHeader')) {
-          window.authHeader = new window.AuthHeader();
+
+        if (window.AuthHeader && shadow.querySelector('#authHeader')) {
+          // Evita múltiples instancias
+          if (!host._authHeaderInstance) {
+            host._authHeaderInstance = new window.AuthHeader(shadow);
+          }
         }
       } catch (e) { console.error('Auth header load error:', e); }
     })();
@@ -72,6 +137,9 @@
       .then(r => r.text())
       .then(html => { const c = document.getElementById('footer-container'); if (c) c.innerHTML = html; })
       .catch(err => console.error('Footer load error:', err));
+  </script>
+</body>
+</html>
   </script>
 </body>
 </html>
