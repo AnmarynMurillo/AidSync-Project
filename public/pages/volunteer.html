@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voluntariado | AidSync</title>
     <link rel="icon" href="/public/assets/logos/Logo_logo.png" type="imagen/x-icon">
-    <link rel="stylesheet" href="/public/css/styles.css">
-    <link rel="stylesheet" href="/public/components/css/header.css">
-    <link rel="stylesheet" href="/public/components/css/footer.css">
-    <script defer src="/public/js/volunteer.js"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../components/css/header.css">
+    <link rel="stylesheet" href="../components/css/footer.css">
+    <link rel="stylesheet" href="../css/volunteer.css">
+    <script defer src="../js/volunteer.js"></script>
 </head>
 <body>
   <!-- Header Container -->
@@ -75,32 +76,44 @@
         
       </div>
     </div>
-     <!--footer-->
-     <div id="footer-container"></div>
-     <script>
-       // Carga header y footer dinámicamente
-       fetch('/public/components/html/header.html')
-         .then(r => r.text())
-         .then(h => {
-           document.getElementById('header-container').innerHTML = h;
-           // Cargar el JS del header después de que el header esté en el DOM
-           const script = document.createElement('script');
-           script.src = '/public/components/js/header.js';
-           document.body.appendChild(script);
-         });
-       fetch('/public/components/html/footer.html').then(r=>r.text()).then(f=>document.getElementById('footer-container').innerHTML=f);
-     </script>
-      // Cargar footer
-      fetch('/public/components/html/footer.html')
-        .then(r => r.text())
-        .then(html => {
-          const footerContainer = document.getElementById('footer-container');
-          if (footerContainer) {
-            footerContainer.innerHTML = html;
-            console.log('Footer cargado correctamente');
-          }
-        })
-        .catch(error => console.error('Error al cargar el footer:', error));
+    <!-- Footer -->
+    <div id="footer-container"></div>
+    
+    <!-- Load Components -->
+    <script>
+      // Function to load components
+      async function loadComponents() {
+        try {
+          // Load header
+          const headerResponse = await fetch('../components/html/header.html');
+          document.getElementById('header-container').innerHTML = await headerResponse.text();
+          
+          // Load header script
+          const headerScript = document.createElement('script');
+          headerScript.src = '../components/js/header.js';
+          document.body.appendChild(headerScript);
+          
+          // Load footer
+          const footerResponse = await fetch('../components/html/footer.html');
+          document.getElementById('footer-container').innerHTML = await footerResponse.text();
+          
+          // Load footer styles
+          const footerStyles = document.createElement('link');
+          footerStyles.rel = 'stylesheet';
+          footerStyles.href = '../components/css/footer.css';
+          document.head.appendChild(footerStyles);
+          
+        } catch (error) {
+          console.error('Error loading components:', error);
+        }
+      }
+
+      // Load components when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadComponents);
+      } else {
+        loadComponents();
+      }
     </script>
 </body>
 </html>
