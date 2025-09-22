@@ -7,8 +7,8 @@
     <title>Voluntariado | AidSync</title>
     <link rel="icon" href="/public/assets/logos/Logo_logo.png" type="imagen/x-icon">
     <link rel="stylesheet" href="/public/css/styles.css">
-    <link rel="stylesheet" href="/src/components/css/header.css">
-    <link rel="stylesheet" href="/public/css/volunteer.css">
+    <link rel="stylesheet" href="/public/components/css/header.css">
+    <link rel="stylesheet" href="/public/components/css/footer.css">
     <script defer src="/public/js/volunteer.js"></script>
 </head>
 <body>
@@ -75,28 +75,23 @@
         
       </div>
     </div>
-    <!-- Footer -->
-    <div id="footer-container"></div>
-    
-    <!-- Cargador de módulos -->
-    <script src="/src/components/js/loader.js" type="module"></script>
-    
-    <!-- Carga dinámica del header y footer -->
-    <script>
-      // Cargar header
-      fetch('/src/components/html/header.html') 
-        .then(r => r.text())
-        .then(html => {
-          const headerContainer = document.getElementById('header-container');
-          if (headerContainer) {
-            headerContainer.innerHTML = html;
-            console.log('Header cargado correctamente');
-          }
-        })
-        .catch(error => console.error('Error al cargar el header:', error));
-
+     <!--footer-->
+     <div id="footer-container"></div>
+     <script>
+       // Carga header y footer dinámicamente
+       fetch('/public/components/html/header.html')
+         .then(r => r.text())
+         .then(h => {
+           document.getElementById('header-container').innerHTML = h;
+           // Cargar el JS del header después de que el header esté en el DOM
+           const script = document.createElement('script');
+           script.src = '/public/components/js/header.js';
+           document.body.appendChild(script);
+         });
+       fetch('/public/components/html/footer.html').then(r=>r.text()).then(f=>document.getElementById('footer-container').innerHTML=f);
+     </script>
       // Cargar footer
-      fetch('/src/components/html/footer.html')
+      fetch('/public/components/html/footer.html')
         .then(r => r.text())
         .then(html => {
           const footerContainer = document.getElementById('footer-container');

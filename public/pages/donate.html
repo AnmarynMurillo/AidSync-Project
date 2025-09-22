@@ -5,15 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donations | AidSync</title>
-    <link rel="icon" href="../assets/logos/Logo_logo.png" type="image/x-icon">
+    <link rel="icon" href="/public/assets/logos/Logo_logo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="/src/components/css/header.css">
-    <link rel="stylesheet" href="/src/components/css/footer.css">
-    <link rel="stylesheet" href="../css/donate.css">
-    <link rel="stylesheet" href="../css/donation-modal.css">
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="/public/components/css/header.css">
+    <link rel="stylesheet" href="/public/components/css/footer.css">
+    <link rel="stylesheet" href="/public/css/donate.css">
+    <link rel="stylesheet" href="/public/css/donation-modal.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script defer src="../js/donate.js"></script>
+    <script defer src="/public/js/donate.js"></script>
 </head>
 <body>
   <!-- Header Container -->
@@ -49,7 +49,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     // Carga header y footer dinámicamente
-    fetch('/src/components/html/header.html')
+    fetch('/public/components/html/header.html')
       .then(r => r.text())
       .then(h => {
         const headerContainer = document.getElementById('header-container');
@@ -57,13 +57,13 @@
           headerContainer.innerHTML = h;
           // Cargar header.js después de insertar el header
           const script = document.createElement('script');
-          script.src = '/src/components/js/header.js';
+          script.src = '/public/components/js/header.js';
           document.body.appendChild(script);
           console.log('Header loaded successfully');
         }
         
         // Cargar el footer después de que el header se haya cargado
-        return fetch('/src/components/html/footer.html');
+        return fetch('/public/components/html/footer.html');
       })
       .then(r => r.text())
       .then(f => {

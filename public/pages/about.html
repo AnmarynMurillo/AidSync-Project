@@ -7,8 +7,8 @@
     <title>AidSync | About Us</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/public/css/about.css">
-    <link rel="stylesheet" href="/src/components/css/header.css">
-    <link rel="stylesheet" href="/src/components/css/footer.css">
+    <link rel="stylesheet" href="/public/components/css/header.css">
+    <link rel="stylesheet" href="/public/components/css/footer.css">
 </head>
 <body>
     <!-- Header Container -->
@@ -185,39 +185,39 @@
         </section>
     </main>
 
-    <!-- Footer Container -->
-    <div id="footer-container"></div>
-    
-    <!-- Cargador de módulos -->
-    <script src="/src/components/js/loader.js" type="module"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/public/js/about.js"></script>
-    
-    <!-- Carga dinámica del header y footer -->
-    <script>
-      // Cargar header
-      fetch('/src/components/html/header.html') 
-        .then(r => r.text())
-        .then(html => {
-          const headerContainer = document.getElementById('header-container');
-          if (headerContainer) {
-            headerContainer.innerHTML = html;
-            console.log('Header cargado correctamente');
-          }
-        })
-        .catch(error => console.error('Error al cargar el header:', error));
+    <!-- Footer -->
+  <div id="footer-container"></div>
+  
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // Carga header y footer dinámicamente
+    fetch('/public/components/html/header.html')
+      .then(r => r.text())
+      .then(h => {
+        const headerContainer = document.getElementById('header-container');
+        if (headerContainer) {
+          headerContainer.innerHTML = h;
+          // Cargar header.js después de insertar el header
+          const script = document.createElement('script');
+          script.src = '/public/components/js/header.js';
+          document.body.appendChild(script);
+          console.log('Header loaded successfully');
+        }
+        
+        // Cargar el footer después de que el header se haya cargado
+        return fetch('/public/components/html/footer.html');
+      })
+      .then(r => r.text())
+      .then(f => {
+        const footerContainer = document.getElementById('footer-container');
+        if (footerContainer) {
+          footerContainer.innerHTML = f;
+          console.log('Footer loaded successfully');
+        }
+      })
+      .catch(error => console.error('Error loading header/footer:', error));
 
-      // Cargar footer
-      fetch('/src/components/html/footer.html')
-        .then(r => r.text())
-        .then(html => {
-          const footerContainer = document.getElementById('footer-container');
-          if (footerContainer) {
-            footerContainer.innerHTML = html;
-            console.log('Footer cargado correctamente');
-          }
-        })
-        .catch(error => console.error('Error al cargar el footer:', error));
     </script>
 </body>
 </html>

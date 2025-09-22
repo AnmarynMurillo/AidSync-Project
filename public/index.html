@@ -6,7 +6,8 @@
     <title>AidSync | Home</title>
     <link rel="icon" href="assets/logos/logito.ico" type="imagen/x-icon">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="/src/components/css/header.css">
+    <link rel="stylesheet" href="components/css/header.css">
+    <link rel="stylesheet" href="components/css/footer.css">
     <script defer src="js/main.js"></script>
 </head>
 <body>
@@ -225,16 +226,16 @@
     <div id="footer-container"></div>
   <script>
     // Carga header y footer dinámicamente
-    fetch('../src/components/html/header.html')
+    fetch('/public/components/html/header.html')
       .then(r => r.text())
       .then(h => {
         document.getElementById('header-container').innerHTML = h;
         // Cargar el JS del header después de que el header esté en el DOM
         const script = document.createElement('script');
-        script.src = '../src/components/js/header.js';
+        script.src = '/public/components/js/header.js';
         document.body.appendChild(script);
       });
-    fetch('../src/components/html/footer.html').then(r=>r.text()).then(f=>document.getElementById('footer-container').innerHTML=f);
+    fetch('/public/components/html/footer.html').then(r=>r.text()).then(f=>document.getElementById('footer-container').innerHTML=f);
   </script>
   <script src="//code.tidio.co/kapcayhoc2ibnyndqp1zqgvdvvpszt2c.js" async></script>
 </body>
