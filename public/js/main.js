@@ -1,3 +1,62 @@
+// Splash Screen Functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const splashScreen = document.getElementById('splash-screen');
+    const progressBar = document.querySelector('.progress');
+    const loadingMessage = document.querySelector('.loading-message');
+    const loadingDots = document.querySelector('.loading-dots');
+    const loadingHint = document.querySelector('.loading-hint');
+    
+    if (splashScreen) {
+        let progress = 0;
+        const messages = [
+            'Initializing platform',
+            'Loading resources',
+            'Preparing experience',
+            'Almost there'
+        ];
+        
+        // Update loading progress
+        const updateProgress = () => {
+            if (progress < 100) {
+                progress += Math.random() * 15;
+                if (progress > 100) progress = 100;
+                progressBar.style.width = `${progress}%`;
+                
+                // Update loading message at certain intervals
+                if (progress < 30) loadingMessage.textContent = messages[0];
+                else if (progress < 50) loadingMessage.textContent = messages[1];
+                else if (progress < 80) loadingMessage.textContent = messages[2];
+                else loadingMessage.textContent = messages[3];
+                
+                // Random speed between 100-500ms
+                setTimeout(updateProgress, 100 + Math.random() * 400);
+            } else {
+                loadingHint.style.opacity = '1';
+                splashScreen.style.cursor = 'pointer';
+            }
+        };
+        
+        // Start progress
+        setTimeout(updateProgress, 500);
+        
+        // Click to skip
+        splashScreen.addEventListener('click', () => {
+            splashScreen.classList.add('hidden');
+            // Remove splash screen from DOM after animation
+            setTimeout(() => {
+                splashScreen.remove();
+            }, 1000);
+        });
+        
+        // Auto-hide after 7 seconds if not clicked
+        setTimeout(() => {
+            if (!splashScreen.classList.contains('hidden')) {
+                splashScreen.click();
+            }
+        }, 7000);
+    }
+});
+
 // Hero Carousel Data
 const carouselSlides = [
   {
