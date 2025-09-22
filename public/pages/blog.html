@@ -9,11 +9,11 @@
   <link rel="icon" href="../assets/logos/logito.ico" type="image/x-icon">
   
   <!-- CSS -->
-  <link rel="stylesheet" href="../css/styles.css">
-  <link rel="stylesheet" href="../css/blog.css">
-  <link rel="stylesheet" href="/src/components/css/header.css">
-  <link rel="stylesheet" href="/src/components/css/auth-header.css">
-  <link rel="stylesheet" href="/src/components/css/footer.css">
+  <link rel="stylesheet" href="/public/css/styles.css">
+  <link rel="stylesheet" href="/public/css/blog.css">
+  <link rel="stylesheet" href="/public/components/css/header.css">
+  <link rel="stylesheet" href="/public/components/css/auth-header.css">
+  <link rel="stylesheet" href="/public/components/css/footer.css ">
   
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -47,127 +47,50 @@
   <!-- Global Footer -->
   <div id="footer-container"></div>
   
-  <!-- Cargador de módulos -->
-  <script src="/src/components/js/loader.js" type="module"></script>
-  
   <!-- Script del blog -->
   <script src="/public/js/blog.js"></script>
   
-  <!-- Load Header and Footer -->
+  <!-- Load Components -->
   <script>
-    // Function to load scripts
-    function loadScript(src) {
-      return new Promise((resolve, reject) => {
-        const s = document.createElement('script');
-        s.src = src; 
-        s.onload = resolve; 
-        s.onerror = reject;
-        document.head.appendChild(s);
-      });
-    }
-
-    // Function to load styles
-    function loadStyles(href) {
-      return new Promise((resolve, reject) => {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = href;
-        link.onload = resolve;
-        link.onerror = reject;
-        document.head.appendChild(link);
-      });
-    }
-
-    // Load header
-    async function loadHeader() {
+    // Function to load components
+    async function loadComponents() {
       try {
-        const headerContainer = document.getElementById('header-container');
-        
-        // Clear any existing content
-        headerContainer.innerHTML = '';
-        
-        // Create shadow DOM for encapsulation
-        const shadow = headerContainer.attachShadow({ mode: 'open' });
-        
-        // Add critical styles first
-        const critical = document.createElement('style');
-        critical.textContent = `
-          .as-header__nav-list { list-style: none; margin: 0; padding: 0; }
-          .as-header__nav-link { text-decoration: none; }
-          .as-header { background: #003d66; color: white; padding: 1rem 0; }
-          .as-header__container { 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            padding: 0 1rem;
-          }
-          .as-header__logo { height: 40px; }
-        `;
-        shadow.appendChild(critical);
-        
-        // Load header HTML
-        const response = await fetch('/src/components/html/header.html');
-        const html = await response.text();
-        
-        // Create a template element to parse HTML
-        const template = document.createElement('template');
-        template.innerHTML = html;
-        
-        // Clone and append the template content
-        const headerContent = template.content.cloneNode(true);
-        shadow.appendChild(headerContent);
+        // Load header
+        const headerResponse = await fetch('/public/components/html/header.html');
+        document.getElementById('header-container').innerHTML = await headerResponse.text();
         
         // Load header styles
-        await loadStyles('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+        const headerStyles = document.createElement('link');
+        headerStyles.rel = 'stylesheet';
+        headerStyles.href = '/public/components/css/header.css';
+        document.head.appendChild(headerStyles);
         
-        // Load header scripts
-        await loadScript('/src/components/js/header.js');
+        // Load header script
+        const headerScript = document.createElement('script');
+        headerScript.src = '/public/components/js/header.js';
+        document.body.appendChild(headerScript);
         
-        // Initialize header if function exists
-        if (window.initHeader) {
-          window.initHeader();
-        }
+        // Load footer
+        const footerResponse = await fetch('/public/components/html/footer.html');
+        document.getElementById('footer-container').innerHTML = await footerResponse.text();
+        
+        // Load footer styles
+        const footerStyles = document.createElement('link');
+        footerStyles.rel = 'stylesheet';
+        footerStyles.href = '/public/components/css/footer.css';
+        document.head.appendChild(footerStyles);
         
       } catch (error) {
-        console.error('Error loading header:', error);
+        console.error('Error loading components:', error);
       }
     }
-    
-    // Load footer
-    async function loadFooter() {
-      try {
-        const footerContainer = document.getElementById('footer-container');
-        const response = await fetch('/src/components/html/footer.html');
-        footerContainer.innerHTML = await response.text();
-      } catch (error) {
-        console.error('Error loading footer:', error);
-      }
+
+    // Load components when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadComponents);
+    } else {
+      loadComponents();
     }
-    
-    // Initialize everything when DOM is loaded
-    document.addEventListener('DOMContentLoaded', async () => {
-      try {
-        await Promise.all([
-          loadHeader(),
-          loadFooter()
-        ]);
-        
-        // Initialize auth header if it exists
-        if (window.AuthHeader && typeof window.AuthHeader === 'function') {
-          const headerContainer = document.getElementById('header-container');
-          if (headerContainer && headerContainer.shadowRoot) {
-            const shadow = headerContainer.shadowRoot;
-            if (!headerContainer._authHeaderInstance) {
-              headerContainer._authHeaderInstance = new window.AuthHeader(shadow);
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Initialization error:', error);
-      }
-    });
   </script>
 </body>
 </html>

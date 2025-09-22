@@ -8,10 +8,10 @@
     <link rel="icon" href="../assets/logos/logito.ico" type="image/x-icon">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="/src/components/css/header.css">
-    <link rel="stylesheet" href="/src/components/css/footer.css">
-    <link rel="stylesheet" href="../css/contact.css">
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="/public/components/css/header.css">
+    <link rel="stylesheet" href="/public/components/css/footer.css">
+    <link rel="stylesheet" href="/public/css/contact.css">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -140,14 +140,14 @@
         // Load header and footer
         document.addEventListener('DOMContentLoaded', function() {
             // Load header
-            fetch('/src/components/html/header.html')
+            fetch('/public/components/html/header.html')
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById('header-container').innerHTML = data;
                 });
 
             // Load footer
-            fetch('/src/components/html/footer.html')
+            fetch('/public/components/html/footer.html')
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById('footer-container').innerHTML = data;
