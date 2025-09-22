@@ -9,14 +9,15 @@
   <link rel="icon" href="../assets/logos/logito.ico" type="image/x-icon">
   
   <!-- CSS -->
-  <link rel="stylesheet" href="/public/css/styles.css">
-  <link rel="stylesheet" href="/public/css/blog.css">
-  <link rel="stylesheet" href="/public/components/css/header.css">
-  <link rel="stylesheet" href="/public/components/css/auth-header.css">
-  <link rel="stylesheet" href="/public/components/css/footer.css ">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/blog.css">
+  <link rel="stylesheet" href="../components/css/header.css">
+  <link rel="stylesheet" href="../components/css/auth-header.css">
+  <link rel="stylesheet" href="../components/css/footer.css">
   
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
   <!-- Header -->
@@ -48,7 +49,7 @@
   <div id="footer-container"></div>
   
   <!-- Script del blog -->
-  <script src="/public/js/blog.js"></script>
+  <script src="../js/blog.js"></script>
   
   <!-- Load Components -->
   <script>
@@ -56,28 +57,28 @@
     async function loadComponents() {
       try {
         // Load header
-        const headerResponse = await fetch('/public/components/html/header.html');
+        const headerResponse = await fetch('../components/html/header.html');
         document.getElementById('header-container').innerHTML = await headerResponse.text();
         
         // Load header styles
         const headerStyles = document.createElement('link');
         headerStyles.rel = 'stylesheet';
-        headerStyles.href = '/public/components/css/header.css';
+        headerStyles.href = '../components/css/header.css';
         document.head.appendChild(headerStyles);
         
         // Load header script
         const headerScript = document.createElement('script');
-        headerScript.src = '/public/components/js/header.js';
+        headerScript.src = '../components/js/header.js';
         document.body.appendChild(headerScript);
         
         // Load footer
-        const footerResponse = await fetch('/public/components/html/footer.html');
+        const footerResponse = await fetch('../components/html/footer.html');
         document.getElementById('footer-container').innerHTML = await footerResponse.text();
         
         // Load footer styles
         const footerStyles = document.createElement('link');
         footerStyles.rel = 'stylesheet';
-        footerStyles.href = '/public/components/css/footer.css';
+        footerStyles.href = '../components/css/footer.css';
         document.head.appendChild(footerStyles);
         
       } catch (error) {
