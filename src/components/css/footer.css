@@ -204,7 +204,7 @@
 }
 
 .footer-section a:hover {
-  color: #3498db;
+  color: #0000;
 }
 
 .footer-section ul {
@@ -254,7 +254,7 @@
 }
 
 .footer-bottom a {
-  color: #3498db;
+  color: #000;
   text-decoration: none;
   transition: color 0.3s ease;
 }
