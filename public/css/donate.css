@@ -63,7 +63,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 3rem 1.5rem;
-  font-family: 'Poppins', 'Inter', 'Nunito', sans-serif;
+  font-family: 'Poppins', 'Nunito', Arial, sans-serif;
 }
 
 .donate-main h1, .donate-main h2 {
@@ -72,7 +72,7 @@ body {
   margin: 0 auto 2rem auto;
   font-size: 2.5rem;
   color: var(--color-primary);
-  font-weight: 700;
+  font-weight: 25px;
   display: block;
   letter-spacing: -0.5px;
   line-height: 1.2;
@@ -90,73 +90,41 @@ body {
     padding: 1.5rem 0.5rem 1rem 0.5rem;
   }
 }
-
 .donate-filters {
   display: flex;
   gap: 1rem;
-  margin: 0 auto 3rem auto;
+  margin-bottom: 2rem;
   flex-wrap: wrap;
   justify-content: center;
-  padding: 0.5rem;
-  max-width: 900px;
 }
 
 .filter-btn {
-  background: white;
-  color: var(--color-primary);
-  border: 2px solid var(--color-primary);
-  border-radius: 25px;
-  padding: 0.6rem 1.5rem;
+  background: var(--cat-color, #eaf4f5);
+  color: white;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.7rem 1.7rem;
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.9rem;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  text-transform: capitalize;
-  letter-spacing: 0.5px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  font-size: 1.08rem;
+  transition: all 0.25s ease;
 }
 
-.filter-btn:hover {
-  background: var(--color-primary);
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.filter-btn.active {
-  background: var(--color-primary);
-  color: white;
-  border-color: var(--color-primary);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-/* Estilos específicos por categoría */
+/* Excepción para "All" */
 .filter-btn[data-category="all"] {
-  background: var(--color-primary);
-  color: white;
+  background: white;
+  color: black;
 }
-
-.filter-btn[data-category="welfare"] { --cat-color: var(--color-social); }
-.filter-btn[data-category="health"] { --cat-color: var(--color-health); }
-.filter-btn[data-category="education"] { --cat-color: var(--color-education); }
-.filter-btn[data-category="environment"] { --cat-color: var(--color-environment); }
 
 /* Hover y activo */
-.filter-btn:not([data-category="all"]):hover,
-.filter-btn:not([data-category="all"]).active {
+.filter-btn:hover, 
+.filter-btn.active {
   background: white;
   color: var(--cat-color);
-  border-color: var(--cat-color);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.filter-btn[data-category="all"]:hover,
-.filter-btn[data-category="all"].active {
-  background: #475569;
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+  transform: translateY(-3px) scale(1.04);
+  border: 2px solid var(--cat-color);
 }
 
 .donate-gallery {
