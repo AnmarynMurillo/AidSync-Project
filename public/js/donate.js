@@ -20,7 +20,7 @@ const CAUSES = [
       categoria: 'health',
       color: '#dc2626',
       colorHover: '#b91c1c',
-      img: '../assets/img/donation/brigada-medica.jpg',
+      img: '../assets/img/donation/BRIGADA-MEDICA.jpg',
       desc: 'Health campaigns and prevention in rural communities.',
       descLarga: 'Health for All brings medical brigades, prevention workshops, and basic care to remote rural communities.',
       location: 'Chiriqui',
