@@ -2,25 +2,31 @@
 .volunteer-main {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2.5rem 1rem 2rem 1rem;
+    padding: 3rem 1.5rem;
     font-family: 'Poppins', 'Nunito', Arial, sans-serif;
   }
-  .volunteer-main h1,
-  .volunteer-main h2 {
+  .volunteer-main h1, .volunteer-main h2 {
     width: 100%;
     text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2rem;
+    margin: 0 auto 2rem auto;
+    font-size: 2.5rem;
     color: var(--color-primary);
-    font-weight: 700;
+    font-weight: 25px;
     display: block;
-    letter-spacing: 0.5px;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    font-family: 'Poppins', sans-serif;
+    max-width: 800px;
+    padding: 0 1rem;
   }
   @media (max-width: 600px) {
     .volunteer-main h1,
     .volunteer-main h2 {
       font-size: 1.3rem;
       margin-bottom: 1.2rem;
+    }
+    .volunteer-main {
+      padding: 1.5rem 0.5rem 1rem 0.5rem;
     }
   }
   .volunteer-filters {
