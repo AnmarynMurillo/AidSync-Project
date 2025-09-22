@@ -187,38 +187,54 @@
     </main>
 
     <!-- Footer -->
-  <div id="footer-container"></div>
-  
-  <!-- Scripts -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    // Carga header y footer dinámicamente
-    fetch('/public/components/html/header.html')
-      .then(r => r.text())
-      .then(h => {
-        const headerContainer = document.getElementById('header-container');
-        if (headerContainer) {
-          headerContainer.innerHTML = h;
-          // Cargar header.js después de insertar el header
-          const script = document.createElement('script');
-          script.src = '/public/components/js/header.js';
-          document.body.appendChild(script);
-          console.log('Header loaded successfully');
+    <div id="footer-container"></div>
+    
+    <!-- Scripts -->
+    <script>
+      // Function to load components
+      async function loadComponents() {
+        try {
+          // Load header
+          const headerResponse = await fetch('../components/html/header.html');
+          const headerContainer = document.getElementById('header-container');
+          if (headerContainer) {
+            headerContainer.innerHTML = await headerResponse.text();
+            
+            // Load header script
+            const headerScript = document.createElement('script');
+            headerScript.src = '../components/js/header.js';
+            document.body.appendChild(headerScript);
+            
+            // Load header styles
+            const headerStyles = document.createElement('link');
+            headerStyles.rel = 'stylesheet';
+            headerStyles.href = '../components/css/header.css';
+            document.head.appendChild(headerStyles);
+          }
+          
+          // Load footer
+          const footerResponse = await fetch('../components/html/footer.html');
+          const footerContainer = document.getElementById('footer-container');
+          if (footerContainer) {
+            footerContainer.innerHTML = await footerResponse.text();
+            
+            // Load footer styles
+            const footerStyles = document.createElement('link');
+            footerStyles.rel = 'stylesheet';
+            footerStyles.href = '../components/css/footer.css';
+            document.head.appendChild(footerStyles);
+          }
+        } catch (error) {
+          console.error('Error loading components:', error);
         }
-        
-        // Cargar el footer después de que el header se haya cargado
-        return fetch('/public/components/html/footer.html');
-      })
-      .then(r => r.text())
-      .then(f => {
-        const footerContainer = document.getElementById('footer-container');
-        if (footerContainer) {
-          footerContainer.innerHTML = f;
-          console.log('Footer loaded successfully');
-        }
-      })
-      .catch(error => console.error('Error loading header/footer:', error));
+      }
 
+      // Load components when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadComponents);
+      } else {
+        loadComponents();
+      }
     </script>
 </body>
 </html>
