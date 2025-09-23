@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AidSync | Home</title>
-    <link rel="icon" href="assets/logos/logito.ico" type="imagen/x-icon">
+    <link rel="icon" href="assets/logos/logito.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="components/css/header.css">
-    <link rel="stylesheet" href="components/css/footer.css">
+    <link rel="stylesheet" href="../public/components/css/header.css">
+    <link rel="stylesheet" href="../public/components/css/footer.css">
     <script defer src="js/main.js"></script>
 </head>
 <body>
@@ -243,11 +243,7 @@
           const footerResponse = await fetch('components/html/footer.html');
           document.getElementById('footer-container').innerHTML = await footerResponse.text();
           
-          // Load footer styles
-          const footerStyles = document.createElement('link');
-          footerStyles.rel = 'stylesheet';
-          footerStyles.href = 'components/css/footer.css';
-          document.head.appendChild(footerStyles);
+          // Footer styles are already included via a static <link> in <head>
           
         } catch (error) {
           console.error('Error loading components:', error);
