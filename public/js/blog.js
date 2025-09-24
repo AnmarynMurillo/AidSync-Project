@@ -84,7 +84,7 @@ const BLOG_POSTS = [
   {
     id: 13,
     title: 'Pro Integration Foundation: Supporting People with Disabilities',
-    image: '/public/assets/img/support_organization/red_solidaria.jpg',
+    image: '../assets/img/support_organization/red_solidaria.jpg',
     excerpt: 'Providing essential mobility and hearing devices to improve quality of life.',
     content: 'Fundación Pro Integración (FUNPROI) provides vital support including:\n\n• Specialized devices to improve mobility for people with physical disabilities, such as wheelchairs, postural chairs, canes, and crutches.\n• Hearing aids and cochlear implants for people with hearing disabilities.\n• Transportation support to facilitate access to health services.\n\nYou can support their mission through bank transfers or Yappy donations.',
     author: 'AidSync Team',
@@ -96,7 +96,7 @@ const BLOG_POSTS = [
   {
     id: 14,
     title: 'HTN Foundation: Comprehensive Support for Social Causes',
-    image: '/public/assets/img/Carrusel_1/Social_welfare.png',
+    image: '../assets/img/Carrusel_1/Social_welfare.png',
     excerpt: 'Supporting various social organizations through multiple donation channels.',
     content: 'Fundación HTN offers multiple ways to support social causes:\n\n• Financial donations\n• Products and services needed by social organizations\n• You may even consider donating an inheritance through their platform\n\nThrough their intelligent system, you can provide financial donations, products, services, and even inheritances to support those in need across Panama.',
     author: 'AidSync Team',
@@ -108,7 +108,7 @@ const BLOG_POSTS = [
   {
     id: 1,
     title: 'Volunteering in Darién',
-    image: '/public/assets/img/donation/BRIGADA-MEDICA.jpg',
+    image: '../assets/img/donation/BRIGADA-MEDICA.jpg',
     excerpt: 'A life-changing experience helping rural communities in Darién... Read the full story!',
     content: 'Full story of the experience in Darién. Lots of learning, teamwork, and gratitude. I participated in building a school and in health workshops for children and adults. I recommend everyone to live such an experience.',
     author: 'John Perez',
@@ -122,7 +122,7 @@ const BLOG_POSTS = [
   {
     id: 2,
     title: 'Health Day in Chiriquí',
-    image: '/public/assets/img/volunter/Pro-comedores.jpg',
+    image: '../assets/img/volunter/Pro-comedores.jpg',
     excerpt: 'Doctors and volunteers provided care to over 200 people in rural areas of Chiriquí.',
     content: 'Chronicle of the health day: doctors, nurses, and AidSync volunteers provided consultations, medicines, and prevention talks to families in remote communities. Thanks to everyone who supported!',
     author: 'Anna Torres',
@@ -134,7 +134,7 @@ const BLOG_POSTS = [
   {
     id: 3,
     title: 'Urban Reforestation',
-    image: '/public/assets/img/volunter/Reforestacion.jpeg',
+    image: '../assets/img/volunter/Reforestacion.jpeg',
     excerpt: 'Over 500 trees planted in the city thanks to volunteers and partner companies.',
     content: 'Campaign details: native species were planted in parks and main avenues. Students, companies, and families participated. Together for cleaner air!',
     author: 'Charles Ruiz',
@@ -146,7 +146,7 @@ const BLOG_POSTS = [
   {
     id: 4,
     title: 'Stories of Hope',
-    image: '/public/assets/img/volunter/banco.jpg',
+    image: '../assets/img/volunter/banco.jpg',
     excerpt: 'Testimonies of people benefited by AidSync and its social programs.',
     content: 'Real stories of social impact: interviews with families who received support in health, education, and housing. AidSync continues to transform lives with your help.',
     author: 'Sophie Martinez',
@@ -158,7 +158,7 @@ const BLOG_POSTS = [
   {
     id: 5,
     title: 'Youth Entrepreneurship Workshop',
-    image: '/public/assets/img/donation/BRIGADA-MEDICA.jpg',
+    image: '../assets/img/donation/BRIGADA-MEDICA.jpg',
     excerpt: 'Young people from different provinces participated in a workshop to create their own businesses.',
     content: 'The workshop included mentoring, talks by entrepreneurs, and business simulations. Several projects received seed capital. The future belongs to the youth!',
     author: 'Laura Gomez',
@@ -170,7 +170,7 @@ const BLOG_POSTS = [
   {
     id: 6,
     title: 'Alliance with Smiles Foundation',
-    image: '/public/assets/img/volunter/Pro-comedores.jpg',
+    image: '../assets/img/volunter/Pro-comedores.jpg',
     excerpt: 'New partnership to provide free dental care to vulnerable communities.',
     content: 'AidSync and Smiles Foundation join forces to carry out oral health days in rural schools. Hygiene kits were delivered and more than 300 children were treated.',
     author: 'AidSync Team',
@@ -396,7 +396,7 @@ function renderNewPostForm() {
     <div class="new-post-toggle" id="newPostToggle">
       <i class="fas fa-plus"></i> New Post
     </div>
-    <div class="new-post-section" id="newPostSection" style="display: none;">
+    <div class="new-post-section" id="newPostSection" style<="display: none;">
       <h2>Create New Post</h2>
       <form id="new-post-form" class="new-post-form">
         <div class="form-group">
@@ -473,7 +473,7 @@ function renderNewPostForm() {
     PENDING_POSTS.push({
       id: Date.now(),
       titulo: data.title,
-      imagen: data.image || '/public/assets/images/hero/voluntariado.jpg',
+      imagen: data.image || '../assets/images/hero/voluntariado.jpg',
       extracto: data.excerpt,
       contenido: data.content,
       autor: data.author,

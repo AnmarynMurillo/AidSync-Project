@@ -197,8 +197,8 @@ function initTeamCarousel() {
         {
             name: 'Dushka Jimenez',
             role: 'Designer',
-            image: '../../public/assets/Integrantes/Dushka1.jpg',
-            hoverImage: '../../public/assets/Integrantes/Dushka2.jpg',
+            image: '../assets/Integrantes/Dushka1.jpg',
+            hoverImage: '../assets/Integrantes/Dushka2.jpg',
             bio: 'Transforming ideas into beautiful and intuitive user experiences.',
             social: {
                 email: 'mailto:dushka.jimenez2025@motta.superate.org.pa',
@@ -209,8 +209,8 @@ function initTeamCarousel() {
         {
             name: 'Elina Perez',
             role: 'Frontend Developer',
-            image: '../../public/assets/Integrantes/Elina1.jpg',
-            hoverImage: '../../public/assets/Integrantes/Elina2.jpg',
+            image: '../assets/Integrantes/Elina1.jpg',
+            hoverImage: '../assets/Integrantes/Elina2.jpg',
             bio: 'Building responsive and accessible web applications.',
             social: {
                 email: 'mailto:elina.perez2025@motta.superate.org.pa',
@@ -221,8 +221,8 @@ function initTeamCarousel() {
         {
             name: 'Isaura Ríos',
             role: 'Frontend Developer',
-            image: '../../public/assets/Integrantes/Isaura1.jpg',
-            hoverImage: '../../public/assets/Integrantes/Ir2.jpg',
+            image: '../assets/Integrantes/Isaura1.jpg',
+            hoverImage: '../assets/Integrantes/Ir2.jpg',
             bio: 'Bridging the gap between frontend and backend development.',
             social: {
                 email: 'mailto:isaura.rios2025@motta.superate.org.pa',
@@ -233,8 +233,8 @@ function initTeamCarousel() {
         {
             name: 'Jhostan Jimenez',
             role: 'Frontend Developer',
-            image: '../../public/assets/Integrantes/Jhostan1.jpg',
-            hoverImage: '../../public/assets/Integrantes/Jhostan2.jpg',
+            image: '../assets/Integrantes/Jhostan1.jpg',
+            hoverImage: '../assets/Integrantes/Jhostan2.jpg',
             bio: 'Building cross-platform mobile experiences.',
             social: {
                 email: 'mailto:jhostan.jimenez2025@motta.superate.org.pa',
@@ -245,8 +245,8 @@ function initTeamCarousel() {
         {
             name: 'Josue Rodriguez',
             role: 'Frontend Developer',
-            image: '../../public/assets/Integrantes/Josue1.jpg',
-            hoverImage: '../../public/assets/Integrantes/Josue2.jpg',
+            image: '../assets/Integrantes/Josue1.jpg',
+            hoverImage: '../assets/Integrantes/Josue2.jpg',
             bio: 'Automating deployments and ensuring system reliability.',
             social: {
                 email: 'mailto:gilberto.rodriguez2025@motta.superate.org.pa',
@@ -257,8 +257,8 @@ function initTeamCarousel() {
         {
             name: 'Juan Morales',
             role: 'Backend Developer',
-            image: '../../public/assets/Integrantes/Juan1.jpg',
-            hoverImage: '../../public/assets/Integrantes/Juan2.jpg',
+            image: '../assets/Integrantes/Juan1.jpg',
+            hoverImage: '../assets/Integrantes/Juan2.jpg',
             bio: 'Ensuring the highest quality in every release.',
             social: {
                 email: 'mailto:juan2.morales2025@motta.superate.org.pa',
@@ -269,8 +269,8 @@ function initTeamCarousel() {
         {
             name: 'Anmaryn Murillo',
             role: 'Frontend Developer',
-            image: '../../public/assets/Integrantes/Anmaryn1.jpg',
-            hoverImage: '../../public/assets/Integrantes/Anmaryn2.jpg',
+            image: '../assets/Integrantes/Anmaryn1.jpg',
+            hoverImage: '../assets/Integrantes/Anmaryn2.jpg',
             bio: 'Passionate about creating impactful solutions through technology.',
             social: {
                 email: 'mailto:anmaryn.murillo2025@motta.superate.org.pa',
@@ -281,8 +281,8 @@ function initTeamCarousel() {
         {
             name: 'Emily Bulgin',
             role: 'Designer',
-            image: '../../public/assets/Integrantes/Emily1.jpg',
-            hoverImage: '../../public/assets/Integrantes/Emily2.jpg',
+            image: '../assets/Integrantes/Emily1.jpg',
+            hoverImage: '../assets/Integrantes/Emily2.jpg',
             bio: 'Making the user experience.',
             social: {
                 email: 'mailto:emily.bulgin2025@motta.superate.org.pa',
@@ -293,8 +293,8 @@ function initTeamCarousel() {
         {
             name: 'Patricia Fernandez',
             role: 'Designer',
-            image: '../../public/assets/Integrantes/Patricia1.jpg',
-            hoverImage: '../../public/assets/Integrantes/Patricia2.jpg',
+            image: '../assets/Integrantes/Patricia1.jpg',
+            hoverImage: '../assets/Integrantes/Patricia2.jpg',
             bio: 'Creating beautiful and intuitive user experiences.',
             social: {
                 email: 'mailto:patricia.fernandez2025@motta.superate.org.pa',
@@ -305,8 +305,8 @@ function initTeamCarousel() {
         {
             name: 'Stephany Dominguez',
             role: 'Data Researcher',
-            image: '../../public/assets/Integrantes/Stephany1.jpg',
-            hoverImage: '../../public/assets/Integrantes/Stephany2.jpg',
+            image: '../assets/Integrantes/Stephany1.jpg',
+            hoverImage: '../assets/Integrantes/Stephany2.jpg',
             bio: 'Searcher of information and data.',
             social: {
                 email: 'mailto:stephany.dominguez2025@motta.superate.org.pa',
@@ -317,8 +317,8 @@ function initTeamCarousel() {
         {
             name: 'Luis Camargo',
             role: 'Backend Developer',
-            image: '../../public/assets/Integrantes/Luis1.jpg',
-            hoverImage: '../../public/assets/Integrantes/Luis2.jpg',
+            image: '../assets/Integrantes/Luis1.jpg',
+            hoverImage: '../assets/Integrantes/Luis2.jpg',
             bio: 'Extracting insights from complex data sets.',
             social: {
                 email: 'mailto:luis.camargo2025@motta.superate.org.pa',
