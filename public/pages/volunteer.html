@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voluntariado | AidSync</title>
     <link rel="icon" href="/public/assets/logos/Logo_logo.png" type="imagen/x-icon">
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../components/css/header.css">
-    <link rel="stylesheet" href="../components/css/footer.css">
-    <link rel="stylesheet" href="../css/volunteer.css">
-    <script defer src="../js/volunteer.js"></script>
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="/public/components/css/header.css">
+    <link rel="stylesheet" href="/public/components/css/footer.css">
+    <link rel="stylesheet" href="/public/css/volunteer.css">
+    <script defer src="/public/js/volunteer.js"></script>
 </head>
 <body>
   <!-- Header Container -->
@@ -85,22 +85,22 @@
       async function loadComponents() {
         try {
           // Load header
-          const headerResponse = await fetch('../components/html/header.html');
+          const headerResponse = await fetch('/public/components/html/header.html');
           document.getElementById('header-container').innerHTML = await headerResponse.text();
           
           // Load header script
           const headerScript = document.createElement('script');
-          headerScript.src = '../components/js/header.js';
+          headerScript.src = '/public/components/js/header.js';
           document.body.appendChild(headerScript);
           
           // Load footer
-          const footerResponse = await fetch('../components/html/footer.html');
+          const footerResponse = await fetch('/public/components/html/footer.html');
           document.getElementById('footer-container').innerHTML = await footerResponse.text();
           
           // Load footer styles
           const footerStyles = document.createElement('link');
           footerStyles.rel = 'stylesheet';
-          footerStyles.href = '../components/css/footer.css';
+          footerStyles.href = '/public/components/css/footer.css';
           document.head.appendChild(footerStyles);
           
         } catch (error) {

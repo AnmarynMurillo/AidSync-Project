@@ -16,7 +16,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Profile</title>
-  <link rel="stylesheet" href="../css/profile.css">
+  <link rel="stylesheet" href="/public/css/profile.css">
   <link rel="icon" href="/public/assets/logos/logito.ico" type="image/x-icon">
   <!-- Firebase v8 en orden correcto -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -60,7 +60,7 @@
         const hc = document.getElementById('header-container');
         
         // Cargar HTML directamente (NO Shadow DOM)
-        const res = await fetch('/src/components/html/auth-header.html', { cache: 'no-cache' });
+        const res = await fetch('/public/components/html/auth-header.html', { cache: 'no-cache' });
         const html = await res.text();
         hc.innerHTML = html;
 
@@ -68,7 +68,7 @@
         if (!document.querySelector('link[href*="auth-header.css"]')) {
           const link = document.createElement('link');
           link.rel = 'stylesheet';
-          link.href = '/src/components/css/auth-header.css';
+          link.href = '/public/components/css/auth-header.css';
           document.head.appendChild(link);
         }
 
@@ -76,7 +76,7 @@
         if (!window.AuthHeader) {
           await new Promise((resolve, reject) => {
             const s = document.createElement('script');
-            s.src = '/src/components/js/auth-header.js';
+            s.src = '/public/components/js/auth-header.js';
             s.onload = resolve; s.onerror = reject; document.body.appendChild(s);
           });
         }
