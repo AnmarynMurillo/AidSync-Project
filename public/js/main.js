@@ -227,28 +227,46 @@ document.addEventListener('DOMContentLoaded', function () {
 function loadHeader() {
   const container = document.getElementById('header-container');
   if (!container) return;
-  fetch('/src/components/html/header.html')
-    .then(res => res.text())
+  
+  // Ruta relativa al header.html
+  fetch('components/html/header.html')
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.text();
+    })
     .then(html => {
       container.innerHTML = html;
+      
       // Carga el JS del header después de insertar el HTML
       const script = document.createElement('script');
-      script.src = '/src/components/js/header.js';
+      script.src = 'components/js/header.js';
       script.defer = true;
+      script.onerror = () => console.error('Error al cargar header.js');
       document.body.appendChild(script);
+      
       // Carga el CSS del header si no está ya cargado
       if (!document.querySelector('link[href*="header.css"]')) {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = '/src/components/css/header.css';
+        link.href = 'components/css/header.css';
+        link.onerror = () => console.error('Error al cargar header.css');
         document.head.appendChild(link);
       }
+      
+      // Inicializa el modo oscuro después de cargar el header
+      initDarkModeHeader();
+    })
+    .catch(error => {
+      console.error('Error cargando el header:', error);
     });
 }
 document.addEventListener('DOMContentLoaded', loadHeader);
 // For dynamic header: re-inicializa modo oscuro tras cargar el header
 function initDarkModeHeader() {
   const html = document.documentElement;
+  
   function setDarkMode(on) {
     if (on) {
       html.setAttribute('data-theme', 'dark');
