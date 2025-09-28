@@ -1,0 +1,69 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "public/**", "use": "@vercel/static" },
+    { "src": "api/_middleware.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/_middleware"
+    },
+    {
+      "src": "/",
+      "dest": "/public/pages/index.html"
+    },
+    {
+      "src": "/about",
+      "dest": "/public/pages/about.html"
+    },
+    {
+      "src": "/blog",
+      "dest": "/public/pages/blog.html"
+    },
+    {
+      "src": "/contact",
+      "dest": "/public/pages/contact.html"
+    },
+    {
+      "src": "/donate",
+      "dest": "/public/pages/donate.html"
+    },
+    {
+      "src": "/headerauthtest",
+      "dest": "/public/pages/headerauthtest.html"
+    },
+    {
+      "src": "/login",
+      "dest": "/public/pages/login.html"
+    },
+    {
+      "src": "/map",
+      "dest": "/public/pages/map.html"
+    },
+    {
+      "src": "/privacypolicy",
+      "dest": "/public/pages/privacypolicy.html"
+    },
+    {
+      "src": "/profile",
+      "dest": "/public/pages/profile.html"
+    },
+    {
+      "src": "/register",
+      "dest": "/public/pages/register.html"
+    },
+    {
+      "src": "/termsandcondition",
+      "dest": "/public/pages/termsandcondition.html"
+    },
+    {
+      "src": "/volunteer",
+      "dest": "/public/pages/volunteer.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
+  ]
+}
