@@ -1,5 +1,17 @@
 {
+  "name": "aidsync-project",
+  "version": "1.0.0",
+  "description": "AidSync - Plataforma de donaciones y voluntariado",
+  "main": "api/_middleware.js",
+  "scripts": {
+    "start": "node api/_middleware.js"
+  },
   "dependencies": {
-    "firebase": "^12.1.0"
+    "firebase": "^12.1.0",
+    "http-proxy-middleware": "^2.0.6",
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": ">=14.x"
   }
 }

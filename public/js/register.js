@@ -1,36 +1,36 @@
 // Configuración de Firebase JS para fallback si el backend falla
-// Las configuraciones se cargan desde el backend de forma segura
+// Importar configuración
+import { currentConfig } from './config.js';
 
+// Las configuraciones se cargan desde el backend de forma segura
 let firebaseConfig = null;
-let backendUrl = null;
+
+// Usar la configuración actual
+const backendUrl = currentConfig.backendUrl + currentConfig.apiPrefix;
 
 async function loadConfig() {
     try {
-        const response = await fetch('http://localhost:5000/api/config');
+        const response = await fetch(`${currentConfig.backendUrl}/api/config`);
         const config = await response.json();
         firebaseConfig = config.firebase;
-        backendUrl = config.backend.url;
         console.log('✅ Configuraciones cargadas desde backend');
         initializeFirebase();
     } catch (error) {
-        console.warn('⚠️ No se pudo cargar configuraciones del backend, usando valores por defecto');
-        // Configuración por defecto (fallback)
-        // Firebase v8
+        console.error('Error cargando configuraciones:', error);
+        // Configuración de respaldo
         firebaseConfig = {
-            apiKey: "AIzaSyAJ395j9EL5Nv81Q70Csc4zRKNp5e1Xrjo",
+            apiKey: "AIzaSyC9Qx2G3K0Q8Q9XQ4Q5Q6Q7Q8Q9Q0Q1Q2Q",
             authDomain: "expo-project-1040e.firebaseapp.com",
-            projectId: "expo-project-1040e",
+            projectId: "expo-project-1040e"
         };
-        backendUrl = 'http://localhost:5000';
-        initializeFirebase();
-    }
-}
-
-function initializeFirebase() {
-    if (typeof firebase !== 'undefined' && firebase.apps && !firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    } else if (typeof firebase !== 'undefined' && !firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
+        
+        // Inicializar Firebase
+        if (typeof firebase !== 'undefined') {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            initializeFirebase();
+        }
     }
 }
 
