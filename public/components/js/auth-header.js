@@ -45,6 +45,16 @@
     
     this.setupEvents();
     this.initAuth();
+    
+    // Configurar logout alternativo después de un delay
+    setTimeout(() => {
+      this.setupLogoutAlternative();
+    }, 200);
+    
+    // Actualizar nombre del usuario después de un delay
+    setTimeout(() => {
+      this.updateUserName();
+    }, 300);
   }
 
   AuthHeader.DEFAULT_AVATAR = '/public/assets/img/default-avatar.png';
@@ -134,15 +144,64 @@
 
   AuthHeader.prototype.setupEvents = function () {
     console.log('🔧 Setting up events, logoutBtn found:', !!this.logoutBtn);
+    console.log('🔧 Logout button element:', this.logoutBtn);
+    console.log('🔧 Root element:', this.root);
+    
+    // Buscar el botón de logout en el DOM
+    const logoutBtn = this.root.querySelector('#headerLogoutBtn');
+    console.log('🔧 Direct DOM search for logout button:', !!logoutBtn);
+    console.log('🔧 All buttons in root:', this.root.querySelectorAll('button'));
+    console.log('🔧 All elements with logout in ID:', this.root.querySelectorAll('[id*="logout"]'));
+    
+    if (logoutBtn) {
+      this.logoutBtn = logoutBtn;
+      console.log('🔧 Found logout button, setting up events');
+    }
+    
     if (this.logoutBtn) {
       console.log('🔧 Adding click listener to logout button');
+      console.log('🔧 Button ID:', this.logoutBtn.id);
+      console.log('🔧 Button classes:', this.logoutBtn.className);
+      
+      // Remover cualquier listener previo
+      this.logoutBtn.removeEventListener('click', this.handleLogout);
+      
+      // Agregar listener de click
       this.logoutBtn.addEventListener('click', (e) => {
         console.log('🔧 Logout button clicked!');
         e.preventDefault();
+        e.stopPropagation();
         this.handleLogout();
+      });
+      
+      // También agregar un listener de mouse para debug
+      this.logoutBtn.addEventListener('mouseenter', () => {
+        console.log('🔧 Logout button hover detected');
+      });
+      
+      // Verificar que el botón sea clickeable
+      console.log('🔧 Button clickable:', !this.logoutBtn.disabled);
+      console.log('🔧 Button style:', window.getComputedStyle(this.logoutBtn).cursor);
+      
+      // Agregar listener de mousedown para debug
+      this.logoutBtn.addEventListener('mousedown', () => {
+        console.log('🔧 Logout button mousedown detected');
       });
     } else {
       console.warn('🔧 Logout button not found!');
+      console.warn('🔧 Available elements:', document.querySelectorAll('[id*="logout"], [class*="logout"]'));
+      
+      // Intentar encontrar el botón después de un delay
+      setTimeout(() => {
+        const retryBtn = this.root.querySelector('#headerLogoutBtn');
+        if (retryBtn) {
+          console.log('🔧 Retry: Found logout button, setting up events');
+          this.logoutBtn = retryBtn;
+          this.setupEvents();
+        } else {
+          console.error('🔧 Retry failed: Still no logout button found');
+        }
+      }, 100);
     }
     
     window.addEventListener('as:user-updated', () => this.refreshFromStorage());
@@ -225,10 +284,23 @@
     const norm = this.normalizeUser(user, stored);
     
     console.log('📝 Normalized user:', norm);
+    console.log('📝 Name element found:', !!this.nameEl);
+    console.log('📝 Name element:', this.nameEl);
     
     if (this.nameEl) {
       this.nameEl.textContent = norm.displayName;
       console.log('📝 Set header name:', norm.displayName);
+      console.log('📝 Name element content after setting:', this.nameEl.textContent);
+    } else {
+      console.warn('📝 Name element not found!');
+      // Intentar encontrar el elemento directamente
+      const nameEl = document.querySelector('#rightUserName');
+      if (nameEl) {
+        console.log('📝 Found name element via direct search, setting content');
+        nameEl.textContent = norm.displayName;
+      } else {
+        console.warn('📝 Name element not found via direct search either');
+      }
     }
     
     this.safeSetAvatar(this.avatarEl, norm.photoURL);
@@ -347,7 +419,70 @@
       console.warn('Storage cleanup error:', e);
     }
     
-    window.location.href = '../index.html';
+    // Determinar la ruta correcta según la ubicación de la página
+    const isInPagesFolder = window.location.pathname.includes('/pages/');
+    const redirectPath = isInPagesFolder ? '../index.html' : 'index.html';
+    console.log('🔧 Redirecting to:', redirectPath);
+    window.location.href = redirectPath;
+  };
+
+  // Método alternativo para configurar logout
+  AuthHeader.prototype.setupLogoutAlternative = function () {
+    console.log('🔧 Setting up alternative logout method');
+    
+    // Buscar el botón de logout en todo el documento
+    const logoutBtn = document.querySelector('#headerLogoutBtn');
+    console.log('🔧 Alternative search for logout button:', !!logoutBtn);
+    
+    if (logoutBtn) {
+      console.log('🔧 Found logout button via alternative method');
+      
+      // Remover cualquier listener previo
+      logoutBtn.removeEventListener('click', this.handleLogout);
+      
+      // Agregar listener de click
+      logoutBtn.addEventListener('click', (e) => {
+        console.log('🔧 Alternative logout button clicked!');
+        e.preventDefault();
+        e.stopPropagation();
+        this.handleLogout();
+      });
+      
+      console.log('🔧 Alternative logout listener added');
+    } else {
+      console.warn('🔧 Alternative method: Logout button not found');
+    }
+  };
+
+  // Método para actualizar el nombre del usuario
+  AuthHeader.prototype.updateUserName = function () {
+    console.log('📝 Updating user name...');
+    
+    // Buscar el elemento de nombre
+    const nameEl = document.querySelector('#rightUserName');
+    console.log('📝 Name element found:', !!nameEl);
+    
+    if (nameEl) {
+      // Obtener datos del usuario
+      const stored = this.getStoredUser();
+      console.log('📝 Stored user data:', stored);
+      
+      if (stored) {
+        const norm = this.normalizeUser(stored, stored);
+        console.log('📝 Normalized user for name update:', norm);
+        
+        if (norm.displayName && norm.displayName !== 'User') {
+          nameEl.textContent = norm.displayName;
+          console.log('📝 Updated header name to:', norm.displayName);
+        } else {
+          console.warn('📝 No valid display name found');
+        }
+      } else {
+        console.warn('📝 No stored user data found');
+      }
+    } else {
+      console.warn('📝 Name element not found for update');
+    }
   };
 
   AuthHeader.prototype.refreshFromStorage = function () {
@@ -368,6 +503,9 @@
       } 
     };
     
+    console.log('🔍 Normalizing user - Firebase user:', u);
+    console.log('🔍 Normalizing user - Stored user:', s);
+    
     // PRIORIDAD ABSOLUTA: username de RTDB
     var username = this.pick(
       get(s, 'username'),     // localStorage username
@@ -379,8 +517,11 @@
       get(u, 'email')         // fallback email
     );
     
+    console.log('🔍 Found username:', username);
+    
     if (typeof username === 'string' && username.indexOf('@') !== -1) {
       username = username.split('@')[0];
+      console.log('🔍 Cleaned username (removed @):', username);
     }
     
     // PRIORIDAD ABSOLUTA: foto_url de RTDB
@@ -393,10 +534,13 @@
       get(u, 'avatarUrl')     // firebase user avatarUrl
     );
     
-    return { 
+    const result = { 
       displayName: (username && username.trim()) || 'User', 
       photoURL: photoURL || AuthHeader.DEFAULT_AVATAR 
     };
+    
+    console.log('🔍 Final normalized user result:', result);
+    return result;
   };
 
   AuthHeader.prototype.pick = function () {
@@ -485,19 +629,182 @@
       var parse = function (s) { 
         try { return JSON.parse(s); } catch (e) { return null; } 
       };
-      var raw = localStorage.getItem('as_user') || localStorage.getItem('user');
-      var u = raw ? parse(raw) : null;
-      if (u) return u;
       
+      console.log('🔍 getStoredUser - Checking localStorage...');
+      
+      var raw = localStorage.getItem('as_user') || localStorage.getItem('user');
+      console.log('🔍 getStoredUser - Raw data from localStorage:', raw);
+      
+      var u = raw ? parse(raw) : null;
+      console.log('🔍 getStoredUser - Parsed user data:', u);
+      
+      if (u) {
+        console.log('🔍 getStoredUser - Found user in localStorage');
+        return u;
+      }
+      
+      console.log('🔍 getStoredUser - Checking Firebase tokens...');
       for (var i = 0; i < localStorage.length; i++) {
         var k = localStorage.key(i);
         if (k && k.indexOf('firebase:authUser:') === 0) {
+          console.log('🔍 getStoredUser - Found Firebase token:', k);
           var fu = parse(localStorage.getItem(k));
-          if (fu) return fu;
+          if (fu) {
+            console.log('🔍 getStoredUser - Firebase user data:', fu);
+            return fu;
+          }
         }
       }
+      
+      console.log('🔍 getStoredUser - No user found');
       return null;
-    } catch (_) { return null; }
+    } catch (e) { 
+      console.error('🔍 getStoredUser - Error:', e);
+      return null;
+    }
+  };
+
+// Función global para manejar logout
+window.handleGlobalLogout = function() {
+  console.log('🔧 Global logout function called');
+  
+  // Cleanup Firebase
+  try { 
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+      firebase.auth().signOut();
+    }
+  } catch (e) {
+    console.warn('Firebase signOut error:', e);
+  }
+  
+  // Cleanup storage
+  try {
+    localStorage.removeItem('user'); 
+    localStorage.removeItem('as_user'); 
+    localStorage.removeItem('idToken');
+    localStorage.removeItem('uid');
+    sessionStorage.removeItem('user'); 
+    sessionStorage.removeItem('as_user');
+  } catch (e) {
+    console.warn('Storage cleanup error:', e);
+  }
+  
+  // Redireccionar
+  const isInPagesFolder = window.location.pathname.includes('/pages/');
+  const redirectPath = isInPagesFolder ? '../index.html' : 'index.html';
+  console.log('🔧 Global logout redirecting to:', redirectPath);
+  window.location.href = redirectPath;
+};
+
+// Función global para actualizar el nombre del usuario
+window.updateHeaderUserName = function() {
+  console.log('📝 Global function: Updating header user name...');
+  
+  // Buscar el elemento de nombre
+  const nameEl = document.querySelector('#rightUserName');
+  console.log('📝 Global: Name element found:', !!nameEl);
+  
+  if (nameEl) {
+    // Obtener datos del usuario del localStorage
+    const userData = localStorage.getItem('as_user') || localStorage.getItem('user');
+    console.log('📝 Global: Raw user data:', userData);
+    
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        console.log('📝 Global: Parsed user data:', user);
+        
+        // Usar username, displayName, nombre o email como fallback
+        const displayName = user.username || user.displayName || user.nombre || user.email || 'User';
+        console.log('📝 Global: Display name to set:', displayName);
+        
+        nameEl.textContent = displayName;
+        console.log('📝 Global: Updated header name to:', displayName);
+      } catch (e) {
+        console.warn('📝 Global: Error parsing user data:', e);
+        nameEl.textContent = 'User';
+      }
+    } else {
+      console.warn('📝 Global: No user data found in localStorage');
+      nameEl.textContent = 'User';
+    }
+  } else {
+    console.warn('📝 Global: Name element not found');
+  }
+};
+
+// Función para forzar la actualización del username
+window.forceUpdateUsername = function() {
+  console.log('🔧 Force updating username...');
+  
+  // Buscar el elemento
+  const nameEl = document.querySelector('#rightUserName');
+  console.log('🔧 Name element found:', !!nameEl);
+  
+  if (nameEl) {
+    // Obtener datos del usuario
+    const userData = localStorage.getItem('as_user') || localStorage.getItem('user');
+    console.log('🔧 User data from localStorage:', userData);
+    
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        console.log('🔧 Parsed user:', user);
+        
+        // Determinar el nombre a mostrar
+        let displayName = 'User';
+        if (user.username) {
+          displayName = user.username;
+        } else if (user.displayName) {
+          displayName = user.displayName;
+        } else if (user.nombre) {
+          displayName = user.nombre;
+        } else if (user.email) {
+          displayName = user.email.split('@')[0]; // Solo la parte antes del @
+        }
+        
+        console.log('🔧 Setting display name to:', displayName);
+        nameEl.textContent = displayName;
+        console.log('🔧 Name element content after setting:', nameEl.textContent);
+      } catch (e) {
+        console.error('🔧 Error parsing user data:', e);
+        nameEl.textContent = 'User';
+      }
+    } else {
+      console.warn('🔧 No user data found in localStorage');
+      nameEl.textContent = 'User';
+    }
+  } else {
+    console.warn('🔧 Name element not found');
+  }
+};
+
+// Función para observar cambios en el DOM y actualizar el username
+window.observeUsernameChanges = function() {
+  console.log('🔧 Setting up username observer...');
+  
+  // Crear un observer para detectar cuando se agrega el elemento
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'childList') {
+        const nameEl = document.querySelector('#rightUserName');
+        if (nameEl && nameEl.textContent === 'User') {
+          console.log('🔧 Username element detected, updating...');
+          setTimeout(() => {
+            window.forceUpdateUsername();
+          }, 100);
+        }
+      }
+    });
+  });
+  
+  // Observar cambios en el documento
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+  
+  console.log('🔧 Username observer set up');
   };
 
   // Bootstrap
@@ -506,11 +813,31 @@
       if (document.getElementById('authHeader') && !window.authHeader) {
         window.authHeader = new AuthHeader(document);
       }
+    
+    // Configurar observer de username
+    if (window.observeUsernameChanges) {
+      window.observeUsernameChanges();
+    }
+    
+    // Forzar actualización del username después de un delay
+    setTimeout(() => {
+      window.forceUpdateUsername();
+    }, 500);
     });
   } else {
     if (document.getElementById('authHeader') && !window.authHeader) {
       window.authHeader = new AuthHeader(document);
     }
+  
+  // Configurar observer de username
+  if (window.observeUsernameChanges) {
+    window.observeUsernameChanges();
+  }
+  
+  // Forzar actualización del username después de un delay
+  setTimeout(() => {
+    window.forceUpdateUsername();
+  }, 500);
   }
 
   // Cleanup al destruir

@@ -223,19 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-// Cargar header-loader para manejo inteligente del header
-document.addEventListener('DOMContentLoaded', () => {
-  // Cargar el header-loader si no está ya cargado
-  if (!window.loadHeader) {
-    const script = document.createElement('script');
-    script.src = 'js/header-loader.js';
-    script.defer = true;
-    script.onload = () => {
-      // El header se cargará automáticamente cuando se cargue header-loader.js
-    };
-    document.body.appendChild(script);
-  }
-});
+// El header se maneja directamente en index.html con header-loader.js
 // For dynamic header: re-inicializa modo oscuro tras cargar el header
 function initDarkModeHeader() {
   const html = document.documentElement;

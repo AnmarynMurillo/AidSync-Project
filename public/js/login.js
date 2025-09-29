@@ -127,6 +127,35 @@ document.addEventListener('DOMContentLoaded', function() {
                     localStorage.setItem('idToken', pythonRes.idToken);
                     try { const uid = decodeUidFromJwt(pythonRes.idToken); if (uid) localStorage.setItem('uid', uid); } catch(e){}
                 }
+                // Obtener datos del usuario de Firebase para el header
+                try {
+                    const uid = decodeUidFromJwt(pythonRes.idToken);
+                    if (uid && firebase.database) {
+                        const userRef = firebase.database().ref('users/' + uid);
+                        userRef.once('value', (snapshot) => {
+                            const userData = snapshot.val();
+                            if (userData) {
+                                localStorage.setItem('as_user', JSON.stringify({
+                                    uid: uid,
+                                    email: email,
+                                    username: userData.username || userData.nombre || email.split('@')[0],
+                                    displayName: userData.username || userData.nombre || email.split('@')[0],
+                                    nombre: userData.nombre || userData.username
+                                }));
+                            } else {
+                                localStorage.setItem('as_user', JSON.stringify({
+                                    uid: uid,
+                                    email: email,
+                                    username: email.split('@')[0],
+                                    displayName: email.split('@')[0]
+                                }));
+                            }
+                        });
+                    }
+                } catch (e) {
+                    console.warn('Error getting user data from Firebase:', e);
+                }
+                
                 localStorage.setItem('user', JSON.stringify({ email }));
                 status.textContent = 'Login successful! Redirecting...';
                 status.classList.remove('error');
@@ -147,6 +176,35 @@ document.addEventListener('DOMContentLoaded', function() {
                     const uid = decodeUidFromJwt(token);
                     if (uid) localStorage.setItem('uid', uid);
                 } catch (e) { console.warn('No idToken from firebase:', e); }
+                // Obtener datos del usuario de Firebase para el header
+                try {
+                    const uid = firebaseRes.user.uid;
+                    if (firebase.database) {
+                        const userRef = firebase.database().ref('users/' + uid);
+                        userRef.once('value', (snapshot) => {
+                            const userData = snapshot.val();
+                            if (userData) {
+                                localStorage.setItem('as_user', JSON.stringify({
+                                    uid: uid,
+                                    email: firebaseRes.user.email,
+                                    username: userData.username || userData.nombre || firebaseRes.user.email.split('@')[0],
+                                    displayName: userData.username || userData.nombre || firebaseRes.user.email.split('@')[0],
+                                    nombre: userData.nombre || userData.username
+                                }));
+                            } else {
+                                localStorage.setItem('as_user', JSON.stringify({
+                                    uid: uid,
+                                    email: firebaseRes.user.email,
+                                    username: firebaseRes.user.email.split('@')[0],
+                                    displayName: firebaseRes.user.email.split('@')[0]
+                                }));
+                            }
+                        });
+                    }
+                } catch (e) {
+                    console.warn('Error getting user data from Firebase:', e);
+                }
+                
                 localStorage.setItem('user', JSON.stringify({ email: firebaseRes.user.email }));
                 status.textContent = 'Login successful! Redirecting...';
                 status.classList.remove('error');

@@ -134,6 +134,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     localStorage.setItem('idToken', token);
                     const uid = (function(t){ try{const p=JSON.parse(atob(t.split('.')[1])); return p.user_id||p.uid||null;}catch(_){return null;} })(token);
                     if (uid) localStorage.setItem('uid', uid);
+                    
+                    // Guardar datos del usuario en localStorage para el header
+                    localStorage.setItem('as_user', JSON.stringify({
+                        uid: uid,
+                        email: email,
+                        username: username,
+                        displayName: username,
+                        nombre: name
+                    }));
                 } catch(_){}
                 msg.textContent = 'Successful register. Redirecting...';
                 msg.classList.remove('error'); msg.classList.add('success');
