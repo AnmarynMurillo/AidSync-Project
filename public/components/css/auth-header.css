@@ -1,6 +1,6 @@
 /* Auth Header Styles - Matches main header with authenticated user specific styles */
 #authHeader.as-header {
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 1000;
   width: 100%;

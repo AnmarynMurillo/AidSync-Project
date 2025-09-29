@@ -1210,6 +1210,207 @@ h2, h3 {
 [data-theme="dark"] .foundation-name,
 [data-theme="dark"] .submit-btn,
 [data-theme="dark"] .area-card.education .join-btn { color: var(--color-primary) !important; }
+
+/* ==========================================================================
+   Responsive Design - Mobile First Enhancements
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    /* General Body & Typography */
+    body {
+        padding: 0;
+    }
+
+    h2, .h2 {
+        font-size: 2rem;
+    }
+
+    h3, .h3 {
+        font-size: 1.5rem;
+    }
+
+    section {
+        padding: 40px 20px;
+    }
+
+    /* Hero Carousel */
+    .hero-carousel {
+        min-height: 100vh; /* Ocupa toda la altura de la pantalla */
+        height: 100vh;
+        width: 100vw; /* Ocupa todo el ancho del viewport */
+        margin: 0; /* Asegura que no haya márgenes */
+    }
+
+    .carousel-container,
+    .carousel-slide,
+    .carousel-image {
+        height: 100vh; /* Ocupa toda la altura de la pantalla */
+        width: 100%;
+    }
+
+    .carousel-overlay-content {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 500px;
+        padding: 1.5rem;
+        text-align: center;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 12px;
+    }
+
+    .carousel-title {
+        font-size: 2.2rem;
+        line-height: 1.2;
+    }
+
+    .carousel-desc {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .carousel-btns {
+        flex-direction: row; /* Botones en horizontal */
+        justify-content: center;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .carousel-btn {
+        width: auto; /* Ancho automático para los botones */
+        flex-grow: 1;
+        max-width: 200px;
+    }
+
+    /* What We Do Section */
+    .what-we-do-flex {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 0 20px;
+    }
+
+    .what-we-do-left, .what-we-do-right {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .what-we-do-left {
+        align-items: center;
+    }
+
+    .what-we-do-title {
+        font-size: 1.8rem;
+    }
+
+    .what-we-do-right {
+        font-size: 1rem;
+    }
+
+    /* Areas We Support */
+    .areas-support h2 {
+        font-size: 2rem;
+    }
+    .areas-cards {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .area-card {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    /* Foundations We Support */
+    .foundations-support {
+        margin: 2.5rem 0;
+        border-radius: 0;
+        padding: 40px 0;
+    }
+
+    .foundations-support h2 {
+        font-size: 2rem;
+    }
+
+    .foundation-cards {
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding: 0 20px;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+    }
+
+    .foundation-card {
+        scroll-snap-align: center;
+    }
+
+    .foundation-arrow {
+        display: none; /* Hide arrows on mobile, rely on swipe */
+    }
+
+    /* FAQ Section */
+    .impact-faq {
+        flex-direction: column;
+        margin: 2rem 20px;
+        border-radius: 2rem;
+    }
+
+    .faq-visual {
+        min-height: 200px;
+        padding: 2rem 0;
+    }
+
+    .faq-big {
+        font-size: 4rem;
+    }
+
+    .faq-content {
+        padding: 2rem 1.5rem;
+    }
+
+    .faq-title {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    .faq-question {
+        font-size: 1rem;
+    }
+
+    .faq-answer {
+        font-size: 0.95rem;
+    }
+
+    /* Contact Section */
+    .contact-section {
+        flex-direction: column;
+        margin: 2.5rem 0;
+        border-radius: 0;
+        padding: 40px 20px;
+    }
+
+    .contact-info {
+        max-width: 100%;
+        padding: 0;
+        text-align: center;
+    }
+
+    .contact-title {
+        font-size: 1.8rem;
+    }
+
+    .contact-form {
+        padding: 1.5rem;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+}
 [data-theme="dark"] .area-card.health .join-btn { color: var(--color-health) !important; }
 [data-theme="dark"] .area-card.environment .join-btn { color: var(--color-accent) !important; }
 [data-theme="dark"] .area-card.social-welfare .join-btn { color: var(--color-social) !important; }

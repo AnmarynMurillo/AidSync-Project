@@ -55,7 +55,7 @@
       const header = this.root.querySelector('#authHeader');
       if (header) {
         // Aplicar estilos inline como fallback inmediato
-        header.style.cssText = 'height:60px!important;min-height:60px!important;max-height:60px!important;background:linear-gradient(135deg,#0e5a8a 0%,#0ea5a6 100%)!important;position:sticky!important;top:0;z-index:1000;width:100%!important;box-shadow:0 2px 8px rgba(0,0,0,.1)';
+        header.style.cssText = 'height:60px!important;min-height:60px!important;max-height:60px!important;background:linear-gradient(135deg,#0e5a8a 0%,#0ea5a6 100%)!important;position:fixed!important;top:0;z-index:1000;width:100%!important;box-shadow:0 2px 8px rgba(0,0,0,.1)';
         
         const container = this.root.querySelector('.as-header__container');
         if (container) {
@@ -421,19 +421,18 @@
     try {
       const isShadow = !!(this.root && this.root.host);
       const container = isShadow ? this.root : document.head;
-
       // CSS crítico mejorado
       if (!(container.querySelector && container.querySelector('#as-header-critical-css'))) {
         const critical = document.createElement('style');
         critical.id = 'as-header-critical-css';
         critical.textContent = `
-          #authHeader{height:60px!important;min-height:60px!important;max-height:60px!important;background:linear-gradient(135deg,#0e5a8a 0%,#0ea5a6 100%)!important;position:sticky!important;top:0;z-index:1000;width:100%!important}
+          #authHeader{height:60px!important;min-height:60px!important;max-height:60px!important;background:linear-gradient(135deg,#0e5a8a 0%,#0ea5a6 100%)!important;position:fixed!important;top:0;z-index:1000;width:100%!important}
           #authHeader .as-header__container{height:60px!important;padding:0 1rem!important;display:flex!important;align-items:center!important;justify-content:space-between!important;max-width:1280px;margin:0 auto;position:relative}
           #authHeader .as-header__nav-list{list-style:none!important;margin:0!important;padding:0!important;display:flex!important;gap:1rem!important}
           #authHeader .as-header__nav-link{text-decoration:none!important;color:#fff!important;font-size:14px!important;padding:.3rem .6rem!important}
           #authHeader .as-header__user{display:none!important;align-items:center!important;gap:.6rem!important}
           #authHeader .as-header__user-avatar{width:32px!important;height:32px!important;border-radius:50%!important}
-          #authHeader .as-header__user-name{color:#fff!important;font-size:13px!important;max-width:120px!important}
+{{ ... }}
           #authHeader .as-header__user-logout{font-size:12px!important;padding:.25rem .6rem!important;background:transparent!important;color:#fff!important;border:2px solid rgba(255,255,255,.9)!important}
         `;
         container.appendChild(critical);

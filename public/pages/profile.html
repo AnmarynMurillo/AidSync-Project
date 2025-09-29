@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Profile | AidSync</title>
   <link rel="stylesheet" href="../css/profile.css">
+  <link rel="stylesheet" href="../components/css/footer.css">
   <link rel="icon" href="../assets/logos/logito.ico" type="image/x-icon">
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -124,6 +125,9 @@
     </div>
   </main>
 
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
   <script src="../js/profile.js"></script>
   <script>
     // Cargar auth-header SIN Shadow DOM para usar CSS normal
@@ -168,6 +172,30 @@
     if(changeBtn && inputEl && formEl){
       changeBtn.addEventListener('click', function(){ inputEl.click(); });
       inputEl.addEventListener('change', function(){ if(this.files && this.files[0]){ formEl.requestSubmit(); } });
+    }
+  </script>
+
+  <!-- Load Components -->
+  <script>
+    // Function to load components
+    async function loadComponents() {
+      try {
+        // Load footer
+        const footerResponse = await fetch('/public/components/html/footer.html');
+        document.getElementById('footer-container').innerHTML = await footerResponse.text();
+
+        // Footer styles are already included via a static <link> in <head>
+
+      } catch (error) {
+        console.error('Error loading components:', error);
+      }
+    }
+
+    // Load components when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadComponents);
+    } else {
+      loadComponents();
     }
   </script>
 </body>
