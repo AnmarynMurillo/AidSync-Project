@@ -395,3 +395,34 @@
   margin-bottom: 0.7rem;
   text-transform: uppercase;
 }
+
+/* Responsive Styles for Volunteer Page Banner */
+@media (max-width: 768px) {
+    .hero-carousel {
+        min-height: 60vh;
+        height: 60vh;
+    }
+
+    .carousel-container,
+    .carousel-slide,
+    .carousel-image {
+        height: 60vh;
+    }
+
+    .carousel-overlay-content {
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 500px;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .carousel-title {
+        font-size: 2rem;
+    }
+
+    .carousel-arrow {
+        display: none; /* Ocultar flechas en móvil */
+    }
+}
