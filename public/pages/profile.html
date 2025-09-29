@@ -1,55 +1,127 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <link rel="stylesheet" href="../css/profile.css">
-    <link rel="icon" href="../assets/logos/logito.ico" type="image/x-icon">
-    <!-- Firebase v8 en orden correcto -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Profile</title>
-  <link rel="stylesheet" href="/public/css/profile.css">
-  <link rel="icon" href="/public/assets/logos/logito.ico" type="image/x-icon">
-  <!-- Firebase v8 en orden correcto -->
+  <title>User Profile | AidSync</title>
+  <link rel="stylesheet" href="../css/profile.css">
+  <link rel="icon" href="../assets/logos/logito.ico" type="image/x-icon">
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+  <!-- Chart.js for statistics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <!-- Header -->
   <div id="header-container"></div>
 
-  <main class="profile-main">
-    <section class="profile-section">
-      <h1>Profile</h1>
-      <div id="profileContainer">
+  <main class="profile-container">
+    <!-- Left Sidebar -->
+    <aside class="profile-sidebar">
+      <div class="profile-card">
         <div class="profile-avatar">
-          <img id="profilePic" class="profile-pic" src="/public/assets/img/default-avatar.png" alt="Foto de perfil" width="150" height="150">
-          <form id="photoForm" enctype="multipart/form-data" class="photo-form">
-            <input type="file" id="photoInput" accept="image/*" style="display:none">
-            <button type="button" class="change-photo-btn" id="changePhotoBtn">Change image</button>
+          <img id="profilePic" class="profile-pic" src="/public/assets/img/default-avatar.png" alt="Profile Photo">
+          <button type="button" class="change-photo-btn" id="changePhotoBtn">
+            <span class="btn-icon">📷</span> Change Photo
+          </button>
+          <form id="photoForm" enctype="multipart/form-data" style="display: none;">
+            <input type="file" id="photoInput" accept="image/*">
           </form>
         </div>
-        <dl class="profile-dl">
-          <dt>Username</dt><dd id="pf-username">-</dd>
-          <dt>Full name</dt><dd id="pf-name">-</dd>
-          <dt>Age</dt><dd id="pf-age">-</dd>
-          <dt>Volunteering Area</dt><dd id="pf-area">-</dd>
-          <dt>Email</dt><dd id="pf-email">-</dd>
-          <dt>Account Type</dt><dd id="pf-accountType">-</dd>
-        </dl>
-        <div id="profile-status" class="profile-status"></div>
+        
+        <div class="profile-info">
+          <h2 id="pf-name">Loading...</h2>
+          <span class="profile-role" id="pf-accountType">Loading...</span>
+          <span class="profile-status" id="profile-status">Inactive</span>
+          
+          <div class="profile-contact">
+            <div class="contact-item">
+              <span class="icon">👤</span>
+              <span id="pf-username">Loading...</span>
+            </div>
+            <div class="contact-item">
+              <span class="icon">✉️</span>
+              <span id="pf-email">Loading...</span>
+            </div>
+            <div class="contact-item">
+              <span class="icon">🎂</span>
+              <span id="pf-age">Loading...</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="profile-stats">
+          <div class="stat-item">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Horas</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Eventos</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Logros</span>
+          </div>
+        </div>
       </div>
-    </section>
+      
+      <div class="volunteer-areas">
+        <h3>Volunteer Areas</h3>
+        <div class="tags" id="pf-areas">
+          <!-- Volunteer areas will be loaded dynamically -->
+          <span class="no-data">Loading...</span>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <div class="profile-content">
+      <!-- Upcoming Events -->
+      <section class="content-section">
+        <div class="section-header">
+          <h2>Upcoming Events</h2>
+          <a href="#" class="view-all">View All</a>
+        </div>
+        <div class="events-grid" id="events-container">
+          <div class="no-events">
+            <p>No upcoming events</p>
+            <a href="/public/pages/events.html" class="btn-primary">Explore events</a>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Recent Activity -->
+      <section class="content-section">
+        <div class="section-header">
+          <h2>Recent Activity</h2>
+          <a href="#" class="view-all">View All</a>
+        </div>
+        <div class="activity-timeline" id="activity-timeline">
+          <div class="no-activities">
+            <p>No activities yet</p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Hours Chart -->
+      <section class="content-section">
+        <div class="section-header">
+          <h2>Volunteer Hours</h2>
+          <div class="time-filter">
+            <button class="filter-btn active">Month</button>
+            <button class="filter-btn">Year</button>
+            <button class="filter-btn">All Time</button>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="hoursChart"></canvas>
+        </div>
+      </section>
+    </div>
   </main>
 
   <script src="../js/profile.js"></script>
@@ -100,4 +172,5 @@
   </script>
 </body>
 </html>
+
 

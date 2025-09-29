@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 } catch(_){}
                 msg.textContent = 'Successful register. Redirecting...';
                 msg.classList.remove('error'); msg.classList.add('success');
-                setTimeout(() => window.location.assign('/public/pages/profile.html'), 1000);
+                setTimeout(() => window.location.assign('../public/pages/profile.html'), 1000);
             } catch (firebaseErr) {
                 msg.textContent = 'Error: ' + firebaseErr.message;
                 msg.classList.remove('success'); msg.classList.add('error');

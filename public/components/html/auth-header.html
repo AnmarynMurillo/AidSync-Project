@@ -1,72 +1,41 @@
-<!-- Auth Header Component -->
+<!-- Authenticated Header Component -->
 <header id="authHeader" class="as-header" role="banner">
   <div class="as-header__container">
-    <!-- Logo -->
-    <a href="/public/index.html" class="as-header__logo-link">
-      <img class="as-header__logo" src="/public/assets/logos/White_name.png" alt="AidSync Logo" decoding="async" fetchpriority="high" />
-    </a>
+    <!-- Logo Area -->
+    <div class="as-header__logo-area">
+      <a href="/public/index.html" class="as-header__logo-link">
+        <img class="as-header__logo" src="/public/assets/logos/White_name.png" alt="AidSync Logo" decoding="async" fetchpriority="high" />
+      </a>
+    </div>
 
-    <!-- Nav (center) -->
+    <!-- Main Navigation -->
     <nav class="as-header__nav" aria-label="Main navigation">
       <ul class="as-header__nav-list">
-        <li><a href="/public/pages/blog.html" class="as-header__nav-link">Blog</a></li>
-        <li><a href="/public/pages/volunteer.html" class="as-header__nav-link">Volunteer</a></li>
-        <li><a href="/public/pages/donate.html" class="as-header__nav-link">Donate</a></li>
-        <li><a href="/public/pages/about.html" class="as-header__nav-link">About</a></li>
-        <li><a href="/public/pages/profile.html" class="as-header__nav-link">Profile</a></li>
+        <li class="as-header__nav-item"><a href="/public/pages/blog.html" class="as-header__nav-link">Blog</a></li>
+        <li class="as-header__nav-item"><a href="/public/pages/volunteer.html" class="as-header__nav-link">Volunteer</a></li>
+        <li class="as-header__nav-item"><a href="/public/pages/donate.html" class="as-header__nav-link">Donate</a></li>
+        <li class="as-header__nav-item"><a href="/public/pages/about.html" class="as-header__nav-link">About</a></li>
+        <li class="as-header__nav-item"><a href="/public/pages/map.html" class="as-header__nav-link">Map</a></li>
       </ul>
     </nav>
 
-    <!-- Authenticated user only -->
+    <!-- User Actions -->
     <div class="as-header__user-actions">
-      <div class="as-header__user" id="asHeaderUser" style="display:none">
-        <img id="rightUserAvatar" class="as-header__user-avatar" src="/public/assets/img/default-avatar.png" alt="User avatar">
-        <span id="rightUserName" class="as-header__user-name">User</span>
-        <button id="headerLogoutBtn" class="as-header__user-logout" aria-label="Logout">Logout</button>
-      </div>
-    </div>
-  </div>
-</header>
-        <img id="rightUserAvatar" class="as-header__user-avatar" src="/public/assets/img/default-avatar.png" alt="User avatar">
-        <span id="rightUserName" class="as-header__user-name">User</span>
-        <button id="headerLogoutBtn" class="as-header__user-logout" aria-label="Logout">Logout</button>
-      </div>
-    </div>
-  </div>
-</header>
-        <li><a href="/public/pages/volunteer.html" class="as-header__nav-link">Volunteer</a></li>
-        <li><a href="/public/pages/donate.html" class="as-header__nav-link">Donate</a></li>
-        <li><a href="/public/pages/about.html" class="as-header__nav-link">About us</a></li>
-      </ul>
-    </nav>
-
-    <!-- Acciones (derecha) -->
-    <div class="as-header__user-actions">
-      <!-- Invitado -->
-      <div id="asHeaderGuest">
-        <a id="headerLoginLink" class="as-header__guest-link" href="/public/pages/login.html">Login</a>
-        <span class="as-header__guest-sep">/</span>
-        <a id="headerRegisterLink" class="as-header__guest-link" href="/public/pages/register.html">Register</a>
-      </div>
-      <!-- Usuario -->
-      <div class="as-header__user" id="asHeaderUser" style="display:none">
-        <img id="rightUserAvatar" class="as-header__user-avatar" src="/public/assets/img/default-avatar.png" alt="User avatar">
-        <span id="rightUserName" class="as-header__user-name">User</span>
-        <button id="headerLogoutBtn" class="as-header__user-logout" aria-label="Logout">Logout</button>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="as-header__user" id="asHeaderUser" style="display:none">
-        <img id="rightUserAvatar" class="as-header__user-avatar" src="/public/assets/img/default-avatar.png" alt="User avatar">
-        <span id="rightUserName" class="as-header__user-name">User</span>
-        <button id="headerLogoutBtn" class="as-header__user-logout" aria-label="Logout">Logout</button>
-      </div>
-    </div>
-  </div>
-</header>
-        <span id="rightUserName" class="as-header__user-name">User</span>
-        <button id="headerLogoutBtn" class="as-header__user-logout" aria-label="Logout">Logout</button>
+      <div class="as-header__user" id="asHeaderUser">
+        <div class="as-header__user-info">
+          <img id="rightUserAvatar" class="as-header__user-avatar" src="/public/assets/img/default-avatar.png" alt="User avatar">
+          <span id="rightUserName" class="as-header__user-name">User</span>
+        </div>
+        <button id="headerLogoutBtn" class="as-header__btn as-header__btn--logout" aria-label="Logout">
+          <span class="as-header__btn-text">Logout</span>
+          <span class="as-header__btn-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </span>
+        </button>
       </div>
     </div>
   </div>

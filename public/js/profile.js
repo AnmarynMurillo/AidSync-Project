@@ -609,7 +609,7 @@ async function mainLoadProfile() {
 // Asegúrate de usar mainLoadProfile() en DOMContentLoaded
 document.addEventListener('DOMContentLoaded', async () => {
     await mainLoadProfile();
-    // Suscripción en tiempo real a cambios de perfil mientras la sesión esté activa
+    // Suscripción en tiempo real a cambios de Perfil mientras la sesión esté activa
     try {
         if (typeof firebase !== 'undefined' && firebase.auth) {
             firebase.auth().onAuthStateChanged(async (user) => {
