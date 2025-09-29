@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Profile | AidSync</title>
+  <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="../css/profile.css">
   <link rel="stylesheet" href="../components/css/footer.css">
   <link rel="icon" href="../assets/logos/logito.ico" type="image/x-icon">
@@ -14,6 +15,25 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
   <!-- Chart.js for statistics -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Firebase Configuration -->
+  <script>
+    // Firebase configuration - using window object to avoid conflicts
+    window.firebaseConfig = {
+      apiKey: "AIzaSyAJ395j9EL5Nv81Q70Csc4zRKNp5e1Xrjo",
+      authDomain: "expo-project-1040e.firebaseapp.com",
+      databaseURL: "https://expo-project-1040e-default-rtdb.firebaseio.com",
+      projectId: "expo-project-1040e",
+      storageBucket: "expo-project-1040e.firebasestorage.app",
+      messagingSenderId: "813329495011",
+      appId: "1:813329495011:web:931d42531c471fe3e2e6d6",
+      measurementId: "G-QY0VQSB12F"
+    };
+    
+    // Initialize Firebase
+    if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+      firebase.initializeApp(window.firebaseConfig);
+    }
+  </script>
 </head>
 <body>
   <!-- Header -->
@@ -162,6 +182,73 @@
           window.authHeader = new window.AuthHeader(document);
         }
       } catch (e) { console.error('Auth header load error:', e); }
+    })();
+  </script>
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <script src="../js/profile.js"></script>
+  <script>
+    // Cargar auth-header SIN Shadow DOM para usar CSS normal
+    (async function loadAuthHeader(){
+      try {
+        const hc = document.getElementById('header-container');
+        
+        // Cargar HTML directamente (NO Shadow DOM)
+        const res = await fetch('/public/components/html/auth-header.html', { cache: 'no-cache' });
+        const html = await res.text();
+        hc.innerHTML = html;
+
+        // Cargar CSS en head normal
+        if (!document.querySelector('link[href*="auth-header.css"]')) {
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = '/public/components/css/auth-header.css';
+          document.head.appendChild(link);
+        }
+
+        // Cargar JS
+        if (!window.AuthHeader) {
+          await new Promise((resolve, reject) => {
+            const s = document.createElement('script');
+            s.src = '/public/components/js/auth-header.js';
+            s.onload = resolve; s.onerror = reject; document.body.appendChild(s);
+          });
+        }
+        
+        // Instanciar con document normal (NO Shadow DOM)
+        if (window.AuthHeader && !window.authHeader && document.getElementById('authHeader')) {
+          window.authHeader = new window.AuthHeader(document);
+        }
+      } catch (e) { console.error('Auth header load error:', e); }
+    })();
+
+    // Cargar footer
+    (async function loadFooter(){
+      try {
+        const fc = document.getElementById('footer-container');
+        
+        // Cargar HTML del footer
+        const res = await fetch('/public/components/html/footer.html', { cache: 'no-cache' });
+        const html = await res.text();
+        fc.innerHTML = html;
+
+        // Cargar CSS del footer en head normal
+        if (!document.querySelector('link[href*="footer.css"]')) {
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = '/public/components/css/footer.css';
+          document.head.appendChild(link);
+        }
+
+        // Cargar Font Awesome si no está cargado
+        if (!document.querySelector('link[href*="font-awesome"]')) {
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css';
+          document.head.appendChild(link);
+        }
+      } catch (e) { console.error('Footer load error:', e); }
     })();
   </script>
   <script>

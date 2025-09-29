@@ -82,13 +82,25 @@ function stopCarouselAuto() {
 
 // Inicializar al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
-  showCarouselSlide(currentSlide);
-  startCarouselAuto();
-
-  document.querySelector('.carousel-arrow.left').onclick = () => { prevCarouselSlide(); startCarouselAuto(); };
-  document.querySelector('.carousel-arrow.right').onclick = () => { nextCarouselSlide(); startCarouselAuto(); };
-  document.querySelector('.carousel-slide').onmouseenter = stopCarouselAuto;
-  document.querySelector('.carousel-slide').onmouseleave = startCarouselAuto;
+  // Solo inicializar carousel si los elementos existen
+  const carouselSlide = document.querySelector('.carousel-slide');
+  const leftArrow = document.querySelector('.carousel-arrow.left');
+  const rightArrow = document.querySelector('.carousel-arrow.right');
+  
+  if (carouselSlide) {
+    showCarouselSlide(currentSlide);
+    startCarouselAuto();
+    
+    if (leftArrow) {
+      leftArrow.onclick = () => { prevCarouselSlide(); startCarouselAuto(); };
+    }
+    if (rightArrow) {
+      rightArrow.onclick = () => { nextCarouselSlide(); startCarouselAuto(); };
+    }
+    
+    carouselSlide.onmouseenter = stopCarouselAuto;
+    carouselSlide.onmouseleave = startCarouselAuto;
+  }
 });
 
 // volunteer.js: Lógica para galería de voluntariados y modal

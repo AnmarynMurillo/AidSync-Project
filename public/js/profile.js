@@ -31,8 +31,8 @@ async function loadConfig() {
         imgbbKey = (cfg.imgbb && cfg.imgbb.apiKey) || resolveImgBBKey(); // use resolver fallback
         initializeFirebase();
     } catch (e) {
-        // Fallbacks if backend is unreachable
-        firebaseConfig = {
+        // Use window.firebaseConfig if available, otherwise use fallback
+        firebaseConfig = window.firebaseConfig || {
             apiKey: "AIzaSyAJ395j9EL5Nv81Q70Csc4zRKNp5e1Xrjo",
             authDomain: "expo-project-1040e.firebaseapp.com",
             databaseURL: "https://expo-project-1040e-default-rtdb.firebaseio.com",
