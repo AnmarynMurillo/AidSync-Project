@@ -223,46 +223,19 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-// Loader universal para el header
-function loadHeader() {
-  const container = document.getElementById('header-container');
-  if (!container) return;
-  
-  // Ruta relativa al header.html
-  fetch('components/html/header.html')
-    .then(res => {
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-      return res.text();
-    })
-    .then(html => {
-      container.innerHTML = html;
-      
-      // Carga el JS del header después de insertar el HTML
-      const script = document.createElement('script');
-      script.src = 'components/js/header.js';
-      script.defer = true;
-      script.onerror = () => console.error('Error al cargar header.js');
-      document.body.appendChild(script);
-      
-      // Carga el CSS del header si no está ya cargado
-      if (!document.querySelector('link[href*="header.css"]')) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'components/css/header.css';
-        link.onerror = () => console.error('Error al cargar header.css');
-        document.head.appendChild(link);
-      }
-      
-      // Inicializa el modo oscuro después de cargar el header
-      initDarkModeHeader();
-    })
-    .catch(error => {
-      console.error('Error cargando el header:', error);
-    });
-}
-document.addEventListener('DOMContentLoaded', loadHeader);
+// Cargar header-loader para manejo inteligente del header
+document.addEventListener('DOMContentLoaded', () => {
+  // Cargar el header-loader si no está ya cargado
+  if (!window.loadHeader) {
+    const script = document.createElement('script');
+    script.src = 'js/header-loader.js';
+    script.defer = true;
+    script.onload = () => {
+      // El header se cargará automáticamente cuando se cargue header-loader.js
+    };
+    document.body.appendChild(script);
+  }
+});
 // For dynamic header: re-inicializa modo oscuro tras cargar el header
 function initDarkModeHeader() {
   const html = document.documentElement;
