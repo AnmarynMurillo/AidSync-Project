@@ -1237,8 +1237,9 @@ h2, h3 {
     .hero-carousel {
         min-height: 100vh; /* Ocupa toda la altura de la pantalla */
         height: 100vh;
-        width: 100vw; /* Ocupa todo el ancho del viewport */
-        margin: 0; /* Asegura que no haya márgenes */
+        width: 100%;
+        margin: 0;
+        padding: 0;
     }
 
     .carousel-container,
@@ -1246,6 +1247,8 @@ h2, h3 {
     .carousel-image {
         height: 100vh; /* Ocupa toda la altura de la pantalla */
         width: 100%;
+        margin: 0;
+        padding: 0;
     }
 
     .carousel-overlay-content {

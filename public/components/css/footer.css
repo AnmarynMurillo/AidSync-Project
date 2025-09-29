@@ -265,79 +265,56 @@
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
-  .footer-content {
-
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-  }
-  
-  .footer-section.newsletter {
-      grid-column: span 2;
-  }
-  
-  .logo-item {
-      padding: 8px 10px;
-  }
+@media (max-width: 992px) {
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+    .footer-section.newsletter {
+        grid-column: span 2;
+    }
 }
 
 @media (max-width: 768px) {
-  .footer-content {
-      grid-template-columns: 1fr;
-      gap: 30px;
-  }
-  
-  .footer-section.newsletter {
-      grid-column: span 1;
-  }
-  
-  .newsletter-form {
-      flex-direction: column;
-  }
-  
-  .newsletter-form button {
-      width: 100%;
-  }
-  
-  .logos-container {
-      flex-direction: column;
-      align-items: flex-start;
-  }
-  
-  .logo-item {
-      width: 100%;
-      padding: 10px 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .footer-content {
-      grid-template-columns: 1fr;
-      text-align: center;
-  }
-  
-  .footer-section.newsletter{ 
-      grid-column: span 1;
-  }
-  
-  .footer-section h3::after {
-      left: 50%;
-      transform: translateX(-50%);
-  }
-  
-  .social-links, .social-contact {
-      justify-content: center;
-  }
-  
-  .newsletter {
-      padding: 20px;
-  }
+    .main-footer {
+        padding: 2rem 1rem;
+    }
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .footer-section.newsletter {
+        grid-column: span 1;
+        min-width: unset;
+    }
+    .footer-section h3::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .social-links, .social-contact {
+        justify-content: center;
+    }
+    .newsletter-form {
+        flex-direction: column;
+    }
+    .newsletter-form button {
+        width: 100%;
+    }
+    .logos-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .logo-item {
+        justify-content: center;
+    }
+    .footer-bottom p {
+        font-size: 0.85rem;
+    }
 }
 .subscribe-box {
   border: 2px solid #004080; /* Color y grosor del borde */
   border-radius: 12px;       /* Bordes redondeados */
   padding: 20px;             /* Espacio interno */
-  background: rgba(255, 255, 255, 0.05); /* Fondo semi-transparente opcional */
 }
 .footer-section .social-links {
   margin-top: 10px;
