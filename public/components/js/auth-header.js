@@ -133,11 +133,16 @@
   };
 
   AuthHeader.prototype.setupEvents = function () {
+    console.log('🔧 Setting up events, logoutBtn found:', !!this.logoutBtn);
     if (this.logoutBtn) {
+      console.log('🔧 Adding click listener to logout button');
       this.logoutBtn.addEventListener('click', (e) => {
+        console.log('🔧 Logout button clicked!');
         e.preventDefault();
         this.handleLogout();
       });
+    } else {
+      console.warn('🔧 Logout button not found!');
     }
     
     window.addEventListener('as:user-updated', () => this.refreshFromStorage());
@@ -316,6 +321,7 @@
   };
 
   AuthHeader.prototype.handleLogout = async function () {
+    console.log('🔧 handleLogout called!');
     // Cleanup listeners antes del logout
     this.detachRtdb();
     if (this._authUnsubscribe) {
@@ -341,7 +347,7 @@
       console.warn('Storage cleanup error:', e);
     }
     
-    window.location.href = '/public/index.html';
+    window.location.href = '../index.html';
   };
 
   AuthHeader.prototype.refreshFromStorage = function () {
