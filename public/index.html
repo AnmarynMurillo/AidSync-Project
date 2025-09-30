@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +9,31 @@
     <link rel="stylesheet" href="components/css/header.css">
     <link rel="stylesheet" href="components/css/footer.css">
     <script src="js/header-loader.js"></script>
+    <script>
+      // Wait for the header to be fully loaded
+      function initializeDarkMode() {
+        // Check if we have a dark mode button in the header
+        const checkForHeader = setInterval(() => {
+          const darkModeBtn = document.querySelector('.as-header__darkmode-btn');
+          if (darkModeBtn) {
+            clearInterval(checkForHeader);
+            // Initialize dark mode after a small delay to ensure the header is fully loaded
+            setTimeout(() => {
+              if (typeof initDarkModeHeader === 'function') {
+                initDarkModeHeader();
+              }
+            }, 100);
+          }
+        }, 100);
+      }
+
+      // Start checking for header when DOM is loaded
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeDarkMode);
+      } else {
+        initializeDarkMode();
+      }
+    </script>
     <script defer src="js/main.js"></script>
 </head>
 <body>
