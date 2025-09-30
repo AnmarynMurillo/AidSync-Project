@@ -54,10 +54,10 @@ function initHeader() {
   });
 
   // --- Mobile Menu Functionality ---
-  const burger = document.querySelector('.as-header__burger');
-  const mobileMenu = document.getElementById('as-header__mobile-menu');
-  const closeMobile = document.querySelector('.as-header__mobile-close');
-  const mobileMenuLinks = document.querySelectorAll('.as-header__mobile-list a');
+  const burger = document.querySelector('.as-header__mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileMenuLinks = document.querySelectorAll('.as-header__mobile-nav-link');
+  const body = document.body;
   
   // Track touch start position for swipe gestures
   let touchStartX = 0;
@@ -65,24 +65,14 @@ function initHeader() {
 
   // Open mobile menu with animation
   function openMenu() {
-    if (mobileMenu) {
-      // Add menu-open class to body to prevent scrolling
-      document.body.classList.add('menu-open');
+    if (mobileMenu && burger) {
+      // Add active classes to show the menu
+      mobileMenu.classList.add('active');
+      burger.classList.add('active');
+      body.classList.add('mobile-menu-open');
       
-      // Force reflow to ensure the transition works
-      mobileMenu.offsetHeight;
-      
-      // Add open class with a small delay to allow for the transition
-      setTimeout(() => {
-        mobileMenu.classList.add('open');
-      }, 10);
-      
-      // Set focus to the close button
-      if (closeMobile) {
-        setTimeout(() => {
-          closeMobile.focus();
-        }, 150);
-      }
+      // Set aria-expanded to true
+      burger.setAttribute('aria-expanded', 'true');
       
       // Add event listeners for closing the menu
       document.addEventListener('keydown', handleKeyDown);
@@ -91,26 +81,16 @@ function initHeader() {
     }
   }
 
-  // Close mobile menu with animation
+  // Close mobile menu
   function closeMenu() {
-    if (mobileMenu && mobileMenu.classList.contains('open')) {
-      mobileMenu.classList.remove('open');
+    if (mobileMenu && burger) {
+      // Remove active classes to hide the menu
+      mobileMenu.classList.remove('active');
+      burger.classList.remove('active');
+      body.classList.remove('mobile-menu-open');
       
-      // Remove menu-open class after transition ends
-      mobileMenu.addEventListener('transitionend', function handler(event) {
-        // Only run once and only for the transform property
-        if (event.propertyName !== 'transform') return;
-        
-        mobileMenu.removeEventListener('transitionend', handler);
-        document.body.classList.remove('menu-open');
-      }, { once: true });
-      
-      // Return focus to the burger button
-      if (burger) {
-        setTimeout(() => {
-          burger.focus();
-        }, 100);
-      }
+      // Set aria-expanded to false
+      burger.setAttribute('aria-expanded', 'false');
       
       // Remove event listeners
       document.removeEventListener('keydown', handleKeyDown);
@@ -167,13 +147,12 @@ function initHeader() {
   // Toggle menu when burger button is clicked
   if (burger) {
     burger.setAttribute('aria-expanded', 'false');
-    burger.setAttribute('aria-controls', 'as-header__mobile-menu');
-    burger.setAttribute('aria-label', 'Open main menu');
+    burger.setAttribute('aria-controls', 'mobileMenu');
+    burger.setAttribute('aria-label', 'Toggle mobile menu');
     
     burger.addEventListener('click', function(e) {
       e.stopPropagation();
       const isExpanded = this.getAttribute('aria-expanded') === 'true';
-      this.setAttribute('aria-expanded', String(!isExpanded));
       
       if (isExpanded) {
         closeMenu();
@@ -185,11 +164,10 @@ function initHeader() {
 
   // Close menu when clicking outside or on a link
   document.addEventListener('click', function(e) {
-    if (mobileMenu && mobileMenu.classList.contains('open') && 
+    if (mobileMenu && mobileMenu.classList.contains('active') && 
         !mobileMenu.contains(e.target) && 
         e.target !== burger) {
       closeMenu();
-      if (burger) burger.setAttribute('aria-expanded', 'false');
     }
   });
   
@@ -197,7 +175,6 @@ function initHeader() {
   mobileMenuLinks.forEach(link => {
     link.addEventListener('click', function() {
       closeMenu();
-      if (burger) burger.setAttribute('aria-expanded', 'false');
     });
   });
 

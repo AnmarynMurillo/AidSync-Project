@@ -25,79 +25,84 @@
     <main class="contact-page">
         <section class="contact-hero">
             <div class="container">
-                <nav aria-label="breadcrumb" class="breadcrumb">
-                    <a href="/">Home</a> / <span>Contact</span>
-                </nav>
                 <h1>Contact Us</h1>
-                <p class="subtitle">Do you have any questions? We're here to help you.</p>
+                <p class="subtitle">Have any questions? We're here to help you.</p>
             </div>
         </section>
 
         <div class="container">
             <div class="contact-container">
-                <!-- Contact Form -->
-                <section class="contact-form-section">
+                <!-- Contact Form Column -->
+                <div class="contact-form-column">
                     <h2>Send us a message</h2>
+                    <p>Send us a message and we'll respond as soon as possible.</p>
+                    
                     <form id="contactForm" class="contact-form">
                         <div class="form-group">
                             <label for="name">Full Name *</label>
-                            <input type="text" id="name" name="name" required>
+                            <input type="text" id="name" name="name" placeholder="Enter your name" required>
                         </div>
                         
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="email">Email Address *</label>
-                                <input type="email" id="email" name="email" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Phone Number</label>
-                                <input type="tel" id="phone" name="phone">
-                            </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="subject">Subject *</label>
-                            <input type="text" id="subject" name="subject" required>
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" placeholder="Enter subject">
                         </div>
 
                         <div class="form-group">
                             <label for="message">Message *</label>
-                            <textarea id="message" name="message" rows="5" required></textarea>
+                            <textarea id="message" name="message" rows="5" placeholder="Enter your message" required></textarea>
                         </div>
 
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-paper-plane"></i> Send Message
                         </button>
                     </form>
-                </section>
+                </div>
 
-                <!-- Contact Information -->
-                <aside class="contact-info">
-                    <div class="info-card">
-                        <div class="info-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <h3>Location</h3>
-                        <p>123 Main Street, City, Country</p>
+                <!-- Map Column -->
+                <div class="map-column">
+                    <div class="map-container">
+                        <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1266535.9273424443!2d-80.130045!3d8.537981!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa61583c8be2be3%3A0xe5593799fefef3!2sPanam%C3%A1!5e0!3m2!1ses-419!2spa!4v1620000000000!5m2!1ses-419!2spa" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy">
+                        </iframe>
                     </div>
-
-                    <div class="info-card">
-                        <div class="info-icon">
-                            <i class="fas fa-phone-alt"></i>
-                        </div>
-                        <h3>Phone</h3>
-                        <p>+1 234 567 890</p>
-                        <p>Mon - Fri, 9:00 AM - 6:00 PM</p>
-                    </div>
-
-                    <div class="info-card">
-                        <div class="info-icon">
+                    
+                    <div class="contact-info">
+                        <div class="info-item">
                             <i class="fas fa-envelope"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <p>support@aidsync.org</p>
+                            </div>
                         </div>
-                        <h3>Email</h3>
-                        <p>info@aidsync.org</p>
-                        <p>support@aidsync.org</p>
+                        
+                        <div class="info-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <div>
+                                <h4>Phone</h4>
+                                <p>+1 (555) 000-0000</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h4>Location</h4>
+                                <p>123 Main Street, New York, NY 10001</p>
+                            </div>
+                        </div>
                     </div>
+                </div>
 
                     <div class="social-links">
                         <a href="#" class="social-link" aria-label="Facebook">
@@ -113,22 +118,9 @@
                             <i class="fab fa-linkedin-in"></i>
                         </a>
                     </div>
-                </aside>
+                </div>
             </div>
         </div>
-
-        <!-- Map Section -->
-        <section class="map-section">
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1266535.9273424443!2d-80.130045!3d8.537981!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa61583c8be2be3%3A0xe5593799fefef3!2sPanam%C3%A1!5e0!3m2!1ses-419!2spa!4v1620000000000!5m2!1ses-419!2spa" 
-                width="100%" 
-                height="450" 
-                style="border:0;" 
-                allowfullscreen="" 
-                loading="lazy"
-                aria-label="Mapa de Panamá">
-            </iframe>
-        </section>
     </main>
     <script src="/public/js/contact.js"></script>
     <script src="/public/js/header.js"></script>

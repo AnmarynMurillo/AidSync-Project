@@ -52,7 +52,7 @@
   width: 100%;
   min-height: 100vh;
   margin: 0 auto;
-  padding: var(--content-padding);
+  padding: calc(var(--content-padding) + 60px) var(--content-padding) var(--content-padding);
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
