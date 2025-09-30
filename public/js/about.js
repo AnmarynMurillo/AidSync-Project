@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 wordIndex = (wordIndex + 1) % words.length;
             }
 
-            // Set typing speed
+            // Set typing spered
             const speed = isDeleting ? deleteSpeed : typeSpeed;
             setTimeout(typeEffect, speed);
         }

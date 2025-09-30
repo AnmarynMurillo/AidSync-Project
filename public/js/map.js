@@ -468,7 +468,7 @@ class FoundationMap {
         this.markerCluster = null;
         this.rangeCircle = null; // For showing search radius
         this.selectedCategories = new Set(['all']);
-        this.distanceFilter = 5; // Default to 5km radius
+        this.distanceFilter = 10; // Default to 10km radius to match HTML default
         this.foundations = []; // Store all foundations
         
         this.init();
@@ -478,6 +478,9 @@ class FoundationMap {
         this.initMap();
         this.initEventListeners();
         this.loadFoundations();
+        
+        // Try to locate user automatically when the page loads
+        this.locateUser();
     }
     
     initMap() {
@@ -542,10 +545,24 @@ class FoundationMap {
         // Distance filter
         document.getElementById('distance-range').addEventListener('change', (e) => {
             this.distanceFilter = parseInt(e.target.value);
-            this.updateVisibleMarkers();
             
-            // If we have user location, show updated count
+            // Update range circle if we have user location
             if (this.userLocation) {
+                // Remove existing range circle if it exists
+                if (this.rangeCircle) {
+                    this.map.removeLayer(this.rangeCircle);
+                }
+                
+                // Add new range circle if distance is not 0 (show all)
+                if (this.distanceFilter > 0) {
+                    this.rangeCircle = L.circle(this.userLocation, {
+                        color: '#3498db',
+                        fillColor: '#3498db',
+                        fillOpacity: 0.2,
+                        radius: this.distanceFilter * 1000 // Convert km to meters
+                    }).addTo(this.map);
+                }
+                
                 const nearbyCount = this.foundations.filter(f => this.isFoundationInRange(f)).length;
                 const totalCount = this.foundations.length;
                 const distanceText = this.distanceFilter === 0 ? 'any distance' : `${this.distanceFilter}km`;
@@ -555,6 +572,8 @@ class FoundationMap {
                     .setContent(`Showing ${nearbyCount} of ${totalCount} foundations within ${distanceText}`)
                     .openOn(this.map);
             }
+            
+            this.updateVisibleMarkers();
         });
         
         // Locate me button
