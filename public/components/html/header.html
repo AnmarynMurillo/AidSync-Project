@@ -18,6 +18,28 @@
       </ul>
     </nav>
 
+    <!-- Mobile menu button (hidden on desktop) -->
+    <button class="as-header__mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle mobile menu">
+      <span class="as-header__mobile-menu-icon"></span>
+      <span class="as-header__mobile-menu-icon"></span>
+      <span class="as-header__mobile-menu-icon"></span>
+    </button>
+
+    <!-- Mobile menu (hidden by default) -->
+    <div class="as-header__mobile-overlay" id="mobileOverlay"></div>
+    <div class="as-header__mobile-menu" id="mobileMenu">
+      <nav class="as-header__mobile-nav">
+        <ul class="as-header__mobile-nav-list">
+          <li><a href="/public/index.html" class="as-header__mobile-nav-link">Home</a></li>
+          <li><a href="/public/pages/volunteer.html" class="as-header__mobile-nav-link">Volunteer</a></li>
+          <li><a href="/public/pages/donate.html" class="as-header__mobile-nav-link">Donate</a></li>
+          <li><a href="/public/pages/about.html" class="as-header__mobile-nav-link">About us</a></li>
+          <li><a href="/public/pages/login.html" class="as-header__mobile-nav-link">Login</a></li>
+          <li><a href="/public/pages/register.html" class="as-header__mobile-nav-link as-header__mobile-nav-link--register">Register</a></li>
+        </ul>
+      </nav>
+    </div>
+
     <!-- User actions and theme toggle -->
     <div class="as-header__user-actions">
       <button class="as-header__icon-btn as-header__darkmode-btn" aria-label="Toggle dark mode">
@@ -26,32 +48,66 @@
       <a href="/public/pages/login.html" class="as-header__btn as-header__btn--login">Login</a>
       <a href="/public/pages/register.html" class="as-header__btn as-header__btn--register">Register</a>
     </div>
-
-    <!-- Menú hamburguesa (solo móvil/tablet) -->
-    <button class="as-header__burger" aria-label="Open menu" aria-controls="as-header__mobile-menu" aria-expanded="false">
-      <span class="as-header__burger-bar"></span>
-      <span class="as-header__burger-bar"></span>
-      <span class="as-header__burger-bar"></span>
-    </button>
   </div>
-
-  <!-- Menú lateral/desplegable móvil -->
-  <nav class="as-header__mobile-menu" id="as-header__mobile-menu" aria-label="Mobile navigation">
-    <button class="as-header__mobile-close" aria-label="Close menu">&times;</button>
-    <ul class="as-header__mobile-list">
-      <li><a href="/public/index.html">Home</a></li>
-      <li><a href="/public/pages/volunteer.html">Volunteer</a></li>
-      <li><a href="/public/pages/donate.html">Donate</a></li>
-      <li><a href="/public/pages/about.html">About us</a></li>
-      <li><a href="/public/pages/map.html">Map</a></li>
-      <li><a href="/public/pages/login.html">Login</a></li>
-      <li><a href="/public/pages/register.html">Register</a></li>
-    </ul>
-    <div class="as-header__mobile-actions">
-      <button class="as-header__icon-btn as-header__darkmode-btn" aria-label="Toggle dark mode">
-        <span class="as-header__icon as-header__icon--moon"></span>
-      </button>
-    </div>
-  </nav>
 </header>
-<!-- Header scripts are loaded by loader.js -->
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const body = document.body;
+
+    // Function to open menu
+    function openMenu() {
+      if (mobileMenu && mobileMenuBtn) {
+        mobileMenu.classList.add('active');
+        mobileMenuBtn.classList.add('active');
+        mobileOverlay.classList.add('active');
+        body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+      }
+    }
+
+    // Function to close menu
+    function closeMenu() {
+      if (mobileMenu && mobileMenuBtn) {
+        mobileMenu.classList.remove('active');
+        mobileMenuBtn.classList.remove('active');
+        mobileOverlay.classList.remove('active');
+        body.style.overflow = ''; // Re-enable scrolling
+      }
+    }
+
+    // Toggle menu when clicking the hamburger button
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const isOpen = mobileMenu.classList.contains('active');
+        
+        if (isOpen) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      });
+
+      // Close menu when clicking on overlay
+      if (mobileOverlay) {
+        mobileOverlay.addEventListener('click', closeMenu);
+      }
+
+      // Close menu when clicking on a link
+      const mobileLinks = mobileMenu.querySelectorAll('.as-header__mobile-nav-link');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', closeMenu);
+      });
+
+      // Close menu when pressing Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+          closeMenu();
+        }
+      });
+    }
+  });
+</script>

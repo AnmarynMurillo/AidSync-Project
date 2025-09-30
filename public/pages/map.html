@@ -16,8 +16,10 @@
 <body>
     <!-- Header Container -->
     <div id="header-container" class="as-header"></div>
+    <button class="toggle-controls">Show Controls</button>
     <main class="map-container">
         <div class="map-controls">
+            <button class="close-controls" aria-label="Close controls">&times;</button>
             <div class="filters">
                 <h3>Filter by Category</h3>
                 <div class="category-filters">
@@ -52,28 +54,6 @@
                 <button id="locate-me" class="btn-locate">
                     <i class="fas fa-location-arrow"></i> Use My Location
                 </button>
-
-                <div class="navigation-section">
-                    <h3>Discover More</h3>
-                    <div class="nav-cards">
-                        <a href="/public/pages/blog.html" class="nav-card">
-                            <i class="fas fa-newspaper"></i>
-                            <span>Our Blog</span>
-                        </a>
-                        <a href="/public/pages/volunteer.html" class="nav-card">
-                            <i class="fas fa-hands-helping"></i>
-                            <span>Volunteer</span>
-                        </a>
-                        <a href="/public/pages/donate.html" class="nav-card">
-                            <i class="fas fa-heart"></i>
-                            <span>Donate</span>
-                        </a>
-                        <a href="/public/pages/contact.html" class="nav-card">
-                            <i class="fas fa-envelope"></i>
-                            <span>Contact</span>
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
         <div id="map"></div>
@@ -98,6 +78,54 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Mobile controls toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.querySelector('.toggle-controls');
+            const mapControls = document.querySelector('.map-controls');
+            const closeBtn = document.querySelector('.close-controls');
+            
+            function toggleControls(show) {
+                const isExpanded = show !== undefined ? show : !mapControls.classList.contains('expanded');
+                mapControls.classList.toggle('expanded', isExpanded);
+                toggleBtn.textContent = isExpanded ? 'Hide Controls' : 'Show Controls';
+            }
+            
+            if (toggleBtn && mapControls) {
+                // Toggle button click
+                toggleBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    toggleControls();
+                });
+                
+                // Close button click
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        toggleControls(false);
+                    });
+                }
+                
+                // Close controls when clicking outside on mobile
+                document.addEventListener('click', function(e) {
+                    if (window.innerWidth <= 767 && 
+                        !e.target.closest('.map-controls') && 
+                        !e.target.closest('.toggle-controls') &&
+                        mapControls.classList.contains('expanded')) {
+                        toggleControls(false);
+                    }
+                });
+            }
+            
+            // Prevent map controls from closing when clicking inside
+            const mapControlsContainer = document.querySelector('.map-controls');
+            if (mapControlsContainer) {
+                mapControlsContainer.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+        });
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
     <script src="/public/js/map.js" type="module"></script>
 
